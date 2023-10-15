@@ -1,0 +1,8 @@
+bumpversion
+check-manifest
+flake8>=2.2.3
+ipython
+pytest-cov
+pytest>=3.9
+tox
+twine

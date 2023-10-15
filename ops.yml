@@ -1,0 +1,12 @@
+actions:
+  api: ${PROC}
+  readme:
+    command: |-
+      unset OD_INST OD_DATA OD_USER OD_PASS HOME
+      ${PROC} --env '' --readme --out README.md
+options:
+  environment:
+    BIN: src/clo
+    PROC: "${BIN}/__main__.py"
+  exec:
+    load_secrets: true
