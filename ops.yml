@@ -1,12 +1,12 @@
+dependencies:
+  custom:
+    - pip3 install -e .
 actions:
-  api: ${PROC}
+  api: clo
   readme:
     command: |-
-      unset OD_INST OD_DATA OD_USER OD_PASS HOME
-      ${PROC} --env '' --readme --out README.md
+      unset OD_INST OD_DATA OD_USER OD_PASS
+      clo --readme --out README.md
 options:
-  environment:
-    BIN: src/clo
-    PROC: "${BIN}/__main__.py"
   exec:
     load_secrets: true

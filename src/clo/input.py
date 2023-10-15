@@ -377,7 +377,7 @@ class Program(TypedDict):
 
 def RC(path_str: str):
     path = Path(path_str)
-    if not Settings.demo and path.exists():
+    if not (Settings.demo or Settings.readme) and path.exists():
         load_dotenv(dotenv_path=path, interpolate=True)
     else:
         Log.WARN(f"Congig file {path} was not found.")
@@ -911,7 +911,7 @@ def GetOpt(argv: list[str]) -> Namespace:
         Starter = Parser(**Input.Prog)
         [
             Starter.add_argument(*inp.names, **inp.details)
-            for inp in [Input.Logs, Input.Environ, Input.Inst, Input.Out, Input.ReadMe]
+            for inp in [Input.Logs, Input.ReadMe, Input.Environ, Input.Inst, Input.Out]
         ]
         _, argv = Starter.parse_known_args(argv, namespace=Settings)
         ...
