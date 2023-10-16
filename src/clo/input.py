@@ -537,7 +537,7 @@ def GetOpt(argv: list[str]) -> Namespace:
                 ["--domain", "-d"],
                 {
                     "help": (f"A set of criterion to filter the search by (run `{__prog__} explain domains` for "
-                        "details). This option can be specified multiple times."),
+                             "details). This option can be specified multiple times."),
                     "nargs": 3,
                     "action": "append",
                     "metavar": ("FIELD", "OPERATOR", "VALUE"),
@@ -550,7 +550,7 @@ def GetOpt(argv: list[str]) -> Namespace:
                 ["--or", "-o"],
                 {
                     "help": (f"A logical `OR`, placed before two or more domains (arity 2). Run `{__prog__} explain "
-                        "logic` for more details."),
+                             "logic` for more details."),
                     "action": "append_const",
                     "const": "|",
                     "dest": "positional",
@@ -560,7 +560,7 @@ def GetOpt(argv: list[str]) -> Namespace:
                 ["--and", "-a"],
                 {
                     "help": (f"A logical `AND` to place before two or more domains (arity 2). Run `{__prog__} "
-                        "explain logic` for more details."),
+                             "explain logic` for more details."),
                     "const": "&",
                     "action": "append_const",
                     "dest": "positional",
@@ -570,7 +570,7 @@ def GetOpt(argv: list[str]) -> Namespace:
                 ["--not", "-n"],
                 {
                     "help": (f"A logical `OR` to place before a signle domain (arity 1). Run `{__prog__} explain "
-                        "logic` for more details."),
+                             "logic` for more details."),
                     "action": "append_const",
                     "const": "!",
                     "dest": "positional",
@@ -589,7 +589,7 @@ def GetOpt(argv: list[str]) -> Namespace:
             ["--ids", "-i"],
             {
                 "help": ('The ID number(s) of the record(s) to perform the action on. Specifying `-` expects a '
-                    'speace-separated list from STDIN.'),
+                         'speace-separated list from STDIN.'),
                 "metavar": "ID",
                 "nargs": "+",
                 "type": StdInArg("--ids", Settings, "positional", r"^[\d ]+$"),
@@ -712,7 +712,7 @@ def GetOpt(argv: list[str]) -> Namespace:
             details={
                 "title": "actions",
                 "description": ("The Odoo instance is queried, or operated on, using `ACTIONS`. Each `ACTION` has "
-                    "it's own set of arguements; run `%(prog)s ACTION --help` for specific details."),
+                                "it's own set of arguements; run `%(prog)s ACTION --help` for specific details."),
                 "help": "One of the following operations to query, or perform, via the API:",
                 "dest": "action",
                 "metavar": "ACTION",
@@ -725,7 +725,7 @@ def GetOpt(argv: list[str]) -> Namespace:
                         {
                             "description": "Searches for record IDs based on the search domain.",
                             "usage": ("%(prog)s [[-o|-n|-a] -d FIELD OPERATOR VALUE [-d ...]] [--offset POSITION] "
-                                "[--limit AMOUNT] [--order FIELD] [--count] [-h]"),
+                                      "[--limit AMOUNT] [--order FIELD] [--count] [-h]"),
                         },
                     ),
                     [
@@ -746,7 +746,7 @@ def GetOpt(argv: list[str]) -> Namespace:
                         "count",
                         {
                             "description": ("Returns the number of records in the current model matching "
-                                "the provided domain.")
+                                            "the provided domain.")
                         },
                     ),
                     [*Domains, Search[1]],
@@ -766,7 +766,7 @@ def GetOpt(argv: list[str]) -> Namespace:
                         {
                             "description": "A shortcut that combines `search` and `read` into one execution.",
                             "usage": ("%(prog)s [[-o|-n|-a] -d FIELD OPERATOR VALUE [-d ...]] [-f FIELD ...] "
-                                "[--offset POSITION] [--limit AMOUNT] [--order FIELD] [--csv [FILE]] [--help]"),
+                                      "[--offset POSITION] [--limit AMOUNT] [--order FIELD] [--csv [FILE]] [--help]"),
                         },
                     ),
                     [*Domains, Field, *Search, CSV],
@@ -799,7 +799,7 @@ def GetOpt(argv: list[str]) -> Namespace:
                         "fields",
                         {
                             "description": ("Retrieves raw details of the fields available in the current model.\n"
-                                "For user-friendly formatting, run `%(prog)s explain fields`.")
+                                            "For user-friendly formatting, run `%(prog)s explain fields`.")
                         },
                     ),
                     [Attr],

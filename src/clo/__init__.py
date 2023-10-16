@@ -1,19 +1,30 @@
 #!/usr/bin/env python3
 
-import sys
-import json
-from typing import cast
+from .api import Common, Model
 from .meta import __title__, __doc__
-from .output import Log, ToCSV
-from .api import Common, ProtocolError, Fault
-from .input import GetOpt, Namespace, Action, Topic
+from .output import Log, FromCSV, ToCSV
+
+__all__ = [
+    'Common',
+    'Model',
+    'Log',
+    'FromCSV',
+    'ToCSV',
+]
 
 ###########################################################################
 
 
-def main(argv: list[str] = sys.argv[1:]) -> None:
+def main(argv: list[str] = None) -> None:
+    import sys
+    import json
+    from typing import cast
+    from .output import Log, ToCSV
+    from .api import Common, ProtocolError, Fault
+    from .input import GetOpt, Namespace, Action, Topic
+
     try:
-        Settings = GetOpt(argv)
+        Settings = GetOpt(argv if argv else sys.argv[1:])
         ...
         action = cast(Action, Settings.action).title()
         positional: list = [
