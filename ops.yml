@@ -3,10 +3,13 @@ dependencies:
     - pip3 install -e .
 actions:
   api: clo
+  demo: clo --demo > .clorc
   readme:
     command: |-
+      export HOME='.'
       unset OD_INST OD_DATA OD_USER OD_PASS
       clo --readme --out README.md
+  test: tox
 options:
   exec:
     load_secrets: true
