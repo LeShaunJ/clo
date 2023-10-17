@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """XMLRPC API implementation"""
 
-import sys
 import xmlrpc.client
 import ssl
 from typing import Any, Literal, TypedDict
@@ -228,14 +227,14 @@ class Common(metaclass=_Common):
             Log.DEBUG("HEADERS:")
             for key, val in p.headers:
                 Log.DEBUG(f"- {key}: {val}")
-        return 200 + p.errcode
+        return 200
 
     ...
 
     @staticmethod
     def HandleFault(f: xmlrpc.client.Fault) -> int:
         Log.ERROR(f"FAULT_ERROR({f.faultCode}): {f.faultString}")
-        return 100 + f.faultCode
+        return 100
 
     ...
 
@@ -324,6 +323,8 @@ class Model(metaclass=_Model):
             def __execute__(self: Model, *args, **kwargs):
                 code = 0
                 try:
+                    import sys
+                    print(args, kwargs, file=sys.__stdout__)
                     with Trace():
                         args = args if args else method[1]
                         kwargs = kwargs if kwargs else method[2]
@@ -340,7 +341,7 @@ class Model(metaclass=_Model):
                     Log.ERROR(e)
                 finally:
                     if code > 0:
-                        sys.exit(code)
+                        raise Log.EXIT(code=code)
 
             ...
             return MethodType(__execute__, self)

@@ -3,7 +3,7 @@ dependencies:
     - pip3 install -e .
 actions:
   api: clo
-  demo: clo --demo > .clorc
+  demo: clo --demo --out .clorc
   readme:
     command: |-
       export HOME='.'

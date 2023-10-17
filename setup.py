@@ -28,7 +28,7 @@ setup(
     ],
     package_dir={"": "src"},
     python_requires=">=3.8",
-    install_requires=["python-dotenv"],
+    install_requires=["python-dotenv", "requests"],
     long_description=read_files("README.md", "CHANGELOG.md"),
     long_description_content_type="text/markdown",
     classifiers=[
@@ -47,7 +47,7 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            f'{meta["__prog__"]}={meta["__prog__"]}:main',
+            f'{meta["__prog__"]}={meta["__prog__"]}:Main',
         ],
     },
 )

@@ -15,7 +15,7 @@ __all__ = [
 ###########################################################################
 
 
-def main(argv: list[str] = None) -> None:
+def CLI(argv: list[str] = None) -> None:
     import sys
     import json
     from typing import cast
@@ -53,7 +53,7 @@ def main(argv: list[str] = None) -> None:
             suffix += " (CSV)" if Settings.csv else ""
             ...
             Log.DEBUG(f"{repr(Settings.model)}.{action}({args}){suffix}")
-            sys.exit(0)
+            raise Log.EXIT()
 
         try:
             Common.Authenticate(
@@ -65,9 +65,9 @@ def main(argv: list[str] = None) -> None:
         except LookupError:
             Common.Authenticate(Settings.database, "admin", "admin")
         except ProtocolError as p:
-            sys.exit(Common.HandleProtocol(p))
+            raise Log.EXIT(Common.HandleProtocol(p))
         except Fault as f:
-            sys.exit(Common.HandleFault(f))
+            raise Log.EXIT(Common.HandleFault(f))
         except Exception as e:
             Log.FATAL(e, code=5)
 
@@ -75,20 +75,34 @@ def main(argv: list[str] = None) -> None:
             topic: str = Settings.topic
             Topic[topic]
 
-        Result = getattr(Settings.model, action)(*positional, **optional)
+        if action in ['Create']:
+            Result = getattr(Settings.model, action)(*filter(None, positional))
+        elif action in ['Fields']:
+            Result = getattr(Settings.model, action)(**optional)
+        else:
+            Result = getattr(Settings.model, action)(*positional, **optional)
+
         if Result is None:
-            sys.exit(0)
+            raise Log.EXIT()
 
         if Settings.raw and isinstance(Result, list):
-            Log.EXIT(" ".join([str(r) for r in Result]), flush=True, file=Settings.out)
+            raise Log.EXIT(" ".join([str(r) for r in Result]), flush=True, file=Settings.out)
 
         if Settings.csv and isinstance(Result, list):
             ToCSV(Result, Settings.out)
+            raise Log.EXIT(code=0)
         else:
-            Log.EXIT(json.dumps(Result, indent="  "), flush=True, file=Settings.out)
+            raise Log.EXIT(json.dumps(Result, indent="  "), flush=True, file=Settings.out)
     except KeyboardInterrupt:
         sys.stderr.write("\n")
         Log.FATAL("Operation aborted", flush=True, code=250)
+
+
+def Main(argv: list[str] = None) -> None:
+    try:
+        CLI(argv)
+    except Log.EXIT as e:
+        e.Done()
 
 
 ###########################################################################

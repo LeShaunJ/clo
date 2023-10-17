@@ -82,7 +82,7 @@ class _Log(type):
         def PassFactory(level: Levels):
             @classmethod
             def __exit(cls: Kind, *args, **kwargs) -> None:
-                sys.exit(kwargs.get("code", 10))
+                raise Log.EXIT(code=kwargs.get("code", 10))
 
             @classmethod
             def __func(cls: Kind, *args, **kwargs) -> None:
@@ -101,7 +101,7 @@ class _Log(type):
                 code: int = 10,
             ) -> None:
                 cls.__send__(level, *values, sep=sep, end=end, flush=flush)
-                sys.exit(code)
+                raise Log.EXIT(code=code)
 
             @classmethod
             def __func(
@@ -154,17 +154,25 @@ class _Log(type):
         ...
         cls.Level = which
 
-    def EXIT(
-        cls,
-        *values: object,
-        sep: str | None = " ",
-        end: str | None = "\n",
-        flush: Literal[False] = False,
-        file: io.TextIOWrapper | None = None,
-        code: int = 0,
-    ) -> None:
-        print(*values, sep=sep, end=end, file=file, flush=flush)
-        sys.exit(code)
+    class EXIT(BaseException):
+
+        def __init__(
+            self,
+            *values: object,
+            code: int = 0,
+            sep: str | None = " ",
+            end: str | None = "\n",
+            flush: Literal[False] = True,
+            file: io.TextIOWrapper | None = None,
+        ) -> None:
+            super().__init__(*values)
+            self.code = code
+            if values:
+                print(*values, sep=sep, end=end, file=file, flush=flush)
+
+        def Done(self) -> None:
+            import os
+            os._exit(self.code)
 
 
 class Log(metaclass=_Log):
@@ -242,8 +250,11 @@ class TraceMe(io.TextIOWrapper):
             self.__.write("TRACE | ")
             self.__ended = False
         self.__.write(string)
-        if string[-1] == "\n":
-            self.__ended = True
+
+        try:
+            self.__ended = string[-1] == "\n"
+        except Exception:
+            pass
 
     def flush(self):
         self.__.flush()

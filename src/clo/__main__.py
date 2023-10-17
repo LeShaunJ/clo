@@ -5,4 +5,9 @@ from . import main
 ###########################################################################
 
 if __name__ == "__main__":
-    main()
+    from .output import Log
+    try:
+        main()
+    except Log.EXIT as e:
+        pass
+        e.Done()

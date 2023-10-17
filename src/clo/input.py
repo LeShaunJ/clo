@@ -67,7 +67,7 @@ class Parser(argparse.ArgumentParser):
     def exit(self, status: int = 0, message=None):
         if message:
             Log.ERROR(message, code=status)
-        sys.exit(status)
+        raise Log.EXIT(code=status)
 
     def error(self, message):
         _level = Log.Level
@@ -110,8 +110,8 @@ class DemoAction(argparse._StoreConstAction):
 
     def __call__(self, parser, namespace, values, option_string=None):
         creds = Common.Demo()
-        [print(f"{Env.at(k)}={json.dumps(v)}") for k, v in creds.items()]
-        sys.exit(0)
+        text = "\n".join([f"{Env.at(k)}={json.dumps(v)}" for k, v in creds.items()])
+        raise Log.EXIT(text, code=0, file=Settings.out)
 
 
 class Namespace(argparse.Namespace):
@@ -144,8 +144,6 @@ class Namespace(argparse.Namespace):
         return super().__setattr__(__name, __value)
 
 
-Settings = Namespace()
-
 ###########################################################################
 
 
@@ -154,7 +152,7 @@ class _Topic(type):
         try:
             inner: Callable[[type[cls]], None] = object.__getattribute__(cls, __name)
             print(textwrap.dedent(inner()), "\n")
-            sys.exit(0)
+            raise Log.EXIT(code=0)
         except Exception as e:
             Log.ERROR(e, code=30)
 
@@ -427,20 +425,28 @@ def StdInArg(
 
         def __new__(cls, *args, **kwargs):
             if args[0] == TICK:
+                # try:
+                #     assert not sys.stdin.isatty()
+                # except AssertionError:
+                #     raise argparse.ArgumentError(f'"<STDIN> is a TTY.')
+
                 try:
-                    assert not sys.stdin.isatty()
                     stdin = " ".join([*sys.stdin]).strip()
                     assert re.match(match, stdin)
                     setattr(space, attr, [int(i) for i in stdin.split(" ")])
                     return TICK
-                except Exception:
+                except Exception as e:
+                    print(f'ERROR: {repr(e)}', file=sys.__stdout__)
                     raise argparse.ArgumentError(f'"{stdin}" is invalid for `{name}`.')
+
             return int(*args, **kwargs)
 
     return ID
 
 
 def GetOpt(argv: list[str]) -> Namespace:
+    global Settings
+    Settings = Namespace()
 
     def Attach(
         parser: argparse.ArgumentParser,
@@ -536,8 +542,10 @@ def GetOpt(argv: list[str]) -> Namespace:
             Argument(
                 ["--domain", "-d"],
                 {
-                    "help": (f"A set of criterion to filter the search by (run `{__prog__} explain domains` for "
-                             "details). This option can be specified multiple times."),
+                    "help": (
+                        f"A set of criterion to filter the search by (run `{__prog__} explain domains` for "
+                        "details). This option can be specified multiple times."
+                    ),
                     "nargs": 3,
                     "action": "append",
                     "metavar": ("FIELD", "OPERATOR", "VALUE"),
@@ -549,8 +557,10 @@ def GetOpt(argv: list[str]) -> Namespace:
             Argument(
                 ["--or", "-o"],
                 {
-                    "help": (f"A logical `OR`, placed before two or more domains (arity 2). Run `{__prog__} explain "
-                             "logic` for more details."),
+                    "help": (
+                        f"A logical `OR`, placed before two or more domains (arity 2). Run `{__prog__} explain "
+                        "logic` for more details."
+                    ),
                     "action": "append_const",
                     "const": "|",
                     "dest": "positional",
@@ -559,8 +569,10 @@ def GetOpt(argv: list[str]) -> Namespace:
             Argument(
                 ["--and", "-a"],
                 {
-                    "help": (f"A logical `AND` to place before two or more domains (arity 2). Run `{__prog__} "
-                             "explain logic` for more details."),
+                    "help": (
+                        f"A logical `AND` to place before two or more domains (arity 2). Run `{__prog__} "
+                        "explain logic` for more details."
+                    ),
                     "const": "&",
                     "action": "append_const",
                     "dest": "positional",
@@ -569,8 +581,10 @@ def GetOpt(argv: list[str]) -> Namespace:
             Argument(
                 ["--not", "-n"],
                 {
-                    "help": (f"A logical `OR` to place before a signle domain (arity 1). Run `{__prog__} explain "
-                             "logic` for more details."),
+                    "help": (
+                        f"A logical `OR` to place before a signle domain (arity 1). Run `{__prog__} explain "
+                        "logic` for more details."
+                    ),
                     "action": "append_const",
                     "const": "!",
                     "dest": "positional",
@@ -588,8 +602,10 @@ def GetOpt(argv: list[str]) -> Namespace:
         IDs = Argument(
             ["--ids", "-i"],
             {
-                "help": ('The ID number(s) of the record(s) to perform the action on. Specifying `-` expects a '
-                         'speace-separated list from STDIN.'),
+                "help": (
+                    "The ID number(s) of the record(s) to perform the action on. Specifying `-` expects a "
+                    "speace-separated list from STDIN."
+                ),
                 "metavar": "ID",
                 "nargs": "+",
                 "type": StdInArg("--ids", Settings, "positional", r"^[\d ]+$"),
@@ -671,7 +687,7 @@ def GetOpt(argv: list[str]) -> Namespace:
                 "type": RC,
                 "help": f"Path to a `{Env.CONF.value}` file. See \033[4mREQUISITES\033[0m below for details.",
                 "metavar": "FILE",
-                "default": f'~/{Env.CONF.value}',
+                "default": f"~/{Env.CONF.value}",
             },
         )
         Logs = Argument(
@@ -693,12 +709,13 @@ def GetOpt(argv: list[str]) -> Namespace:
             "conflict_handler": "resolve",
             "formatter_class": HelpFormat,
             "exit_on_error": False,
-            "epilog": textwrap.dedent((
-                f"""
+            "epilog": textwrap.dedent(
+                (
+                    f"""
                 \033[4mREQUISITES\033[0m:
 
                 The following inputs are \033[1mrequired\033[0m, but have multiple or special specifications. In """
-                f"""the absense of these inputs, the program will ask for input:
+                    f"""the absense of these inputs, the program will ask for input:
 
                   - `--instance` can be specified using environment variable \033[1m`{Env.INST}`\033[0m.
                   - `--database` can be specified using environment variable \033[1m`{Env.DATA}`\033[0m.
@@ -706,13 +723,16 @@ def GetOpt(argv: list[str]) -> Namespace:
                   - The `password` (or `API-key`) \033[1mMUST BE\033[0m specified using environment variable \
                     \033[1m`{Env.PASS}`\033[0m.
                 """
-            )),
+                )
+            ),
         }
         Commands = Sub(
             details={
                 "title": "actions",
-                "description": ("The Odoo instance is queried, or operated on, using `ACTIONS`. Each `ACTION` has "
-                                "it's own set of arguements; run `%(prog)s ACTION --help` for specific details."),
+                "description": (
+                    "The Odoo instance is queried, or operated on, using `ACTIONS`. Each `ACTION` has "
+                    "it's own set of arguements; run `%(prog)s ACTION --help` for specific details."
+                ),
                 "help": "One of the following operations to query, or perform, via the API:",
                 "dest": "action",
                 "metavar": "ACTION",
@@ -724,8 +744,10 @@ def GetOpt(argv: list[str]) -> Namespace:
                         "search",
                         {
                             "description": "Searches for record IDs based on the search domain.",
-                            "usage": ("%(prog)s [[-o|-n|-a] -d FIELD OPERATOR VALUE [-d ...]] [--offset POSITION] "
-                                      "[--limit AMOUNT] [--order FIELD] [--count] [-h]"),
+                            "usage": (
+                                "%(prog)s [[-o|-n|-a] -d FIELD OPERATOR VALUE [-d ...]] [--offset POSITION] "
+                                "[--limit AMOUNT] [--order FIELD] [--count] [-h]"
+                            ),
                         },
                     ),
                     [
@@ -745,8 +767,10 @@ def GetOpt(argv: list[str]) -> Namespace:
                     Command(
                         "count",
                         {
-                            "description": ("Returns the number of records in the current model matching "
-                                            "the provided domain.")
+                            "description": (
+                                "Returns the number of records in the current model matching "
+                                "the provided domain."
+                            )
                         },
                     ),
                     [*Domains, Search[1]],
@@ -765,8 +789,10 @@ def GetOpt(argv: list[str]) -> Namespace:
                         "find",
                         {
                             "description": "A shortcut that combines `search` and `read` into one execution.",
-                            "usage": ("%(prog)s [[-o|-n|-a] -d FIELD OPERATOR VALUE [-d ...]] [-f FIELD ...] "
-                                      "[--offset POSITION] [--limit AMOUNT] [--order FIELD] [--csv [FILE]] [--help]"),
+                            "usage": (
+                                "%(prog)s [[-o|-n|-a] -d FIELD OPERATOR VALUE [-d ...]] [-f FIELD ...] "
+                                "[--offset POSITION] [--limit AMOUNT] [--order FIELD] [--csv [FILE]] [--help]"
+                            ),
                         },
                     ),
                     [*Domains, Field, *Search, CSV],
@@ -798,8 +824,10 @@ def GetOpt(argv: list[str]) -> Namespace:
                     Command(
                         "fields",
                         {
-                            "description": ("Retrieves raw details of the fields available in the current model.\n"
-                                            "For user-friendly formatting, run `%(prog)s explain fields`.")
+                            "description": (
+                                "Retrieves raw details of the fields available in the current model.\n"
+                                "For user-friendly formatting, run `%(prog)s explain fields`."
+                            )
                         },
                     ),
                     [Attr],
@@ -929,7 +957,7 @@ def GetOpt(argv: list[str]) -> Namespace:
     parser = Build(Input.Prog, Input.Globals(), Input.Commands)
 
     if Settings.readme:
-        Log.EXIT(GetReadMe(parser), file=Settings.out)
+        raise Log.EXIT(GetReadMe(parser), file=Settings.out)
 
     # Load the proxy
     Common.Load(Settings.instance)
