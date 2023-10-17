@@ -15,10 +15,10 @@ def test_command(_: list[str], capsys):
         clo.CLI([*env_args, "search"])
 
     out, err = capsys.readouterr()
-    ids: list[int] = json.loads(out)
+    ids: list[int] = sorted(json.loads(out))
 
     with pytest.raises(Log.EXIT) as e:
-        clo.CLI([*def_args, "--ids", str(ids[0])])
+        clo.CLI([*def_args, "--ids", str(ids[-1])])
 
     out, err = capsys.readouterr()
     assert e.value.code == 0
