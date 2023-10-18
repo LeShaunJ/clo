@@ -1,8 +1,8 @@
 bumpversion
 check-manifest
 coverage
-flake8>=2.2.3
+flake8
 ipython
-pytest>=3.9
+pytest
 tox
 twine
