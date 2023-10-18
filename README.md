@@ -1,7 +1,6 @@
 # CLO (Command-Line Odoo)
 
 [![Build Status][build_status_badge]][build_status_link]
-[![PyPI version][pypi_badge]][pypi_link]
 
 Perform API operations on Odoo instances via the command-line.
 
@@ -243,3 +242,5 @@ Display documentation on a specified topic.
 | `‑‑verbose`<br>`‑v` |  | NO | Display more details. | `false` |
 | `‑‑help`<br>`‑h` |  | NO | Show this help message and exit. |  |
 
+[build_status_badge]: https://github.com/LeShaunJ/clo/actions/workflows/test.yml/badge.svg
+[build_status_link]: https://github.com/LeShaunJ/clo/actions/workflows/test.yml
