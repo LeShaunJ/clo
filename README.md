@@ -1,24 +1,38 @@
 # CLO (Command-Line Odoo)
 
+[![Build Status][build_status_badge]][build_status_link]
+[![PyPI version][pypi_badge]][pypi_link]
+
 Perform API operations on Odoo instances via the command-line.
 
 ## Contents
 
-* [Installation](#installation)
-* [Usage](#usage)
-  * [Globals](#globals)
-    * [Options](#options)
-    * [Requisites](#requisites)
-  * [Actions](#actions)
-    * [Search](#search)
-    * [Count](#count)
-    * [Read](#read)
-    * [Find](#find)
-    * [Create](#create)
-    * [Write](#write)
-    * [Delete](#delete)
-    * [Fields](#fields)
-    * [Explain](#explain)
+- [CLO (Command-Line Odoo)](#clo-command-line-odoo)
+  - [Contents](#contents)
+  - [Installation](#installation)
+  - [Usage](#usage)
+    - [Globals](#globals)
+      - [Options](#options)
+    - [Actions](#actions)
+      - [Search](#search)
+        - [Options](#options-1)
+      - [Count](#count)
+        - [Options](#options-2)
+      - [Read](#read)
+        - [Options](#options-3)
+      - [Find](#find)
+        - [Options](#options-4)
+      - [Create](#create)
+        - [Options](#options-5)
+      - [Write](#write)
+        - [Options](#options-6)
+      - [Delete](#delete)
+        - [Options](#options-7)
+      - [Fields](#fields)
+        - [Options](#options-8)
+      - [Explain](#explain)
+        - [Positional](#positional)
+        - [Options](#options-9)
 
 ## Installation
 
@@ -53,10 +67,10 @@ The following parameters apply to any [Action](#actions).
 | `‑‑version` |  | NO | Show version of this program. |  |
 
 > #### Requisites
-> 
-> 
+>
+>
 > The following inputs are **required**, but have multiple or special specifications. In the absense of these inputs, the program will ask for input:
-> 
+>
 >   - `--instance` can be specified using environment variable **`OD_INST`**.
 >   - `--database` can be specified using environment variable **`OD_DATA`**.
 >   - `--username` can be specified using environment variable **`OD_USER`**.
