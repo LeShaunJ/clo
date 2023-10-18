@@ -1,37 +1,27 @@
 # CLO (Command-Line Odoo)
 
+
 [![Build Status][build_status_badge]][build_status_link]
 
 Perform API operations on Odoo instances via the command-line.
 
 ## Contents
 
-- [CLO (Command-Line Odoo)](#clo-command-line-odoo)
-  - [Contents](#contents)
-  - [Installation](#installation)
-  - [Usage](#usage)
-    - [Globals](#globals)
-      - [Options](#options)
-    - [Actions](#actions)
-      - [Search](#search)
-        - [Options](#options-1)
-      - [Count](#count)
-        - [Options](#options-2)
-      - [Read](#read)
-        - [Options](#options-3)
-      - [Find](#find)
-        - [Options](#options-4)
-      - [Create](#create)
-        - [Options](#options-5)
-      - [Write](#write)
-        - [Options](#options-6)
-      - [Delete](#delete)
-        - [Options](#options-7)
-      - [Fields](#fields)
-        - [Options](#options-8)
-      - [Explain](#explain)
-        - [Positional](#positional)
-        - [Options](#options-9)
+* [Installation](#installation)
+* [Usage](#usage)
+  * [Globals](#globals)
+    * [Options](#options)
+    * [Requisites](#requisites)
+  * [Actions](#actions)
+    * [Search](#search)
+    * [Count](#count)
+    * [Read](#read)
+    * [Find](#find)
+    * [Create](#create)
+    * [Write](#write)
+    * [Delete](#delete)
+    * [Fields](#fields)
+    * [Explain](#explain)
 
 ## Installation
 
@@ -66,10 +56,10 @@ The following parameters apply to any [Action](#actions).
 | `‑‑version` |  | NO | Show version of this program. |  |
 
 > #### Requisites
->
->
+> 
+> 
 > The following inputs are **required**, but have multiple or special specifications. In the absense of these inputs, the program will ask for input:
->
+> 
 >   - `--instance` can be specified using environment variable **`OD_INST`**.
 >   - `--database` can be specified using environment variable **`OD_DATA`**.
 >   - `--username` can be specified using environment variable **`OD_USER`**.
@@ -131,7 +121,7 @@ Retrieves the details for the records at the ID(s) specified.
 
 | Flag(s) | Argument | Required | Description                                                                         . | Default |
 | :--- | :--: | :--: | :--- | :--- |
-| `‑‑ids`<br>`‑i` | `ID` | YES | The ID number(_s_) of the record(_s_) to perform the action on. Specifying `-` expects a speace-separated list from STDIN. |  |
+| `‑‑ids`<br>`‑i` | `ID` | YES | The ID number(_s_) of the record(_s_) to perform the action on. Specifying `-` expects a space-separated list from STDIN. |  |
 | `‑‑fields`<br>`‑f` | `FIELD` | NO | Field names to return (_default is all fields_). | `[]` |
 | `‑‑csv` |  | NO | If `True`, outputs records in CSV format. | `false` |
 | `‑‑help`<br>`‑h` |  | NO | Show this help message and exit. |  |
@@ -186,7 +176,7 @@ Updates existing records in the current model.
 
 | Flag(s) | Argument | Required | Description                                                                         . | Default |
 | :--- | :--: | :--: | :--- | :--- |
-| `‑‑ids`<br>`‑i` | `ID` | YES | The ID number(_s_) of the record(_s_) to perform the action on. Specifying `-` expects a speace-separated list from STDIN. |  |
+| `‑‑ids`<br>`‑i` | `ID` | YES | The ID number(_s_) of the record(_s_) to perform the action on. Specifying `-` expects a space-separated list from STDIN. |  |
 | `‑‑value`<br>`‑v` | `FIELD`<br>`VALUE` | YES | Key/value pair(_s_) that correspond to the field and assigment to be made, respectively. |  |
 | `‑‑help`<br>`‑h` |  | NO | Show this help message and exit. |  |
 
@@ -202,7 +192,7 @@ Deletes the records from the current model.
 
 | Flag(s) | Argument | Required | Description                                                                         . | Default |
 | :--- | :--: | :--: | :--- | :--- |
-| `‑‑ids`<br>`‑i` | `ID` | YES | The ID number(_s_) of the record(_s_) to perform the action on. Specifying `-` expects a speace-separated list from STDIN. |  |
+| `‑‑ids`<br>`‑i` | `ID` | YES | The ID number(_s_) of the record(_s_) to perform the action on. Specifying `-` expects a space-separated list from STDIN. |  |
 | `‑‑help`<br>`‑h` |  | NO | Show this help message and exit. |  |
 
 #### Fields
@@ -218,7 +208,7 @@ For user-friendly formatting, run `clo fields explain fields`.
 
 | Flag(s) | Argument | Required | Description                                                                         . | Default |
 | :--- | :--: | :--: | :--- | :--- |
-| `‑‑attributes`<br>`‑‑attr`<br>`‑a` | `NAME` | NO | Attribute(_s_) to return for each field, all if empty or not provided |  |
+| `‑‑attributes`<br>`‑‑attr`<br>`‑a` | `NAME` | NO | Attribute(_s_) to return for each field, all if empty or not provided. |  |
 | `‑‑help`<br>`‑h` |  | NO | Show this help message and exit. |  |
 
 #### Explain
@@ -242,5 +232,7 @@ Display documentation on a specified topic.
 | `‑‑verbose`<br>`‑v` |  | NO | Display more details. | `false` |
 | `‑‑help`<br>`‑h` |  | NO | Show this help message and exit. |  |
 
+
 [build_status_badge]: https://github.com/LeShaunJ/clo/actions/workflows/test.yml/badge.svg
 [build_status_link]: https://github.com/LeShaunJ/clo/actions/workflows/test.yml
+

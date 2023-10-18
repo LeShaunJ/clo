@@ -9,7 +9,11 @@ actions:
       export HOME='.'
       unset OD_INST OD_DATA OD_USER OD_PASS
       clo --readme --out README.md
-  test: tox
+  test:
+    command: >-
+      eval "$(pyenv init -)";
+      pyenv local 3.10 3.11 3.12-dev;
+      tox
 options:
   exec:
     load_secrets: true

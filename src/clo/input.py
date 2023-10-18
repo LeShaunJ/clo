@@ -970,7 +970,6 @@ def GetReadMe(
     parser: argparse.ArgumentParser,
     /,
     lines: list[str] = [],
-    toc: ToC = None,
     base: int = 0,
 ) -> str:
     from argparse import _SubParsersAction
@@ -1057,6 +1056,7 @@ def GetReadMe(
 
     if base == 0:
         lines.append(header(1, __title__))
+        lines.append('[![Build Status][build_status_badge]][build_status_link]\n')
 
         descr = re.sub(rf"^{re.escape(__title__)} - ", r"", parser.description.strip())
         lines.append(f"{descr % tmpv}\n")
@@ -1132,6 +1132,13 @@ def GetReadMe(
         for title, command in cmds.items():
             lines.append(header(4, title.title()))
             GetReadMe(command, lines=lines, base=base + 3)
+
+    if base == 0:
+        lines.extend([
+            '',
+            '[build_status_badge]: https://github.com/LeShaunJ/clo/actions/workflows/test.yml/badge.svg',
+            '[build_status_link]: https://github.com/LeShaunJ/clo/actions/workflows/test.yml',
+        ])
 
     doc = "\n".join(lines)
     if tocpl in doc:

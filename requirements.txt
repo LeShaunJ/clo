@@ -1,6 +1,5 @@
+black
 bumpversion
-check-manifest
-coverage
 flake8
 ipython
 pytest

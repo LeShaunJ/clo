@@ -1,42 +1,35 @@
 import typing as _t
 
 T = _t.TypeVar("T")
+OP = _t.Literal["__eq__", "__ne__", "__lt__", "__gt__", "__le__", "__ge__"]
 
 
-class GenericMeta(type):
-    pass
+class CMP(_t.NamedTuple):
+    operator: OP
+    value: _t.Any
 
 
-class _NamedTupGen(_t.NamedTupleMeta, GenericMeta):
-    pass
-
-
-class CMP(_t.NamedTuple, _t.Generic[T], metaclass=_NamedTupGen):
-    operator: _t.Literal["__eq__", "__ne__", "__lt__", "__gt__", "__le__", "__ge__"]
-    value: T
-
-
-def EQ(value: T) -> CMP[T]:
+def EQ(value: T):
     return CMP("__eq__", value)
 
 
-def NE(value: T) -> CMP[T]:
+def NE(value: T):
     return CMP("__ne__", value)
 
 
-def LT(value: T) -> CMP[T]:
+def LT(value: T):
     return CMP("__lt__", value)
 
 
-def GT(value: T) -> CMP[T]:
+def GT(value: T):
     return CMP("__gt__", value)
 
 
-def LE(value: T) -> CMP[T]:
+def LE(value: T):
     return CMP("__le__", value)
 
 
-def GE(value: T) -> CMP[T]:
+def GE(value: T):
     return CMP("__ge__", value)
 
 
