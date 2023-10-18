@@ -3,13 +3,13 @@
 
 import xmlrpc.client
 import ssl
-from typing import Any, Literal, TypedDict
+from typing import Any, Literal, TypedDict, Union
 from types import MethodType
-from functools import cache
+from functools import lru_cache
 from itertools import groupby
 from .meta import __title__
-from .types import Secret, IR, Credentials
-from .output import Log, Trace
+from .types import Secret, IR, Credentials, Domain, Logic
+from .output import Levels, Log, Trace
 
 ###########################################################################
 
@@ -19,7 +19,7 @@ Fault = xmlrpc.client.Fault
 ###########################################################################
 
 
-def IRWalk(*models: IR, depth: int = 0) -> dict[str, IR]:
+def IRWalk(*models: IR, depth: int = 0) -> dict[str, IR]:  # pragma: no cover
 
     def transform(obj: IR):
         try:
@@ -50,38 +50,7 @@ def IRWalk(*models: IR, depth: int = 0) -> dict[str, IR]:
 ###########################################################################
 
 
-class CookiesTransport(xmlrpc.client.SafeTransport):
-    """A Transport subclass that retains cookies over its lifetime."""
-
-    __instance: "CookiesTransport" = None
-
-    def __new__(cls):
-        if cls.__instance is None:
-            cls.__instance = super().__new__(cls)
-        return cls.__instance
-
-    def __init__(self, context=ssl._create_unverified_context()):
-        super().__init__(context=context)
-        self._cookies = []
-
-    def send_headers(self, connection, headers):
-        if self._cookies:
-            connection.putheader("Cookie", "; ".join(self._cookies))
-        super().send_headers(connection, headers)
-
-    def parse_response(self, response):
-        # This check is required if in some responses we receive no cookies at all
-        if response.msg.get_all("Set-Cookie"):
-            for header in response.msg.get_all("Set-Cookie"):
-                cookie = header.split(";", 1)[0]
-                self._cookies.append(cookie)
-        return super().parse_response(response)
-
-
 class _Common(type):
-    ...
-    __instance = None
-    ...
 
     @property
     def URL(cls) -> str:
@@ -92,7 +61,7 @@ class _Common(type):
         return getattr(cls, "__database")
 
     @property
-    def Username(cls) -> str:
+    def Username(cls) -> str:  # pragma: no cover
         return getattr(cls, "__username", "")
 
     @property
@@ -103,28 +72,33 @@ class _Common(type):
     def Arguments(cls) -> tuple[str, str, str]:
         return cls.Database, cls.UID, getattr(cls, "__password").data
 
-    ...
-
-    def __new__(cls, name: str, bases: tuple[type], dct: dict):
-        if not cls.__instance:
-            cls.__instance = type.__new__(cls, name, bases, dct)
-        ...
-        return cls.__instance
-
 
 class Common(metaclass=_Common):
-    ...
+    """A singleton class representing the Odoo server's common XMLRPC connection.
+    """
 
     class APIVersion(TypedDict):
+        """A collection of version metadata properties:
+
+        - **server_version** `str`: The major and minor version.
+        - **server_version_info** `(int, int, int, str, int)`: The major, minor, patch, release, and build items.
+        - **server_serie** `str`
+        - **protocol_version** `int`: The API protocol version.
+        """
+
         server_version: str
-        server_version_info: tuple[int, int, int, str, int, str]
+        server_version_info: tuple[int, int, int, str, int]
         server_serie: str
         protocol_version: int
 
-    ...
-
     @classmethod
     def Load(cls, url: str) -> None:
+        """Load the  Odoo server's common XMLRPC connection.
+
+        Args:
+            url (str): The URL of the  Odoo server.
+        """
+
         setattr(cls, "__url", url)
         ...
         try:
@@ -134,14 +108,11 @@ class Common(metaclass=_Common):
                     "__rpc",
                     xmlrpc.client.ServerProxy(
                         f"{url}/xmlrpc/2/common",
-                        transport=CookiesTransport(),
-                        verbose=(Log.Level == Log.Levels.TRACE),
+                        verbose=(Log.Level == Levels.TRACE),
                     ),
                 )
         except OSError:
             Log.FATAL(f"Could not connect to XML-RPC protocol at {url}")
-
-    ...
 
     @classmethod
     def Authenticate(
@@ -152,6 +123,21 @@ class Common(metaclass=_Common):
         *,
         exit_on_fail: bool = True,
     ) -> int:
+        """Log in to an Odoo instance's XMLRPC API.
+
+        Args:
+            database (str): The name of Odoo instance database.
+            username (str): The user to authenitcate.
+            password (Secret): The user's password.
+            exit_on_fail (bool, optional): If `True`, calls for an exit on failure. Defaults to True.
+
+        Raises:
+            LookupError: Raised when authenitcation fails in any way.
+
+        Returns:
+            int: The ID of the authenitcated user.
+        """
+
         setattr(cls, "__database", database)
         setattr(cls, "__username", username)
         setattr(cls, "__password", password)
@@ -172,17 +158,25 @@ class Common(metaclass=_Common):
         setattr(cls, "__uid", uid)
         return uid
 
-    ...
-
     @classmethod
     def Version(cls) -> APIVersion:
+        """Retrieve version data about the Odoo instance.
+
+        Returns:
+            APIVersion: The version properties.
+        """
+
         with Trace():
             return getattr(cls, "__rpc").version()
 
-    ...
-
     @classmethod
     def Demo(cls) -> Credentials:
+        """Retrieve demo credentials from Odoo Cloud.
+
+        Returns:
+            Credentials: Teh credentials, in the for of Environment Variable declarations.
+        """
+
         from urllib.parse import urlparse, parse_qs, ParseResult
         import requests
 
@@ -217,26 +211,38 @@ class Common(metaclass=_Common):
         ...
         return result
 
-    ...
-
     @staticmethod
-    def HandleProtocol(p: xmlrpc.client.ProtocolError) -> int:
-        Log.ERROR(f"PROTOCOL_ERROR({p.errcode}): {p.errmsg}")
-        if Log.Level == Log.Levels.DEBUG:
-            Log.DEBUG(f"URL: {p.url}\n  ")
+    def HandleProtocol(exception: xmlrpc.client.ProtocolError) -> Literal[200]:
+        """A handler for protocal errors.
+
+        Args:
+            exception (xmlrpc.client.ProtocolError): The protocol exception.
+
+        Returns:
+            Literal[200]: Standard exit code for protocol errors in `clo`.
+        """
+
+        Log.ERROR(f"PROTOCOL_ERROR({exception.errcode}): {exception.errmsg}")
+        if Log.Level == Levels.DEBUG:
+            Log.DEBUG(f"URL: {exception.url}\n  ")
             Log.DEBUG("HEADERS:")
-            for key, val in p.headers:
+            for key, val in exception.headers:
                 Log.DEBUG(f"- {key}: {val}")
         return 200
 
-    ...
-
     @staticmethod
-    def HandleFault(f: xmlrpc.client.Fault) -> int:
-        Log.ERROR(f"FAULT_ERROR({f.faultCode}): {f.faultString}")
-        return 100
+    def HandleFault(exception: xmlrpc.client.Fault) -> Literal[100]:
+        """A handler for fault errors.
 
-    ...
+        Args:
+            exception (xmlrpc.client.ProtocolError): The fault exception.
+
+        Returns:
+            Literal[100]: Standard exit code for protocol errors in `clo`.
+        """
+
+        Log.ERROR(f"FAULT_ERROR({exception.faultCode}): {exception.faultString}")
+        return 100
 
 
 class _Model(type):
@@ -246,7 +252,7 @@ class _Model(type):
     Repo: dict[str, IR] = {}
     ...
 
-    @cache
+    @lru_cache(maxsize=None)
     def __getitem__(cls, __name: str, /):
         try:
             if not cls.IR:
@@ -268,6 +274,16 @@ class _Model(type):
 
 
 class Model(metaclass=_Model):
+    """Perform operation on the records of a specified Odoo model.
+
+    ```python
+    Model[str]
+    ```
+
+    Args:
+        name (str): The name of the model to query.
+    """
+
     __rpc = None
     __name = ""
     __methods__: dict[str, tuple[str, list, dict]] = {
@@ -280,40 +296,30 @@ class Model(metaclass=_Model):
         "Delete": ("unlink", [], {}),
         "Fields": ("fields_get", [[]], {}),
     }
-    ...
+
     IR: "Model" = None
     Repo: dict[str, IR] = {}
-    ...
 
     def __new__(cls, *args):
         if not cls.__rpc:
             with Trace():
                 cls.__rpc = xmlrpc.client.ServerProxy(
                     f"{Common.URL}/xmlrpc/2/object",
-                    transport=CookiesTransport(),
-                    verbose=(Log.Level == Log.Levels.TRACE),
+                    verbose=(Log.Level == Levels.TRACE),
                 )
         ...
         return super().__new__(cls)
 
-    ...
-
     def __init__(self, name: str, /) -> None:
         self.__name = name
-
-    ...
 
     def __str__(self) -> str:
         return self.__name
 
-    ...
-
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}['{self}']"
 
-    ...
-
-    @cache
+    @lru_cache(maxsize=None)
     def __getattribute__(self, __name: str) -> Any:
         get_attr = object.__getattribute__
         try:
@@ -324,7 +330,6 @@ class Model(metaclass=_Model):
                 code = 0
                 try:
                     import sys
-                    print(args, kwargs, file=sys.__stdout__)
                     with Trace():
                         args = args if args else method[1]
                         kwargs = kwargs if kwargs else method[2]
@@ -348,49 +353,130 @@ class Model(metaclass=_Model):
         except KeyError:
             return get_attr(self, __name)
 
-    ...
-
     def Search(
         self,
-        domain: list[tuple[str, str, str]] = [],
+        domain: list[Union[Domain, Logic]] = [],
         /,
         offset: int = 0,
         limit: int | None = None,
         order: str | None = None,
-        count: bool = False,
     ) -> list[int]:
+        """Searches for record IDs based on the search domain.
+
+        Args:
+            domain (list[Union[Domain, Logic]], optional): A set of criterion to filter the search
+                by.
+            offset (int, optional): Number of results to ignore.
+            limit (int | None, optional): Maximum number of records to return.
+            order (str | None, optional): The field to sort the records by.
+
+        Returns:
+            list[int]: A list of matched record IDs.
+        """
         ...
 
     def Count(
-        self, domain: list[tuple[str, str, str]] = [], /, limit: int | None = None
-    ) -> list[int]:
+        self, domain: list[Union[Domain, Logic]] = [], /, limit: int | None = None
+    ) -> int:
+        """Returns the number of records in the current model matching
+        the provided domain.
+
+        Args:
+            domain (list[Union[Domain, Logic]], optional): A set of criterion to filter the search
+                by.
+            limit (int | None, optional): Maximum number of records to return.
+
+        Returns:
+            int: The count of matched records.
+        """
         ...
 
     def Find(
         self,
-        domain: list[tuple[str, str, str]] = [],
+        domain: list[Union[Domain, Logic]] = [],
         /,
         fields: list[str] = [],
         offset: int = 0,
         limit: int | None = None,
         order: str | None = None,
-        count: bool = False,
     ) -> list[dict[str, Any]]:
+        """A shortcut that combines `search` and `read` into one execution.
+
+        Args:
+            domain (list[Union[Domain, Logic]], optional): A set of criterion to filter the search
+                by.
+            fields (list[str], optional): Field names to return (default is all fields).
+            offset (int, optional): Number of results to ignore.
+            limit (int | None, optional): Maximum number of records to return.
+            order (str | None, optional): The field to sort the records by.
+
+        Returns:
+            list[dict[str, Any]]: A list of matched record data.
+        """
         ...
 
     def Read(self, ids: list[int], /, fields: list[str] = []) -> list[dict[str, Any]]:
+        """Retrieves the details for the records at the ID(s) specified.
+
+        Args:
+            ids (list[int]): The ID number(s) of the record(s) to perform the action on. Specifying
+                `-` expects a space-separated list from STDIN.
+            fields (list[str], optional): Field names to return (default is all fields).
+
+        Returns:
+            list[dict[str, Any]]: A list of record data.
+        """
         ...
 
-    def Write(self, ids: list[int], values: dict[str, Any], /) -> bool | None:
+    def Write(self, ids: list[int], values: dict[str, Any], /) -> bool:
+        """Updates existing records in the current model.
+
+        Args:
+            ids (list[int]): The ID number(s) of the record(s) to perform the action on. Specifying
+                `-` expects a space-separated list from STDIN.
+            values (dict[str, Any]): Key/value pair(s) that correspond to the field and assigment to
+                be made, respectively.
+
+        Returns:
+            bool: `True`, if the operation was successful.
+        """
         ...
 
     def Create(self, values: dict[str, Any], /) -> int:
+        """Creates new records in the current model.
+
+        Args:
+            values (dict[str, Any]): Key/value pair(s) that correspond to the field and assigment to
+                be made, respectively.
+
+        Returns:
+            int: The ID of the created record.
+        """
         ...
 
-    def Delete(self, ids: list[int], /) -> bool | None:
+    def Delete(self, ids: list[int], /) -> bool:
+        """Deletes the records from the current model.
+
+        Args:
+            ids (list[int]): The ID number(s) of the record(s) to perform the action on. Specifying
+                `-` expects a space-separated list from STDIN.
+
+        Returns:
+            bool: `True`, if the operation was successful.
+        """
         ...
 
     def Fields(self, *, attributes: list[str] = []) -> dict[str, dict[str, Any]]:
+        """Retrieves raw details of the fields available in the current model.
+        For user-friendly formatting, run `%(prog)s explain fields`
+
+        Args:
+            attributes (list[str], optional): Attribute(s) to return for each field, all if
+                empty or not provided.
+
+        Returns:
+            dict[str, dict[str, Any]]: A collection of fields and their metadata.
+        """
         ...
 
     ...
@@ -398,5 +484,12 @@ class Model(metaclass=_Model):
 
 ###########################################################################
 
+__all__ = [
+    'Common',
+    'Model',
+]
+
+###########################################################################
+
 if __name__ == "__main__":
-    print(f"{__title__} - {__doc__}")
+    print(f"{__title__} - {__doc__}")  # pragma: no cover

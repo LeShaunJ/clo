@@ -16,14 +16,25 @@ plugins:
   - mkdocstrings:
       handlers:
         python:
-          rendering:
-            show_root_heading: yes
-            show_submodules: no
+          options:
+            docstring_section_style: spacy
+            group_by_category: yes
+            inherited_members: True
+            members_order: source
             separate_signature: yes
+            show_object_full_path: yes
+            show_root_heading: yes
+            show_source: no
+            show_submodules: yes
+
   - search
+
 nav:
   - Home: index.md
   - Changelog: changelog.md
   - Contributing: contributing.md
   - Reference: reference.md
   - License: license.md
+
+watch:
+  - src/clo

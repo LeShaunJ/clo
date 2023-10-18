@@ -1,25 +1,38 @@
 #!/usr/bin/env python3
+"""# References
 
-from .api import Common, Model
+Perform API operations on Odoo instances from the command-line.
+"""
+
 from .meta import __title__, __doc__
-from .output import Log, FromCSV, ToCSV
+from . import api, input, output, types
 
 __all__ = [
-    'Common',
-    'Model',
-    'Log',
-    'FromCSV',
-    'ToCSV',
+    'api',
+    'input',
+    'output',
+    'types',
+    'CLI',
+    'Main'
 ]
 
 ###########################################################################
 
 
 def CLI(argv: list[str] = None) -> None:
+    """The `clo` command-line functionality.
+
+    Args:
+        argv (list[str], optional): A list of arguments to pass to the CLI; otherwise,
+            `sys.argv[1:]` is used. Defaults to None.
+
+    Raises:
+        Log.EXIT: Raised when the CLI is done it's job and poised to exit.
+    """
+
     import sys
-    import json
     from typing import cast
-    from .output import Log, ToCSV
+    from .output import Levels, Log, ToCSV, ToJSON
     from .api import Common, ProtocolError, Fault
     from .input import GetOpt, Namespace, Action, Topic
 
@@ -38,7 +51,7 @@ def CLI(argv: list[str] = None) -> None:
         }
 
         if Settings.dry_run:
-            Log.Level = Log.Levels.DEBUG
+            Log.Level = Levels.DEBUG
             args = ", ".join(
                 filter(
                     None,
@@ -49,7 +62,10 @@ def CLI(argv: list[str] = None) -> None:
                 )
             )
             ...
-            suffix = f" -> {Settings.out.name}"
+            try:
+                suffix = f" -> {Settings.out.name}"
+            except AttributeError:
+                suffix = f" -> ???"
             suffix += " (CSV)" if Settings.csv else ""
             ...
             Log.DEBUG(f"{repr(Settings.model)}.{action}({args}){suffix}")
@@ -92,13 +108,14 @@ def CLI(argv: list[str] = None) -> None:
             ToCSV(Result, Settings.out)
             raise Log.EXIT(code=0)
         else:
-            raise Log.EXIT(json.dumps(Result, indent="  "), flush=True, file=Settings.out)
+            raise Log.EXIT(ToJSON(Result), flush=True, file=Settings.out)
     except KeyboardInterrupt:
         sys.stderr.write("\n")
         Log.FATAL("Operation aborted", flush=True, code=250)
 
 
 def Main(argv: list[str] = None) -> None:
+    from .output import Log
     try:
         CLI(argv)
     except Log.EXIT as e:

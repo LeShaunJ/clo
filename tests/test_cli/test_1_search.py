@@ -3,7 +3,7 @@ import pytest
 import clo
 import re
 from clo.output import Log
-from .compare import CMP, EQ, GT
+from tests.compare import CMP, EQ, GT
 
 def_args = ["--env", ".clorc", "search"]
 
@@ -30,6 +30,7 @@ def_args = ["--env", ".clorc", "search"]
             EQ(0),
         ),
         (["-d", "login", "=", "dgdfgdfgs"], r"^\[\]\n$", EQ(0)),
+        (["-d", "login", "is", "good"], None, GT(0)),
     ],
     ids=[
         "search with no args",
@@ -41,6 +42,7 @@ def_args = ["--env", ".clorc", "search"]
         "search where not login = demo",
         "search where login = demo or login = admin",
         "search where nothing matches",
+        "search where the operator is invalid",
     ],
 )
 def test_command(args: list[str], pattern: re.Pattern | None, code: CMP[int], capsys):
@@ -64,7 +66,7 @@ def test_help(arg, capsys):
     out, err = capsys.readouterr()
     assert out
     assert e.value.code == 0
-    print(out, err, file=sys.__stdout__)
+    print(out, err)
 
 
 ###########################################################################

@@ -11,14 +11,41 @@ from .meta import __title__
 
 ###########################################################################
 
+__all__ = [
+    'ToJSON',
+    'ToCSV',
+    'FromCSV',
+    'Levels',
+    'Log',
+]
 
-def Pretty(obj) -> str:
-    return json.dumps(obj, indent=2)
+###########################################################################
+
+
+def ToJSON(obj: Any) -> str:
+    """Convert a serializable object into JSON.
+
+    Args:
+        obj (Any): Any serializable object.
+
+    Returns:
+        str: A JSON-formatted document.
+    """
+
+    return json.dumps(obj, indent="  ")
 
 
 def ToCSV(
     records: list[dict[str, Any]], file: io.TextIOWrapper, sep: str = ","
 ) -> None:
+    """Write a list of records to CSV.
+
+    Args:
+        records (list[dict[str, Any]]): A list of records.
+        file (io.TextIOWrapper): The stream the output will be saved to.
+        sep (str, optional): The column separator.
+    """
+
     import csv
 
     try:
@@ -30,59 +57,81 @@ def ToCSV(
 
 
 def FromCSV(file: io.TextIOWrapper, sep: str = ",") -> list[dict[str, Any]]:
+    """Convert CSV file contents into a list of records.
+
+    Args:
+        file (io.TextIOWrapper): The CSV-formatted input file.
+        sep (str, optional): The separator used in the file.
+
+    Returns:
+        list[dict[str, Any]]: A list of records.
+    """
+
     import csv
 
     try:
-        return csv.DictReader(file, delimiter=sep, strict=True)
-    except Exception as e:
+        return [*csv.DictReader(file, delimiter=sep, strict=True)]
+    except Exception as e:  # pragma: no cover
         Log.ERROR(e, code=7)
-
 
 ###########################################################################
 
+class Levels(Enum):
+    """An enumerator representing log levels.
+    """
+
+    OFF = 0
+    """Disables all logging."""
+    FATAL = 1
+    """Logs when an error causes the program to abort."""
+    ERROR = 2
+    """Logs when the program has a non-fatal error."""
+    WARN = 3
+    """Logs when the program needs to warn the user of something."""
+    INFO = 4
+    """Logs general information."""
+    DEBUG = 5
+    """Logs verbose, debugging infromation."""
+    TRACE = 6
+    """Logs egregiously verbos infromation."""
+
+    @classmethod
+    def names(cls) -> list[str]:
+        return [level.name for level in Levels]
+
+    @classmethod
+    def pretty(cls) -> list[str]:
+        result = "`, `".join(cls.names())
+        return f"`{result}`"
 
 class _Log(type):
+    """..."""
     import builtins
-
-    class Levels(Enum):
-        OFF = 0
-        FATAL = 1
-        ERROR = 2
-        WARN = 3
-        INFO = 4
-        DEBUG = 5
-        TRACE = 6
-
-        @classmethod
-        def names(cls) -> list[str]:
-            return [level.name for level in Log.Levels]
-
-        @classmethod
-        def pretty(cls) -> list[str]:
-            result = "`, `".join(cls.names())
-            return f"`{result}`"
 
     _level: Levels = Levels.OFF
     _print = builtins.print
 
     @property
     def Level(cls) -> Levels:
+        """Gets the current loggin level.
+        """
         return cls._level
 
     @Level.setter
     def Level(cls, which: str | Levels) -> None:
+        """Sets the current loggin level.
+        """
         if isinstance(which, str):
-            which = cls.Levels[which]
+            which = Levels[which]
         ...
         cls._level = which
         Kind = type(cls)
-        Levels = cls.Levels
-        Exiters = [cls.Levels.ERROR, cls.Levels.FATAL]
+        Exiters = [Levels.ERROR, Levels.FATAL]
 
         def PassFactory(level: Levels):
             @classmethod
             def __exit(cls: Kind, *args, **kwargs) -> None:
-                raise Log.EXIT(code=kwargs.get("code", 10))
+                raise Log.EXIT(code=kwargs.get("code", 10))  # pragma: no cover
 
             @classmethod
             def __func(cls: Kind, *args, **kwargs) -> None:
@@ -115,8 +164,8 @@ class _Log(type):
 
             return __exit if level in Exiters else __func
 
-        for level in list(cls.Levels):
-            if level == cls.Levels.OFF:
+        for level in list(Levels):
+            if level == Levels.OFF:
                 continue
             ...
             Factory = PassFactory if level.value > which.value else SendFactory
@@ -124,7 +173,7 @@ class _Log(type):
 
     def __new__(cls, name: str, bases: tuple[type], dct: dict):
         inst = type.__new__(cls, name, bases, dct)
-        inst.Level = cls.Levels.ERROR
+        inst.Level = Levels.ERROR
         return inst
 
     @classmethod
@@ -146,8 +195,14 @@ class _Log(type):
         )
 
     def Bump(cls, which: str | Levels) -> None:
+        """Switches the logging level if the current is less than what is specified.
+
+        Args:
+            which (str | Levels): The logging level to switch to.
+        """
+
         if isinstance(which, str):
-            which = cls.Levels[which]
+            which = Levels[which]
         ...
         if which.value < cls._level.value:
             return
@@ -171,21 +226,31 @@ class _Log(type):
                 print(*values, sep=sep, end=end, file=file, flush=flush)
 
         def Done(self) -> None:
-            import os
-            os._exit(self.code)
+            import os  # pragma: no cover
+            os._exit(self.code)  # pragma: no cover
 
 
 class Log(metaclass=_Log):
+    """A singleton class for outputting logs to `stderr`.
+    """
+
     @classmethod
     def FATAL(
         cls,
         *values: object,
         sep: str | None = " ",
         end: str | None = "\n",
-        flush: Literal[False] = False,
+        flush: bool = False,
         code: int = 10,
     ) -> None:
-        ...
+        """Output a `FATAL`-level log.
+
+        Args:
+            sep (str | None, optional): A string inserted between values.
+            end (str | None, optional): A string appended after the last value.
+            flush (bool, optional): Whether to forcibly flush the stream.
+            code (int, optional): If set, calls for exit with the code specified.
+        """
 
     @classmethod
     def ERROR(
@@ -193,10 +258,17 @@ class Log(metaclass=_Log):
         *values: object,
         sep: str | None = " ",
         end: str | None = "\n",
-        flush: Literal[False] = False,
+        flush: bool = False,
         code: int = 10,
     ) -> None:
-        ...
+        """Output an `ERROR`-level log.
+
+        Args:
+            sep (str | None, optional): A string inserted between values.
+            end (str | None, optional): A string appended after the last value.
+            flush (bool, optional): Whether to forcibly flush the stream.
+            code (int, optional): If set, calls for exit with the code specified.
+        """
 
     @classmethod
     def WARN(
@@ -204,9 +276,15 @@ class Log(metaclass=_Log):
         *values: object,
         sep: str | None = " ",
         end: str | None = "\n",
-        flush: Literal[False] = False,
+        flush: bool = False,
     ) -> None:
-        ...
+        """Output a `WARN`-level log.
+
+        Args:
+            sep (str | None, optional): A string inserted between values.
+            end (str | None, optional): A string appended after the last value.
+            flush (bool, optional): Whether to forcibly flush the stream.
+        """
 
     @classmethod
     def INFO(
@@ -214,9 +292,15 @@ class Log(metaclass=_Log):
         *values: object,
         sep: str | None = " ",
         end: str | None = "\n",
-        flush: Literal[False] = False,
+        flush: bool = False,
     ) -> None:
-        ...
+        """Output an `INFO`-level log.
+
+        Args:
+            sep (str | None, optional): A string inserted between values.
+            end (str | None, optional): A string appended after the last value.
+            flush (bool, optional): Whether to forcibly flush the stream.
+        """
 
     @classmethod
     def DEBUG(
@@ -224,9 +308,15 @@ class Log(metaclass=_Log):
         *values: object,
         sep: str | None = " ",
         end: str | None = "\n",
-        flush: Literal[False] = False,
+        flush: bool = False,
     ) -> None:
-        ...
+        """Output a `DEBUG`-level log.
+
+        Args:
+            sep (str | None, optional): A string inserted between values.
+            end (str | None, optional): A string appended after the last value.
+            flush (bool, optional): Whether to forcibly flush the stream.
+        """
 
     @classmethod
     def TRACE(
@@ -234,9 +324,15 @@ class Log(metaclass=_Log):
         *values: object,
         sep: str | None = " ",
         end: str | None = "\n",
-        flush: Literal[False] = False,
+        flush: bool = False,
     ) -> None:
-        ...
+        """Output a `TRACE`-level log.
+
+        Args:
+            sep (str | None, optional): A string inserted between values.
+            end (str | None, optional): A string appended after the last value.
+            flush (bool, optional): Whether to forcibly flush the stream.
+        """
 
 
 class TraceMe(io.TextIOWrapper):
@@ -256,9 +352,6 @@ class TraceMe(io.TextIOWrapper):
         except Exception:
             pass
 
-    def flush(self):
-        self.__.flush()
-
 
 ###########################################################################
 
@@ -276,4 +369,4 @@ def Trace():
 ###########################################################################
 
 if __name__ == "__main__":
-    print(f"{__title__} - {__doc__}")
+    print(f"{__title__} - {__doc__}")  # pragma: no cover

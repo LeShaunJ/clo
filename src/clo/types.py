@@ -10,6 +10,15 @@ from .meta import __title__
 
 TICK = "-"
 
+Logic = Literal['&', '|', '!']
+"""
+Logical operators used with Domains:
+
+- `&`: A logical `AND` to place before two or more domains (arity 2).
+- `|`: A logical `OR`, placed before two or more domains (arity 2).
+- `!`: A logical `OR` to place before a signle domain (arity 1).
+"""
+
 ###########################################################################
 
 
@@ -21,35 +30,12 @@ class IR(TypedDict):
     children: dict[str, "IR"]
 
 
-class Secret(UserString):
-    ...
-
-    def __str__(self) -> str:
-        return "*" * len(self)
-
-    ...
-
-    def __repr__(self) -> str:
-        return f"'{self}'"
-
-
-class URL(str):
-    def __new__(cls, object=...):
-        from urllib.parse import urlparse
-
-        txt = str(object)
-        ...
-        try:
-            url = urlparse(txt)
-            assert url.scheme and url.netloc
-        except AssertionError:
-            raise argparse.ArgumentError(f'"{txt}" is not a valid instance URL.')
-        ...
-        return txt
-
-
 class Domain(NamedTuple):
+    """Criterion to filter the search by.
+    """
+
     field: str
+    """The name of the field to match."""
     operator: Literal[
         "=",
         "!=",
@@ -69,7 +55,9 @@ class Domain(NamedTuple):
         "child_of",
         "parent_of",
     ]
+    """A comparison operator."""
     value: str
+    """The value to compare."""
 
     @classmethod
     def Operators(cls) -> tuple[type, ...]:
@@ -96,6 +84,34 @@ class Domain(NamedTuple):
         return value
 
 
+class Secret(UserString):
+    """A string to hold secret values, but obsfucates when printed.
+    """
+
+    def __str__(self) -> str:
+        return "*" * len(self)
+
+    ...
+
+    def __repr__(self) -> str:
+        return f"'{self}'"
+
+
+class URL(str):
+    def __new__(cls, object=...):
+        from urllib.parse import urlparse
+
+        txt = str(object)
+        ...
+        try:
+            url = urlparse(txt)
+            assert url.scheme and url.netloc
+        except AssertionError:
+            raise argparse.ArgumentError(None, f'"{txt}" is not a valid instance URL.')
+        ...
+        return txt
+
+
 class Credentials(TypedDict):
     instance: str
     database: str
@@ -105,5 +121,16 @@ class Credentials(TypedDict):
 
 ###########################################################################
 
+__all__ = [
+    'Logic',
+    'IR',
+    'Domain',
+    'Secret',
+    'URL',
+    'Credentials',
+]
+
+###########################################################################
+
 if __name__ == "__main__":
-    print(f"{__title__} - {__doc__}")
+    print(f"{__title__} - {__doc__}")  # pragma: no cover

@@ -2,7 +2,7 @@ import sys
 import pytest
 import clo
 from clo.output import Log
-from .compare import CMP, EQ, GT
+from tests.compare import CMP, EQ, GT
 
 def_args = ["--env", ".clorc", "count"]
 

@@ -41,10 +41,10 @@ The following parameters apply to any [Action](#actions).
 | Flag(s) | Argument | Required | Description                                                                         . | Default |
 | :--- | :--: | :--: | :--- | :--- |
 | `‑‑model`<br>`‑m` | `MODEL` | NO | The Odoo model to perform an action on. Run `clo explain models [-v]` to list                             available options. | `"res.users"` |
-| `‑‑env` | `FILE` | NO | Path to a `.clorc` file. See [Requisites](_#requisites_) below for details. | `"~/.clorc"` |
-| `‑‑inst`<br>`‑‑instance` | `URL` | NO | The address of the Odoo instance. See [Requisites](_#requisites_) below for details. | `"http://localhost:8069"` |
-| `‑‑db`<br>`‑‑database` | `NAME` | NO | The application database to perform operations on. See [Requisites](_#requisites_) below                             for details. | `""` |
-| `‑‑user` | `NAME` | NO | The user to perform operations as. See [Requisites](_#requisites_) below for details. | `""` |
+| `‑‑env` | `FILE` | NO | Path to a `.clorc` file. See [Requisites](#requisites) below for details. | `"~/.clorc"` |
+| `‑‑inst`<br>`‑‑instance` | `URL` | NO | The address of the Odoo instance. See [Requisites](#requisites) below for details. | `"http://localhost:8069"` |
+| `‑‑db`<br>`‑‑database` | `NAME` | NO | The application database to perform operations on. See [Requisites](#requisites) below                             for details. | `""` |
+| `‑‑user` | `NAME` | NO | The user to perform operations as. See [Requisites](#requisites) below for details. | `""` |
 | `‑‑demo` |  | NO | Generate and use a demo instance from Odoo Cloud. |  |
 | `‑‑out` | `FILE` | NO | Where to stream the output. |  |
 | `‑‑log` | `LEVEL` | NO | The level (_`OFF`, `FATAL`, `ERROR`, `WARN`, `INFO`, `DEBUG`, `TRACE`_) of logs to produce. | `"ERROR"` |

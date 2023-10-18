@@ -26,7 +26,7 @@ from typing import (
 )
 from .meta import __title__, __prog__, __version__
 from .types import URL, Domain, Secret, TICK
-from .output import Log
+from .output import Levels, Log
 from .api import Common, Model
 from pathlib import Path
 from dotenv import load_dotenv
@@ -71,7 +71,7 @@ class Parser(argparse.ArgumentParser):
 
     def error(self, message):
         _level = Log.Level
-        Log.Bump(Log.Levels.INFO)
+        Log.Bump(Levels.INFO)
         Log.INFO(self.format_usage().strip())
         Log.Level = _level
         self.exit(2, message)
@@ -124,7 +124,7 @@ class Namespace(argparse.Namespace):
     demo: bool = False
     raw: bool = False
     csv: bool = False
-    logging: Log.Levels
+    logging: Levels
     dry_run: bool
     out: io.TextIOWrapper
     env: Path
@@ -151,8 +151,7 @@ class _Topic(type):
     def __getitem__(cls, __name: str):
         try:
             inner: Callable[[type[cls]], None] = object.__getattribute__(cls, __name)
-            print(textwrap.dedent(inner()), "\n")
-            raise Log.EXIT(code=0)
+            raise Log.EXIT(textwrap.dedent(inner()), "\n", code=0)
         except Exception as e:
             Log.ERROR(e, code=30)
 
@@ -425,18 +424,12 @@ def StdInArg(
 
         def __new__(cls, *args, **kwargs):
             if args[0] == TICK:
-                # try:
-                #     assert not sys.stdin.isatty()
-                # except AssertionError:
-                #     raise argparse.ArgumentError(f'"<STDIN> is a TTY.')
-
                 try:
                     stdin = " ".join([*sys.stdin]).strip()
                     assert re.match(match, stdin)
                     setattr(space, attr, [int(i) for i in stdin.split(" ")])
                     return TICK
                 except Exception as e:
-                    print(f'ERROR: {repr(e)}', file=sys.__stdout__)
                     raise argparse.ArgumentError(f'"{stdin}" is invalid for `{name}`.')
 
             return int(*args, **kwargs)
@@ -604,7 +597,7 @@ def GetOpt(argv: list[str]) -> Namespace:
             {
                 "help": (
                     "The ID number(s) of the record(s) to perform the action on. Specifying `-` expects a "
-                    "speace-separated list from STDIN."
+                    "space-separated list from STDIN."
                 ),
                 "metavar": "ID",
                 "nargs": "+",
@@ -636,7 +629,7 @@ def GetOpt(argv: list[str]) -> Namespace:
         Attr = Argument(
             ["--attributes", "--attr", "-a"],
             {
-                "help": "Attribute(s) to return for each field, all if empty or not provided",
+                "help": "Attribute(s) to return for each field, all if empty or not provided.",
                 "metavar": "NAME",
                 "nargs": "+",
             },
@@ -695,10 +688,10 @@ def GetOpt(argv: list[str]) -> Namespace:
             {
                 "metavar": "LEVEL",
                 "action": "store",
-                "default": Log.Levels.ERROR.name,
-                "choices": Log.Levels.names(),
+                "default": Levels.ERROR.name,
+                "choices": Levels.names(),
                 "dest": "logging",
-                "help": f"The level ({Log.Levels.pretty()}) of logs to produce.",
+                "help": f"The level ({Levels.pretty()}) of logs to produce.",
             },
         )
 
@@ -950,7 +943,7 @@ def GetOpt(argv: list[str]) -> Namespace:
         ]
         _, argv = Starter.parse_known_args(argv, namespace=Settings)
         ...
-        Log.Level = Log.Levels[Settings.logging]
+        Log.Level = Levels[Settings.logging]
     except argparse.ArgumentError:
         pass
 
@@ -968,7 +961,7 @@ def GetOpt(argv: list[str]) -> Namespace:
         Log.DEBUG(Settings)
         return Settings
     except argparse.ArgumentError as e:
-        Log.Bump(Log.Levels.INFO)
+        Log.Bump(Levels.INFO)
         Log.INFO(parser.format_usage().strip())
         Log.ERROR(e, code=1)
 
@@ -1011,7 +1004,7 @@ def GetReadMe(
         )
         text = re.sub(r"\033\[1m(.+?)\033\[0m", r"**\1**", text)
         text = re.sub(r"\033\[3m(.+?)\033\[0m", r"_\1_", text)
-        text = re.sub(r"[(](.+?)[)]", r"(_\1_)", text)
+        text = re.sub(r"(?<!\])[(](.+?)[)]", r"(_\1_)", text)
         return text
 
     def requisite(arg: argparse.Action) -> Literal["YES", "NO"]:
@@ -1167,4 +1160,4 @@ __all__ = [
 ###########################################################################
 
 if __name__ == "__main__":
-    print(f"{__title__} - {__doc__}")
+    print(f"{__title__} - {__doc__}")  # pragma: no cover
