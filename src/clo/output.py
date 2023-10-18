@@ -76,6 +76,7 @@ def FromCSV(file: io.TextIOWrapper, sep: str = ",") -> list[dict[str, Any]]:
 
 ###########################################################################
 
+
 class Levels(Enum):
     """An enumerator representing log levels.
     """
@@ -103,6 +104,7 @@ class Levels(Enum):
     def pretty(cls) -> list[str]:
         result = "`, `".join(cls.names())
         return f"`{result}`"
+
 
 class _Log(type):
     """..."""

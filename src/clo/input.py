@@ -429,7 +429,7 @@ def StdInArg(
                     assert re.match(match, stdin)
                     setattr(space, attr, [int(i) for i in stdin.split(" ")])
                     return TICK
-                except Exception as e:
+                except Exception:
                     raise argparse.ArgumentError(f'"{stdin}" is invalid for `{name}`.')
 
             return int(*args, **kwargs)

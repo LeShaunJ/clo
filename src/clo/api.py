@@ -2,7 +2,6 @@
 """XMLRPC API implementation"""
 
 import xmlrpc.client
-import ssl
 from typing import Any, Literal, TypedDict, Union
 from types import MethodType
 from functools import lru_cache
@@ -329,7 +328,6 @@ class Model(metaclass=_Model):
             def __execute__(self: Model, *args, **kwargs):
                 code = 0
                 try:
-                    import sys
                     with Trace():
                         args = args if args else method[1]
                         kwargs = kwargs if kwargs else method[2]

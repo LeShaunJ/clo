@@ -43,7 +43,7 @@ def test_bump():
 
 def test_tocsv_fail(capsys):
     with pytest.raises(Log.EXIT) as e:
-        ToCSV({ 5, 6, 7, 8 }, sys.stdout)
+        ToCSV({5, 6, 7, 8}, sys.stdout)
 
     _, err = capsys.readouterr()
     assert e.value.code > 0

@@ -65,7 +65,7 @@ def CLI(argv: list[str] = None) -> None:
             try:
                 suffix = f" -> {Settings.out.name}"
             except AttributeError:
-                suffix = f" -> ???"
+                suffix = " -> ???"
             suffix += " (CSV)" if Settings.csv else ""
             ...
             Log.DEBUG(f"{repr(Settings.model)}.{action}({args}){suffix}")
