@@ -376,12 +376,14 @@ def RC(path_str: str):
     if Settings.demo or Settings.readme:
         return None
 
-    path = Path(path_str).expanduser().resolve(True)
+    path = Path(path_str)
 
-    if path.exists():
+    try:
+        path = path.expanduser().resolve(True)
+        assert path.exists()
         load_dotenv(dotenv_path=path, interpolate=True)
-    else:
-        Log.WARN(f"Congig file {path} was not found.")
+    except (FileNotFoundError, AssertionError):
+        Log.WARN(f"Congig file {path_str} was not found.")
 
     return path
 
@@ -936,12 +938,22 @@ def GetOpt(argv: list[str]) -> Namespace:
 
     # Preprocess Logging arg so that it's available to Common & Model
     try:
-        Starter = Parser(**Input.Prog)
+        Starters = Parser(**Input.Prog)
         [
-            Starter.add_argument(*inp.names, **inp.details)
-            for inp in [Input.Logs, Input.ReadMe, Input.Environ, Input.Inst, Input.Out]
+            Starters.add_argument(*inp.names, **inp.details)
+            for inp in [Input.Logs, Input.Out]
         ]
-        _, argv = Starter.parse_known_args(argv, namespace=Settings)
+        _, argv = Starters.parse_known_args(argv, namespace=Settings)
+        [
+            Starters.add_argument(*inp.names, **inp.details)
+            for inp in [
+                Input.Demo,
+                Input.ReadMe,
+                Input.Environ,
+                Input.Inst,
+            ]
+        ]
+        _, argv = Starters.parse_known_args(argv, namespace=Settings)
         ...
         Log.Level = Levels[Settings.logging]
     except argparse.ArgumentError:
