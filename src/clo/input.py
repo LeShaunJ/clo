@@ -1068,7 +1068,12 @@ def GetReadMe(
 
     if base == 0:
         lines.append(header(1, __title__))
-        lines.append('[![Build Status][build_status_badge]][build_status_link]\n')
+        lines.extend([
+            '[![Build Status][build_status_badge]][build_status_link]',
+            '[![Coverage][coverage_badge]][coverage_link]',
+            '[![PyPI version][pypi_badge]][pypi_link]',
+            '',
+        ])
 
         descr = re.sub(rf"^{re.escape(__title__)} - ", r"", parser.description.strip())
         lines.append(f"{descr % tmpv}\n")
@@ -1146,10 +1151,25 @@ def GetReadMe(
             GetReadMe(command, lines=lines, base=base + 3)
 
     if base == 0:
+        lines.append(header(2, 'See Also'))
         lines.extend([
             '',
+            '* [Changelog](CHANGELOG.md)',
+            '* [Contributing](CONTRIBUTING.md)',
+            '* [Code of Conduct](CODE_OF_CONDUCT.md)',
+            '* [Security](SECURITY.md)',
+        ])
+        lines.extend([
+            '',
+            '![Banner][banner]',
+            '',
+            '[banner]: https://leshaunj.github.io/clo/assets/images/logo-social.png',
             '[build_status_badge]: https://github.com/LeShaunJ/clo/actions/workflows/test.yml/badge.svg',
             '[build_status_link]: https://github.com/LeShaunJ/clo/actions/workflows/test.yml',
+            '[coverage_badge]: https://raw.githubusercontent.com/LeShaunJ/clo/main/assets/images/coverage.svg',
+            '[coverage_link]: https://raw.githubusercontent.com/LeShaunJ/clo/main/assets/images/coverage.svg',
+            '[pypi_badge]: https://badge.fury.io/py/clo.svg',
+            '[pypi_link]: https://badge.fury.io/py/clo',
         ])
 
     doc = "\n".join(lines)

@@ -1,7 +1,8 @@
 # CLO (Command-Line Odoo)
 
-
 [![Build Status][build_status_badge]][build_status_link]
+[![Coverage][coverage_badge]][coverage_link]
+[![PyPI version][pypi_badge]][pypi_link]
 
 Perform API operations on Odoo instances via the command-line.
 
@@ -22,6 +23,7 @@ Perform API operations on Odoo instances via the command-line.
     * [Delete](#delete)
     * [Fields](#fields)
     * [Explain](#explain)
+* [See Also](#see-also)
 
 ## Installation
 
@@ -232,7 +234,20 @@ Display documentation on a specified topic.
 | `‑‑verbose`<br>`‑v` |  | NO | Display more details. | `false` |
 | `‑‑help`<br>`‑h` |  | NO | Show this help message and exit. |  |
 
+## See Also
 
+
+* [Changelog](CHANGELOG.md)
+* [Contributing](CONTRIBUTING.md)
+* [Code of Conduct](CODE_OF_CONDUCT.md)
+* [Security](SECURITY.md)
+
+![Banner][banner]
+
+[banner]: https://leshaunj.github.io/clo/assets/images/logo-social.png
 [build_status_badge]: https://github.com/LeShaunJ/clo/actions/workflows/test.yml/badge.svg
 [build_status_link]: https://github.com/LeShaunJ/clo/actions/workflows/test.yml
-
+[coverage_badge]: https://raw.githubusercontent.com/LeShaunJ/clo/main/assets/images/coverage.svg
+[coverage_link]: https://raw.githubusercontent.com/LeShaunJ/clo/main/assets/images/coverage.svg
+[pypi_badge]: https://badge.fury.io/py/clo.svg
+[pypi_link]: https://badge.fury.io/py/clo
