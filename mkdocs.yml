@@ -3,7 +3,6 @@ repo_url: https://github.com/LeShaunJ/clo
 edit_uri: ""
 theme:
   name: material
-  custom_dir: overrides
   palette:
     primary: 714B67
   favicon: assets/images/favicon.png

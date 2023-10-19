@@ -1166,8 +1166,8 @@ def GetReadMe(
             '[banner]: https://leshaunj.github.io/clo/assets/images/logo-social.png',
             '[build_status_badge]: https://github.com/LeShaunJ/clo/actions/workflows/test.yml/badge.svg',
             '[build_status_link]: https://github.com/LeShaunJ/clo/actions/workflows/test.yml',
-            '[coverage_badge]: https://raw.githubusercontent.com/LeShaunJ/clo/main/assets/images/coverage.svg',
-            '[coverage_link]: https://raw.githubusercontent.com/LeShaunJ/clo/main/assets/images/coverage.svg',
+            '[coverage_badge]: https://raw.githubusercontent.com/LeShaunJ/clo/main/docs/assets/images/coverage.svg',
+            '[coverage_link]: https://raw.githubusercontent.com/LeShaunJ/clo/main/docs/assets/images/coverage.svg',
             '[pypi_badge]: https://badge.fury.io/py/clo.svg',
             '[pypi_link]: https://badge.fury.io/py/clo',
         ])
