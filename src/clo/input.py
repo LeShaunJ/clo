@@ -1154,10 +1154,10 @@ def GetReadMe(
         lines.append(header(2, 'See Also'))
         lines.extend([
             '',
-            '* [Changelog](CHANGELOG.md)',
-            '* [Contributing](CONTRIBUTING.md)',
-            '* [Code of Conduct](CODE_OF_CONDUCT.md)',
-            '* [Security](SECURITY.md)',
+            '* [Changelog](https://github.com/LeShaunJ/clo/CHANGELOG.md)',
+            '* [Contributing](https://github.com/LeShaunJ/clo/CONTRIBUTING.md)',
+            '* [Code of Conduct](https://github.com/LeShaunJ/clo/CODE_OF_CONDUCT.md)',
+            '* [Security](https://github.com/LeShaunJ/clo/SECURITY.md)',
         ])
         lines.extend([
             '',
