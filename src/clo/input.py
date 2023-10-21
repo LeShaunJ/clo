@@ -194,7 +194,7 @@ class Explain(metaclass=_Explain):
             )),
             ('', operators),
             ('`VALUE`:', (
-                """Variable type, must be comparable (through OPERATOR) to the named FIELD."""
+                """Variable type, must be comparable (through `OPERATOR`) to the named `FIELD`."""
             )),
         ]
         result = Columnize(attrs, 100).rstrip()
@@ -212,25 +212,27 @@ class Explain(metaclass=_Explain):
     def logic(cls) -> str:
         """Outputs information regarding Odoo search domains' logical operators.
         """
-        return ("""
-        #### LOGIC
+        return (
+            """
+            #### LOGIC
 
-        Domain criteria can be combined using logical operators in prefix form:
+            Domain criteria can be combined using logical operators in prefix form:
 
-            --or -d login = user -d name = "John Smith" -d email = user@domain.com
+                --or -d login = user -d name = "John Smith" -d email = user@domain.com
 
-        is equivalent to `login == "user" || name == "John Smith" || email == "user@domain.com"`
+            is equivalent to `login == "user" || name == "John Smith" || email == "user@domain.com"`
 
-            --not -d login = user` or `-d login '!=' user
+                --not -d login = user` or `-d login '!=' user
 
-        are equivalent to `login != "user"`. `--not` is generally unneeded, save for negating the """
-        """OPERATOR, `child_of`, or `parent_of`.
+            are equivalent to `login != "user"`. `--not` is generally unneeded, save for negating the """
+            """OPERATOR, `child_of`, or `parent_of`.
 
-            --and -d login = user -d name = "John Smith"
+                --and -d login = user -d name = "John Smith"
 
-        is equivalent to `login == "user" && name == "John Smith"`; though, successive domains"""
-        """imply `--and`.
-        """)
+            is equivalent to `login == "user" && name == "John Smith"`; though, successive domains"""
+            """imply `--and`.
+            """
+        )
 
     @classmethod
     def models(cls) -> str:

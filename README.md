@@ -276,7 +276,7 @@ A domain is a set of criteria, each criterion being a throuple of `(FIELD, OPERA
                                     of the model into account (_i.e following the relationship
                                     `FIELD` named by `VALUE`_).
 
-`VALUE`:      Variable type, must be comparable (_through OPERATOR_) to the named FIELD.
+`VALUE`:      Variable type, must be comparable (_through `OPERATOR`_) to the named `FIELD`.
 
 #### LOGIC
 

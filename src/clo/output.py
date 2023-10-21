@@ -99,7 +99,8 @@ def Columnize(
     import textwrap
 
     def handler(subject: str, details: str | Subjects):
-        form_txt = lambda: f"{subject:<{pad}}{delim}{details}"
+        def form_txt():
+            return f"{subject:<{pad}}{delim}{details}"
 
         if isinstance(details, list):
             padding = pad + border
