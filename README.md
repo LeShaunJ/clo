@@ -66,7 +66,9 @@ The following parameters apply to any [Action](#actions).
 > - `--instance` can be specified using environment variable **`CLO_INSTANCE`**.
 > - `--database` can be specified using environment variable **`CLO_DATABASE`**.
 > - `--username` can be specified using environment variable **`CLO_USERNAME`**.
-> - The `password` (_or `API-key`_) **MUST BE** specified using environment variable                 **`CLO_PASSWORD`**.
+> - The `password` (_or `API-key`_) **MUST BE** specified using environment variable **`CLO_PASSWORD`**.
+> 
+> `clo` also looks for a `.clorc` file in the working directory that contain these values, or the file specified by `--env FILE`, if it exists.
 ### Actions
 
 The Odoo instance is queried, or operated on, using `ACTIONS`. Each `ACTION` has it's own set of arguements; run `clo ACTION --help` for specific details.

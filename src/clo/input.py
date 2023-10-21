@@ -730,22 +730,23 @@ def GetOpt(argv: list[str]) -> Namespace:
             "conflict_handler": "resolve",
             "formatter_class": HelpFormat,
             "exit_on_error": False,
-            "epilog": textwrap.dedent(
-                (
-                    f"""
+            "epilog": textwrap.dedent((
+                f"""
                 \033[4mREQUISITES\033[0m:
 
                 The following inputs are \033[1mrequired\033[0m, but have multiple or special specifications. In """
-                    f"""the absense of these inputs, the program will ask for input:
+                f"""the absense of these inputs, the program will ask for input:
 
                 - `--instance` can be specified using environment variable \033[1m`{Env.INSTANCE}`\033[0m.
                 - `--database` can be specified using environment variable \033[1m`{Env.DATABASE}`\033[0m.
                 - `--username` can be specified using environment variable \033[1m`{Env.USERNAME}`\033[0m.
-                - The `password` (or `API-key`) \033[1mMUST BE\033[0m specified using environment variable \
-                \033[1m`{Env.PASSWORD}`\033[0m.
+                - The `password` (or `API-key`) \033[1mMUST BE\033[0m specified using environment variable """
+                f"""\033[1m`{Env.PASSWORD}`\033[0m.
+
+                `clo` also looks for a `{Env.CONF.value}` file in the working directory that contain these values, """
+                """or the file specified by `--env FILE`, if it exists.
                 """
-                )
-            ),
+            )),
         }
         Commands = Sub(
             details={
