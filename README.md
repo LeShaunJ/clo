@@ -23,6 +23,7 @@ Perform API operations on Odoo instances via the command-line.
     * [Delete](#delete)
     * [Fields](#fields)
     * [Explain](#explain)
+  * [Concepts](#concepts)
 * [See Also](#see-also)
 
 ## Installation
@@ -233,6 +234,65 @@ Display documentation on a specified topic.
 | :--- | :--: | :--: | :--- | :--- |
 | `‑‑verbose`<br>`‑v` |  | NO | Display more details. | `false` |
 | `‑‑help`<br>`‑h` |  | NO | Show this help message and exit. |  |
+
+### Concepts
+
+The following breakdowns apply to search-style `ACTIONS`.
+
+
+#### DOMAINS
+
+A domain is a set of criteria, each criterion being a throuple of `(FIELD, OPERATOR, VALUE)` where:
+
+`FIELD`:      A field name of the current model, or a relationship traversal through a `Many2one`
+              using dot-notation.
+
+`OPERATOR`:   An operand used to compare the `FIELD` with the value. Valid operators are:
+
+              =, !=, >, >=, <, <=   Standard comparison operators.
+
+              =?                    Unset or equals to (_returns true if value is either None or
+                                    False, otherwise behaves like `=`_).
+
+              =[i]like              Matches `FIELD` against the value pattern. An underscore (_`_`_)
+                                    in the pattern matches any single character; a percent sign
+                                    (_`%`_) matches any string of zero or more characters. `=ilike`
+                                    makes the search case-insensitive.
+
+              [not ][i]like         Matches (_or inverse-matches_) `FIELD` against the %value%
+                                    pattern. Similar to `=[i]like` but wraps value with `%` before
+                                    matching.
+
+              [not ]in              Is—or is not—equal to any of the items from value, value should
+                                    be a list of items.
+
+              child_of              Is a child (_descendant[2m_) of a value record (_[2mvalue can
+                                    be either one item or a list of items_). Takes the semantics
+                                    of the model into account (_i.e following the relationship
+                                    `FIELD` named by `VALUE`_).
+
+              parent_of             Is a child (_ascendant[2m_) of a value record (_[2mvalue can
+                                    be either one item or a list of items_). Takes the semantics
+                                    of the model into account (_i.e following the relationship
+                                    `FIELD` named by `VALUE`_).
+
+`VALUE`:      Variable type, must be comparable (_through OPERATOR_) to the named FIELD.
+
+#### LOGIC
+
+Domain criteria can be combined using logical operators in prefix form:
+
+    --or -d login = user -d name = "John Smith" -d email = user@domain.com
+
+is equivalent to `login == "user" || name == "John Smith" || email == "user@domain.com"`
+
+    --not -d login = user` or `-d login '!=' user
+
+are equivalent to `login != "user"`. `--not` is generally unneeded, save for negating the OPERATOR, `child_of`, or `parent_of`.
+
+    --and -d login = user -d name = "John Smith"
+
+is equivalent to `login == "user" && name == "John Smith"`; though, successive domainsimply `--and`.
 
 ## See Also
 

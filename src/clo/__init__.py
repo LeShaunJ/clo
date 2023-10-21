@@ -79,7 +79,7 @@ def CLI(argv: list[str] = None) -> None:
 
         if action == "Explain":
             topic: str = Settings.topic
-            Explain[topic]
+            raise Log.EXIT(Explain[topic], "\n")
         elif action in ['Create']:
             Result = getattr(Settings.model, action)(*filter(None, positional))
         elif action in ['Fields']:

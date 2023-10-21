@@ -139,7 +139,7 @@ class _Explain(type):
         try:
             prop: classmethod = object.__getattribute__(cls, __name)
             meth: Callable[[type[cls]], None] = prop.__get__(cls)
-            raise Log.EXIT(textwrap.dedent(meth()), "\n", code=0)
+            return textwrap.dedent(meth())
         except Exception as e:
             Log.ERROR(e, code=30)
 
@@ -152,60 +152,85 @@ class Explain(metaclass=_Explain):
     def domains(cls) -> str:
         """Outputs information regarding Odoo search domains.
         """
-        return """
-        \033[4mDOMAINS\033[0m
+        from .output import Columnize
 
-        A domain is a set of criteria, each criterion being a throuple of (FIELD, OPERATOR, VALUE) where:
+        operators = [
+            ('=, !=, >, >=, <, <=', ("Standard comparison operators.")),
+            ('=?', (
+                "Unset or equals to (\033[2mreturns true if value is either None or False, otherwise "
+                "behaves like `=`\033[0m)."
+            )),
+            ('=[i]like', (
+                """Matches `FIELD` against the value pattern. An underscore (`_`) in the pattern """
+                """matches any single character; a percent sign (`%`) matches any string of zero """
+                """or more characters. `=ilike` makes the search case-insensitive."""
+            )),
+            ('[not ][i]like', (
+                """Matches (\033[2mor inverse-matches\033[0m) `FIELD` against the %value% pattern. """
+                """Similar to `=[i]like` but wraps value with `%` before matching."""
+            )),
+            ('[not ]in', (
+                """Is—or is not—equal to any of the items from value, value should be a list """
+                """of items."""
+            )),
+            ('child_of', (
+                """Is a child (\033[2mdescendant\033[2m) of a value record (\033[2mvalue can be either """
+                """one item or a list of items\033[0m). Takes the semantics of the model into account """
+                """(\033[2mi.e following the relationship `FIELD` named by `VALUE`\033[0m)."""
+            )),
+            ('parent_of', (
+                """Is a child (\033[2mascendant\033[2m) of a value record (\033[2mvalue can be either """
+                """one item or a list of items\033[0m). Takes the semantics of the model into account """
+                """(\033[2mi.e following the relationship `FIELD` named by `VALUE`\033[0m)."""
+            )),
+        ]
+        attrs = [
+            ('`FIELD`:', (
+                """A field name of the current model, or a relationship traversal through a """
+                """`Many2one` using dot-notation."""
+            )),
+            ('`OPERATOR`:', (
+                "An operand used to compare the `FIELD` with the value. Valid operators are:"
+            )),
+            ('', operators),
+            ('`VALUE`:', (
+                """Variable type, must be comparable (through OPERATOR) to the named FIELD."""
+            )),
+        ]
+        result = Columnize(attrs, 100).rstrip()
 
-        FIELD     A field name of the current model, or a relationship traversal through a `Many2one` using \
-            dot-notation.
-
-        OPERATOR  An operator used to compare the FIELD with the value. Valid operators are:
-
-                    =, !=, >, >=, <, <=   Standard comparison operators.
-                    =?                    Unset or equals to (returns true if value is either None or False, otherwise \
-                        behaves like `=`).
-                    =[i]like              Matches FIELD against the value pattern. An underscore ("_") in the pattern \
-                        matches any single
-                                        character; a percent sign ("%") matches any string of zero or more characters.
-                                        `=ilike` makes the search case-insensitive.
-                    [not ][i]like         Matches (or inverse-matches) FIELD against the %value% pattern. Similar to \
-                        `=[i]like` but wraps value with
-                                        "%" before matching.
-                    [not ]in              Is—or is not—equal to any of the items from value, value should be a list \
-                        of items.
-                    child_of              Is a child (descendant) of a value record (value can be either one item or \
-                        a list of items). Takes the
-                                        semantics of the model into account (i.e following the relationship FIELD \
-                                            named by VALUE).
-                    parent_of             Is a parent (ascendant) of a value record (value can be either one item or \
-                        a list of items). Takes the
-                                        semantics of the model into account (i.e following the relationship FIELD \
-                                            named by VALUE).
-
-        VALUE     Variable type, must be comparable (through OPERATOR) to the named FIELD.
-        """
+        return '\n'.join([
+            '',
+            '#### DOMAINS',
+            '',
+            'A domain is a set of criteria, each criterion being a throuple of `(FIELD, OPERATOR, VALUE)` where:',
+            '',
+            result
+        ])
 
     @classmethod
     def logic(cls) -> str:
         """Outputs information regarding Odoo search domains' logical operators.
         """
-        return """
-        \033[4mLOGIC\033[0m
+        return ("""
+        #### LOGIC
 
-          Domain criteria can be combined using logical operators in prefix form:
+        Domain criteria can be combined using logical operators in prefix form:
 
-          `--or -d login = user -d name = "John Smith" -d email = user@domain.com`
-            is equivalent to `login == "user" || name == "John Smith" || email == "user@domain.com"`
+            --or -d login = user -d name = "John Smith" -d email = user@domain.com
 
-          `--not -d login = user` or `-d login '!=' user`
-            are equivalent to `login != "user"`. `--not` is generally unneeded, save for negating the \
-                OPERATOR, `child_of`, or `parent_of`.
+        is equivalent to `login == "user" || name == "John Smith" || email == "user@domain.com"`
 
-          `--and -d login = user -d name = "John Smith"`
-            is equivalent to `login == "user" && name == "John Smith"`; though, successive domains \
-                imply `--and`.
-        """
+            --not -d login = user` or `-d login '!=' user
+
+        are equivalent to `login != "user"`. `--not` is generally unneeded, save for negating the """
+        """OPERATOR, `child_of`, or `parent_of`.
+
+            --and -d login = user -d name = "John Smith"
+
+        is equivalent to `login == "user" && name == "John Smith"`; though, successive domains"""
+        """imply `--and`.
+        """)
 
     @classmethod
     def models(cls) -> str:
@@ -243,7 +268,7 @@ class Explain(metaclass=_Explain):
             [(f'{indent}{f["model"]:{"."}<{pad}}{delim}{f["info"]}') for f in fields]
         )
         ...
-        return f"\n\033[4mMODELS\033[0m\n\nThe following models are available to query:\n\n{text}"
+        return f"#### MODELS\n\nThe following models are available to query:\n\n{text}"
 
     @classmethod
     def fields(cls) -> str:
@@ -273,7 +298,7 @@ class Explain(metaclass=_Explain):
             [(f'{indent}{f["name"]:{"."}<{pad}}{delim}{f["help"]}') for f in fields]
         )
         ...
-        return f"\n\033[4mFIELDS\033[0m\n\nThe following fields apply to the `{Settings.model}` model:\n\n{text}"
+        return f"\n#### FIELDS\n\nThe following fields apply to the `{Settings.model}` model:\n\n{text}"
 
 
 ###########################################################################
@@ -1007,9 +1032,10 @@ def GetReadMe(
             lambda m: f"[{m.group(1).title()}](#{m.group(1).lower()})",
             text,
         )
-        text = re.sub(r"\033\[1m(.+?)\033\[0m", r"**\1**", text)
-        text = re.sub(r"\033\[3m(.+?)\033\[0m", r"_\1_", text)
-        text = re.sub(r"(?<!\])[(](.+?)[)]", r"(_\1_)", text)
+        text = re.sub(r"\033\[1m([\S\s]+?)\033\[0m", r"**\1**", text)
+        text = re.sub(r"\033\[2m([\S\s]+?)\033\[0m", r"\1", text)
+        text = re.sub(r"\033\[3m([\S\s]+?)\033\[0m", r"_\1_", text)
+        text = re.sub(r"(?<!\]|`)[(]([\S\s]+?)[)]", r"(_\1_)", text)
         return text
 
     def requisite(arg: argparse.Action) -> Literal["YES", "NO"]:
@@ -1145,6 +1171,14 @@ def GetReadMe(
             GetReadMe(command, lines=lines, base=base + 3)
 
     if base == 0:
+        lines.append(header(3, 'Concepts'))
+        lines.extend([
+            'The following breakdowns apply to search-style `ACTIONS`.',
+            '',
+            format(Explain['domains']),
+            textwrap.dedent(format(Explain['logic'])),
+        ])
+
         lines.append(header(2, 'See Also'))
         lines.extend([
             '',

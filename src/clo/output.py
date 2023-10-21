@@ -5,19 +5,21 @@ import sys
 import json
 import io
 from enum import Enum
-from typing import Any, TextIO, Literal
+from typing import Any, TextIO, Literal, TypeAlias
 from contextlib import contextmanager
 from .meta import __title__
 
 ###########################################################################
 
 __all__ = [
-    'ToJSON',
-    'ToCSV',
-    'FromCSV',
-    'Levels',
-    'Log',
+    "ToJSON",
+    "ToCSV",
+    "FromCSV",
+    "Levels",
+    "Log",
 ]
+
+Subjects: TypeAlias = list[tuple[str, "Subjects"]]
 
 ###########################################################################
 
@@ -74,12 +76,62 @@ def FromCSV(file: io.TextIOWrapper, sep: str = ",") -> list[dict[str, Any]]:
     except Exception as e:  # pragma: no cover
         Log.ERROR(e, code=7)
 
+
+def Columnize(
+    items: Subjects,
+    width: int = 120,
+    *,
+    border: int = 3,
+    spacing: str = " ",
+    end: str = "\n",
+) -> str:
+    """Formats a set of subject/details pairs.
+
+    Args:
+        items (list[tuple[str,str]]): The items to format.
+        border (int, optional): The size of spacing between the subject
+            and details.
+        end (str, optional): A suffix to append to each pair-rendering.
+
+    Returns:
+        str: The formatted text.
+    """
+    import textwrap
+
+    def handler(subject: str, details: str | Subjects):
+        form_txt = lambda: f"{subject:<{pad}}{delim}{details}"
+
+        if isinstance(details, list):
+            padding = pad + border
+            indents = spacing * padding
+            s_width = width - padding
+            columns = Columnize(
+                details, s_width, border=border, spacing=spacing, end=end
+            )
+            details = textwrap.indent(columns, indents).lstrip()
+            return form_txt()
+        else:
+            text = form_txt()
+            wrap = "\n".join(wrapper.wrap(text))
+            return f"{wrap}{end}"
+
+    pad = len(max(items, key=lambda i: len(i[0]))[0])
+    delim = spacing * border
+    indent = (spacing * pad) + delim
+    wrapper = textwrap.TextWrapper(
+        width,
+        subsequent_indent=indent,
+    )
+
+    blocks = [handler(subject, details) for subject, details in items]
+    return "\n".join(blocks)
+
+
 ###########################################################################
 
 
 class Levels(Enum):
-    """An enumerator representing log levels.
-    """
+    """An enumerator representing log levels."""
 
     OFF = 0
     """Disables all logging."""
@@ -108,6 +160,7 @@ class Levels(Enum):
 
 class _Log(type):
     """..."""
+
     import builtins
 
     _level: Levels = Levels.OFF
@@ -115,14 +168,12 @@ class _Log(type):
 
     @property
     def Level(cls) -> Levels:
-        """Gets the current loggin level.
-        """
+        """Gets the current loggin level."""
         return cls._level
 
     @Level.setter
     def Level(cls, which: str | Levels) -> None:
-        """Sets the current loggin level.
-        """
+        """Sets the current loggin level."""
         if isinstance(which, str):
             which = Levels[which]
         ...
@@ -220,7 +271,6 @@ class _Log(type):
         return cls.Level.name
 
     class EXIT(BaseException):
-
         def __init__(
             self,
             *values: object,
@@ -237,12 +287,12 @@ class _Log(type):
 
         def Done(self) -> None:
             import os  # pragma: no cover
+
             os._exit(self.code)  # pragma: no cover
 
 
 class Log(metaclass=_Log):
-    """A singleton class for outputting logs to `stderr`.
-    """
+    """A singleton class for outputting logs to `stderr`."""
 
     @classmethod
     def FATAL(
