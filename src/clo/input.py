@@ -698,6 +698,7 @@ def GetOpt(argv: list[str]) -> Namespace:
         Prog: Program = {
             "prog": __prog__,
             "description": f"{__title__} - Perform API operations on Odoo instances via the command-line.",
+            "usage": "%(prog)s [OPTIONS] ACTION ...",
             "add_help": False,
             "conflict_handler": "resolve",
             "formatter_class": HelpFormat,

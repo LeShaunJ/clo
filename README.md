@@ -34,7 +34,7 @@ pip3 install clo
 ## Usage
 
 ```sh
-clo [--model MODEL] [--env FILE] [--inst URL] [--db NAME] [--user NAME] [--demo] [--out FILE] [--log LEVEL] [--dry-run] [--help] [--version] ACTION ...
+clo [OPTIONS] ACTION ...
 ```
 
 ### Globals
@@ -46,13 +46,13 @@ The following parameters apply to any [Action](#actions).
 | Flag(s) | Argument | Required | Description                                                                         . | Default |
 | :--- | :--: | :--: | :--- | :--- |
 | `‑‑model`<br>`‑m` | `MODEL` | NO | The Odoo model to perform an action on. Run `clo explain models [-v]` to list                             available options. | `"res.users"` |
-| `‑‑env` | `FILE` | NO | Path to a `.clorc` file. See [Requisites](#requisites) below for details. | `"~/.clorc"` |
-| `‑‑inst`<br>`‑‑instance` | `URL` | NO | The address of the Odoo instance. See [Requisites](#requisites) below for details. | `"http://localhost:8069"` |
-| `‑‑db`<br>`‑‑database` | `NAME` | NO | The application database to perform operations on. See [Requisites](#requisites) below                             for details. | `""` |
-| `‑‑user` | `NAME` | NO | The user to perform operations as. See [Requisites](#requisites) below for details. | `""` |
-| `‑‑demo` |  | NO | Generate and use a demo instance from Odoo Cloud. |  |
+| `‑‑env` | `FILE` | NO | Path to a `.clorc` file. See [Requisites](#requisites) below for details. | `".clorc"` |
+| `‑‑inst`<br>`‑‑instance` | `URL` | NO | The address of the Odoo instance. See [Requisites](#requisites) below for details. |  |
+| `‑‑db`<br>`‑‑database` | `NAME` | NO | The application database to perform operations on. See [Requisites](#requisites) below                             for details. |  |
+| `‑‑user` | `NAME` | NO | The user to perform operations as. See [Requisites](#requisites) below for details. |  |
+| `‑‑demo` | `FILE` | NO | Generate a demo instance from Odoo Cloud and save the connection properties to `FILE`. | `".clorc"` |
 | `‑‑out` | `FILE` | NO | Where to stream the output. |  |
-| `‑‑log` | `LEVEL` | NO | The level (_`OFF`, `FATAL`, `ERROR`, `WARN`, `INFO`, `DEBUG`, `TRACE`_) of logs to produce. | `"ERROR"` |
+| `‑‑log` | `LEVEL` | NO | The level (_`OFF`, `FATAL`, `ERROR`, `WARN`, `INFO`, `DEBUG`, `TRACE`_) of logs to produce. | `"WARN"` |
 | `‑‑dry‑run` |  | NO | Perform a "practice" run of the action; implies `--log=DEBUG`. | `false` |
 | `‑‑help`<br>`‑h` |  | NO | Show this help message and exit. |  |
 | `‑‑version` |  | NO | Show version of this program. |  |
@@ -62,10 +62,10 @@ The following parameters apply to any [Action](#actions).
 > 
 > The following inputs are **required**, but have multiple or special specifications. In the absense of these inputs, the program will ask for input:
 > 
-> - `--instance` can be specified using environment variable **`OD_INST`**.
-> - `--database` can be specified using environment variable **`OD_DATA`**.
-> - `--username` can be specified using environment variable **`OD_USER`**.
-> - The `password` (_or `API-key`_) **MUST BE** specified using environment variable                 **`OD_PASS`**.
+> - `--instance` can be specified using environment variable **`CLO_INSTANCE`**.
+> - `--database` can be specified using environment variable **`CLO_DATABASE`**.
+> - `--username` can be specified using environment variable **`CLO_USERNAME`**.
+> - The `password` (_or `API-key`_) **MUST BE** specified using environment variable                 **`CLO_PASSWORD`**.
 ### Actions
 
 The Odoo instance is queried, or operated on, using `ACTIONS`. Each `ACTION` has it's own set of arguements; run `clo ACTION --help` for specific details.
@@ -73,7 +73,7 @@ The Odoo instance is queried, or operated on, using `ACTIONS`. Each `ACTION` has
 #### Search
 
 ```sh
-clo search [[-o|-n|-a] -d FIELD OPERATOR VALUE [-d ...]] [--offset POSITION] [--limit AMOUNT] [--order FIELD] [--count] [-h]
+clo [OPTIONS] ACTION ... search [[-o|-n|-a] -d FIELD OPERATOR VALUE [-d ...]] [--offset POSITION] [--limit AMOUNT] [--order FIELD] [--count] [-h]
 ```
 
 Searches for record IDs based on the search domain.
@@ -95,7 +95,7 @@ Searches for record IDs based on the search domain.
 #### Count
 
 ```sh
-clo count [--domain FIELD OPERATOR VALUE] [--or] [--and] [--not] [--limit AMOUNT] [--help]
+clo [OPTIONS] ACTION ... count [--domain FIELD OPERATOR VALUE] [--or] [--and] [--not] [--limit AMOUNT] [--help]
 ```
 
 Returns the number of records in the current model matching the provided domain.
@@ -114,7 +114,7 @@ Returns the number of records in the current model matching the provided domain.
 #### Read
 
 ```sh
-clo read --ids ID [ID ...] [--fields FIELD [FIELD ...]] [--csv] [--help]
+clo [OPTIONS] ACTION ... read --ids ID [ID ...] [--fields FIELD [FIELD ...]] [--csv] [--help]
 ```
 
 Retrieves the details for the records at the ID(s) specified.
@@ -131,7 +131,7 @@ Retrieves the details for the records at the ID(s) specified.
 #### Find
 
 ```sh
-clo find [[-o|-n|-a] -d FIELD OPERATOR VALUE [-d ...]] [-f FIELD ...] [--offset POSITION] [--limit AMOUNT] [--order FIELD] [--csv [FILE]] [--help]
+clo [OPTIONS] ACTION ... find [[-o|-n|-a] -d FIELD OPERATOR VALUE [-d ...]] [-f FIELD ...] [--offset POSITION] [--limit AMOUNT] [--order FIELD] [--csv [FILE]] [--help]
 ```
 
 A shortcut that combines `search` and `read` into one execution.
@@ -154,7 +154,7 @@ A shortcut that combines `search` and `read` into one execution.
 #### Create
 
 ```sh
-clo create --value FIELD VALUE [--help]
+clo [OPTIONS] ACTION ... create --value FIELD VALUE [--help]
 ```
 
 Creates new records in the current model.
@@ -169,7 +169,7 @@ Creates new records in the current model.
 #### Write
 
 ```sh
-clo write --ids ID [ID ...] --value FIELD VALUE [--help]
+clo [OPTIONS] ACTION ... write --ids ID [ID ...] --value FIELD VALUE [--help]
 ```
 
 Updates existing records in the current model.
@@ -185,7 +185,7 @@ Updates existing records in the current model.
 #### Delete
 
 ```sh
-clo delete --ids ID [ID ...] [--help]
+clo [OPTIONS] ACTION ... delete --ids ID [ID ...] [--help]
 ```
 
 Deletes the records from the current model.
@@ -200,11 +200,11 @@ Deletes the records from the current model.
 #### Fields
 
 ```sh
-clo fields [--attributes NAME [NAME ...]] [--help]
+clo [OPTIONS] ACTION ... fields [--attributes NAME [NAME ...]] [--help]
 ```
 
 Retrieves raw details of the fields available in the current model.
-For user-friendly formatting, run `clo fields explain fields`.
+For user-friendly formatting, run `clo [OPTIONS] ACTION ... fields explain fields`.
 
 ##### Options
 
@@ -216,7 +216,7 @@ For user-friendly formatting, run `clo fields explain fields`.
 #### Explain
 
 ```sh
-clo explain [--verbose] [--help] {models,domains,logic,fields}
+clo [OPTIONS] ACTION ... explain [--verbose] [--help] {models,domains,logic,fields}
 ```
 
 Display documentation on a specified topic.
