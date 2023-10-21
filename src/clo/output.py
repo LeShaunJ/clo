@@ -128,20 +128,26 @@ class _Log(type):
         ...
         cls._level = which
         Kind = type(cls)
-        Exiters = [Levels.ERROR, Levels.FATAL]
+        always_exit = [Levels.FATAL]
+        exiters = [Levels.ERROR, *always_exit]
 
         def PassFactory(level: Levels):
+            __code = 10 if level in always_exit else None
+
             @classmethod
-            def __exit(cls: Kind, *args, **kwargs) -> None:
-                raise Log.EXIT(code=kwargs.get("code", 10))  # pragma: no cover
+            def __exit(cls: Kind, *args, code: int = __code, **kwargs) -> None:
+                if code is not None:  # pragma: no cover
+                    raise Log.EXIT(code=code)
 
             @classmethod
             def __func(cls: Kind, *args, **kwargs) -> None:
                 pass
 
-            return __exit if level in Exiters else __func
+            return __exit if level in always_exit else __func
 
         def SendFactory(level: Levels):
+            __code = 10 if level in always_exit else None
+
             @classmethod
             def __exit(
                 cls: Kind,
@@ -149,10 +155,11 @@ class _Log(type):
                 sep: str | None = " ",
                 end: str | None = "\n",
                 flush: Literal[False] = False,
-                code: int = 10,
+                code: int | None = __code,
             ) -> None:
-                cls.__send__(level, *values, sep=sep, end=end, flush=flush)
-                raise Log.EXIT(code=code)
+                cls.__send__(level.name, *values, sep=sep, end=end, flush=flush)
+                if code is not None:
+                    raise Log.EXIT(code=code)
 
             @classmethod
             def __func(
@@ -162,9 +169,9 @@ class _Log(type):
                 end: str | None = "\n",
                 flush: Literal[False] = False,
             ) -> None:
-                cls.__send__(level, *values, sep=sep, end=end, flush=flush)
+                cls.__send__(level.name, *values, sep=sep, end=end, flush=flush)
 
-            return __exit if level in Exiters else __func
+            return __exit if level in exiters else __func
 
         for level in list(Levels):
             if level == Levels.OFF:
@@ -181,14 +188,14 @@ class _Log(type):
     @classmethod
     def __send__(
         cls,
-        level: Level,
+        level: str,
         *values: object,
         sep: str | None = " ",
         end: str | None = "\n",
         flush: Literal[False] = False,
     ) -> None:
         cls._print(
-            f"{level.name:<5} |",
+            f"{level:<5} |",
             *values,
             sep=sep,
             end=end,
@@ -196,7 +203,7 @@ class _Log(type):
             flush=flush,
         )
 
-    def Bump(cls, which: str | Levels) -> None:
+    def Bump(cls, which: str | Levels) -> str:
         """Switches the logging level if the current is less than what is specified.
 
         Args:
@@ -204,12 +211,13 @@ class _Log(type):
         """
 
         if isinstance(which, str):
-            which = Levels[which]
-        ...
-        if which.value < cls._level.value:
-            return
-        ...
+            which = Levels[which.upper()]
+
+        if which.value < cls.Level.value:
+            return cls.Level.name
+
         cls.Level = which
+        return cls.Level.name
 
     class EXIT(BaseException):
 
@@ -364,8 +372,10 @@ Tracer = TraceMe(sys.stderr)
 def Trace():
     _stdout = sys.stdout
     sys.stdout = Tracer
-    yield
-    sys.stdout = _stdout
+    try:
+        yield
+    finally:
+        sys.stdout = _stdout
 
 
 ###########################################################################

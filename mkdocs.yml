@@ -1,15 +1,48 @@
-site_name: clo
+site_name: Command-Line Odoo
 repo_url: https://github.com/LeShaunJ/clo
+site_url: https://leshaunj.github.com/clo/
 edit_uri: ""
 theme:
   name: material
   palette:
-    primary: 714B67
-  favicon: assets/images/favicon.png
+    - media: "(prefers-color-scheme: light)"
+      primary: custom
+      scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      primary: custom
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  logo: assets/images/logo-white.png
+  favicon: assets/images/favicon.ico
   features:
     - toc.follow
     - navigation.tabs
+    - navigation.tabs.sticky
     - navigation.sections
+    - navigation.expand
+    - navigation.instant
+    - navigation.tracking
+    - navigation.top
+    - navigation.footer
+
+copyright: Copyright &copy; 2023 Arian Johnson
+
+extra:
+  consent:
+    title: Cookie consent
+    description: >-
+      We use cookies to recognize your repeated visits and preferences, as well
+      as to measure the effectiveness of our documentation and whether users
+      find what they're searching for. With your consent, you're helping us to
+      make our documentation better.
+  generator: false
+extra_css:
+  - stylesheets/extra.css
 
 markdown_extensions:
   - mdx_truly_sane_lists
@@ -18,26 +51,34 @@ markdown_extensions:
 
 plugins:
   - mkdocstrings:
+      default_handler: python
       handlers:
         python:
           options:
+            allow_inspection: true
             docstring_section_style: spacy
+            docstring_options:
+              ignore_init_summary: true
             group_by_category: yes
             inherited_members: True
             members_order: source
+            merge_init_into_class: true
             separate_signature: yes
             show_object_full_path: yes
             show_root_heading: yes
             show_source: no
-            show_submodules: yes
-
   - search
 
 nav:
   - Home: index.md
+  - Reference:
+      CLI: reference/cli.md
+      API: reference/api.md
+      Input: reference/input.md
+      Output: reference/output.md
+      Types: reference/types.md
   - Changelog: changelog.md
   - Contributing: contributing.md
-  - Reference: reference.md
   - License: license.md
 
 watch:

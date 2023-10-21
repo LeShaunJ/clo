@@ -62,10 +62,10 @@ The following parameters apply to any [Action](#actions).
 > 
 > The following inputs are **required**, but have multiple or special specifications. In the absense of these inputs, the program will ask for input:
 > 
->   - `--instance` can be specified using environment variable **`OD_INST`**.
->   - `--database` can be specified using environment variable **`OD_DATA`**.
->   - `--username` can be specified using environment variable **`OD_USER`**.
->   - The `password` (_or `API-key`_) **MUST BE** specified using environment variable                     **`OD_PASS`**.
+> - `--instance` can be specified using environment variable **`OD_INST`**.
+> - `--database` can be specified using environment variable **`OD_DATA`**.
+> - `--username` can be specified using environment variable **`OD_USER`**.
+> - The `password` (_or `API-key`_) **MUST BE** specified using environment variable                 **`OD_PASS`**.
 ### Actions
 
 The Odoo instance is queried, or operated on, using `ACTIONS`. Each `ACTION` has it's own set of arguements; run `clo ACTION --help` for specific details.
@@ -237,10 +237,10 @@ Display documentation on a specified topic.
 ## See Also
 
 
-* [Changelog](https://github.com/LeShaunJ/clo/CHANGELOG.md)
-* [Contributing](https://github.com/LeShaunJ/clo/CONTRIBUTING.md)
-* [Code of Conduct](https://github.com/LeShaunJ/clo/CODE_OF_CONDUCT.md)
-* [Security](https://github.com/LeShaunJ/clo/SECURITY.md)
+* [Changelog](https://github.com/LeShaunJ/clo/blob/main/CHANGELOG.md)
+* [Contributing](https://github.com/LeShaunJ/clo/blob/main/CONTRIBUTING.md)
+* [Code of Conduct](https://github.com/LeShaunJ/clo/blob/main/CODE_OF_CONDUCT.md)
+* [Security](https://github.com/LeShaunJ/clo/blob/main/SECURITY.md)
 
 ![Banner][banner]
 

@@ -14,7 +14,7 @@ __email__ = __contact__
 __copyright__ = "Copyright 2023, DFFRNT Innovations Inc."
 __license__ = "GPLv3"
 __status__ = "Production"
-__version__ = "0.5.0"
+__version__ = "0.6.0"
 
 __all__ = [
     "__prog__",

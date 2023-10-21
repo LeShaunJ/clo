@@ -3,10 +3,24 @@
 ###########################################################################
 
 if __name__ == "__main__":
-    from . import main
-    from .output import Log
-    try:
-        main()
-    except Log.EXIT as e:
-        pass
-        e.Done()
+    import cProfile
+    import pstats
+    import io
+    from pstats import SortKey
+
+    stream = io.StringIO()
+    sortby = SortKey.CUMULATIVE
+
+    with cProfile.Profile() as profiler:
+
+        from clo import CLI
+        from clo.output import Log
+
+        try:
+            CLI()
+        except Log.EXIT:
+            pass
+
+    stats = pstats.Stats(profiler, stream=stream).sort_stats(sortby)
+    stats.print_stats(20)
+    print(stream.getvalue())
