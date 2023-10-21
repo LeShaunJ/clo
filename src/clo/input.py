@@ -8,7 +8,6 @@ import re
 import io
 import textwrap
 import json
-from enum import Enum
 from typing import (
     Any,
     Callable,
@@ -25,7 +24,7 @@ from typing import (
     overload,
 )
 from .meta import __title__, __prog__, __version__
-from .types import URL, Domain, Secret, TICK
+from .types import URL, Domain, TICK, Env
 from .output import Levels, Log
 from .api import Common, Model
 from pathlib import Path
@@ -39,31 +38,12 @@ Action: TypeAlias = Literal[
 ]
 FileType = argparse.FileType
 SUPPRESS = argparse.SUPPRESS
-DEF_HOST = "http://localhost:8069"
 
 ###########################################################################
 
 
-class Env(Enum):
-    CONF = ".clorc"
-
-    INST = "instance"
-    DATA = "database"
-    USER = "username"
-    PASS = "password"
-
-    def __str__(self) -> str:
-        return f"OD_{self.name}"
-
-    def get(self, __default: str = "", /) -> str:
-        return os.getenv(f"{self}", __default)
-
-    @classmethod
-    def at(cls, value: str) -> "Env":
-        return next((e for e in cls if e.value == value))
-
-
 class Parser(argparse.ArgumentParser):
+
     def exit(self, status: int = 0, message=None):
         if message:
             Log.ERROR(message, code=status)
@@ -77,8 +57,7 @@ class Parser(argparse.ArgumentParser):
         self.exit(2, message)
 
 
-class HelpFormat(argparse.RawDescriptionHelpFormatter):
-    ...
+class HelpFormat(argparse.RawDescriptionHelpFormatter):  # pragma: no cover
 
     def _get_help_string(self, action):
         help = action.help
@@ -95,23 +74,29 @@ class HelpFormat(argparse.RawDescriptionHelpFormatter):
                         help += " (default: %(default)s)"
         return help
 
-    ...
-
     def format_help(self):
         help = super().format_help()
         return f"\n{help}\n"
 
-    ...
 
+class DemoAction(argparse._StoreAction):
 
-class DemoAction(argparse._StoreConstAction):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **{**kwargs, "const": True})
+        super().__init__(*args, **kwargs)
 
-    def __call__(self, parser, namespace, values, option_string=None):
+    def __call__(self, parser, namespace, path: Path | str, option_string=None):
         creds = Common.Demo()
         text = "\n".join([f"{Env.at(k)}={json.dumps(v)}" for k, v in creds.items()])
-        raise Log.EXIT(text, code=0, file=Settings.out)
+
+        if not path:
+            path = self.default
+            print(f'\nSaving demo credentials to {path}\n')
+
+        path = Path(path).resolve()
+
+        with open(path, 'w') as file:
+            print(file)
+            raise Log.EXIT(text, code=0, file=file)
 
 
 class Namespace(argparse.Namespace):
@@ -120,8 +105,7 @@ class Namespace(argparse.Namespace):
     instance: str
     database: str
     username: str
-    password: Secret
-    demo: bool = False
+    demo: io.TextIOWrapper
     raw: bool = False
     csv: bool = False
     logging: Levels
@@ -147,47 +131,27 @@ class Namespace(argparse.Namespace):
 ###########################################################################
 
 
-class _Topic(type):
+class _Explain(type):
+    def __init_subclass__(cls) -> None:
+        raise TypeError(f'{cls.__name__} class cannot be subclassed.')
+
     def __getitem__(cls, __name: str):
         try:
-            inner: Callable[[type[cls]], None] = object.__getattribute__(cls, __name)
-            raise Log.EXIT(textwrap.dedent(inner()), "\n", code=0)
+            prop: classmethod = object.__getattribute__(cls, __name)
+            meth: Callable[[type[cls]], None] = prop.__get__(cls)
+            raise Log.EXIT(textwrap.dedent(meth()), "\n", code=0)
         except Exception as e:
             Log.ERROR(e, code=30)
 
-    def models(cls) -> str:
-        export = sorted([f for f in Model("ir.model").Find()], key=lambda f: f["model"])
-        ...
-        indent = "  "
-        delim = "  "
-        pad = max([len(f["model"]) for f in export])
-        hang = " " * (len(indent + delim) + pad)
-        if Settings.verbose:
-            fields = [
-                {
-                    "model": f'{f["model"]}{delim}'[:pad],
-                    "info": f"\n{hang}".join(
-                        re.split(r"\n", f"{f['display_name']}{f.get('info','')}"),
-                    ).strip(),
-                }
-                for f in export
-            ]
-        else:
-            fields = [
-                {
-                    "model": f'{f["model"]}{delim}'[:pad],
-                    "info": f["display_name"].strip(),
-                }
-                for f in export
-            ]
-        ...
-        text = "\n".join(
-            [(f'{indent}{f["model"]:{"."}<{pad}}{delim}{f["info"]}') for f in fields]
-        )
-        ...
-        return f"\n\033[4mMODELS\033[0m\n\nThe following models are available to query:\n\n{text}"
 
+class Explain(metaclass=_Explain):
+    """A container for specialize documention. This is called when the user runs `clo explain TOPIC`.
+    """
+
+    @classmethod
     def domains(cls) -> str:
+        """Outputs information regarding Odoo search domains.
+        """
         return """
         \033[4mDOMAINS\033[0m
 
@@ -222,7 +186,10 @@ class _Topic(type):
         VALUE     Variable type, must be comparable (through OPERATOR) to the named FIELD.
         """
 
+    @classmethod
     def logic(cls) -> str:
+        """Outputs information regarding Odoo search domains' logical operators.
+        """
         return """
         \033[4mLOGIC\033[0m
 
@@ -240,7 +207,51 @@ class _Topic(type):
                 imply `--and`.
         """
 
+    @classmethod
+    def models(cls) -> str:
+        """Retrieves relevant metadata for all models in the specified Odoo instance/database.
+
+        Returns:
+            str: A formatted, human-readable documentation.
+        """
+        export = sorted([f for f in Model("ir.model").Find()], key=lambda f: f["model"])
+        ...
+        indent = "  "
+        delim = "  "
+        pad = max([len(f["model"]) for f in export])
+        hang = " " * (len(indent + delim) + pad)
+        if Settings.verbose:
+            fields = [
+                {
+                    "model": f'{f["model"]}{delim}'[:pad],
+                    "info": f"\n{hang}".join(
+                        re.split(r"\n", f"{f['display_name']}{f.get('info','')}"),
+                    ).strip(),
+                }
+                for f in export
+            ]
+        else:
+            fields = [
+                {
+                    "model": f'{f["model"]}{delim}'[:pad],
+                    "info": f["display_name"].strip(),
+                }
+                for f in export
+            ]
+        ...
+        text = "\n".join(
+            [(f'{indent}{f["model"]:{"."}<{pad}}{delim}{f["info"]}') for f in fields]
+        )
+        ...
+        return f"\n\033[4mMODELS\033[0m\n\nThe following models are available to query:\n\n{text}"
+
+    @classmethod
     def fields(cls) -> str:
+        """Retrieves relevant metadata for all models in the specified Odoo instance/database.
+
+        Returns:
+            str: A formatted, human-readable documentation.
+        """
         export = [f for f in Settings.model.Fields().values() if f["exportable"]]
         indent = "  "
         delim = "  "
@@ -263,10 +274,6 @@ class _Topic(type):
         )
         ...
         return f"\n\033[4mFIELDS\033[0m\n\nThe following fields apply to the `{Settings.model}` model:\n\n{text}"
-
-
-class Topic(metaclass=_Topic):
-    ...
 
 
 ###########################################################################
@@ -373,17 +380,16 @@ class Program(TypedDict):
 
 
 def RC(path_str: str):
-    if Settings.demo or Settings.readme:
-        return None
+    if Settings.readme:
+        return
 
     path = Path(path_str)
-
     try:
         path = path.expanduser().resolve(True)
         assert path.exists()
         load_dotenv(dotenv_path=path, interpolate=True)
     except (FileNotFoundError, AssertionError):
-        Log.WARN(f"Congig file {path_str} was not found.")
+        Log.WARN(f"Environment file `{path_str}` was not found.")
 
     return path
 
@@ -393,6 +399,7 @@ def Ask(
     name: str = "ARGUMENT",
     secret: bool = False,
     env: str = None,
+    default: str = "",
     kind: type[T] = str,
 ) -> Callable[[str], T]:
     from getpass import getpass
@@ -403,7 +410,7 @@ def Ask(
         if Settings.readme:
             return value
         if env is not None:
-            value = os.environ.get(env, "")
+            value = os.environ.get(env, default)
         while value == "":
             value = enter(f"{prompt}: ")
         return kind(value)
@@ -636,19 +643,6 @@ def GetOpt(argv: list[str]) -> Namespace:
                 "nargs": "+",
             },
         )
-        Inst = Argument(
-            ["--inst", "--instance"],
-            {
-                "metavar": "URL",
-                "action": "store",
-                "default": Env.INST.get(DEF_HOST),
-                "type": Ask(
-                    "Enter the Instance URL", "instance", env=f"{Env.INST}", kind=URL
-                ),
-                "dest": "instance",
-                "help": "The address of the Odoo instance. See \033[4mREQUISITES\033[0m below for details.",
-            },
-        )
         Help = Argument(
             ["--help", "-h"],
             {"action": "help", "help": "Show this help message and exit."},
@@ -664,7 +658,10 @@ def GetOpt(argv: list[str]) -> Namespace:
             ["--demo"],
             {
                 "action": DemoAction,
-                "help": "Generate and use a demo instance from Odoo Cloud.",
+                'nargs': '?',
+                "help": "Generate a demo instance from Odoo Cloud and save the connection properties to `FILE`.",
+                "metavar": "FILE",
+                "default": Env.CONF.value,
             },
         )
         Out = Argument(
@@ -682,7 +679,7 @@ def GetOpt(argv: list[str]) -> Namespace:
                 "type": RC,
                 "help": f"Path to a `{Env.CONF.value}` file. See \033[4mREQUISITES\033[0m below for details.",
                 "metavar": "FILE",
-                "default": f"~/{Env.CONF.value}",
+                "default": Env.CONF.value,
             },
         )
         Logs = Argument(
@@ -690,7 +687,8 @@ def GetOpt(argv: list[str]) -> Namespace:
             {
                 "metavar": "LEVEL",
                 "action": "store",
-                "default": Levels.ERROR.name,
+                "type": Log.Bump,
+                "default": Levels.WARN.name,
                 "choices": Levels.names(),
                 "dest": "logging",
                 "help": f"The level ({Levels.pretty()}) of logs to produce.",
@@ -712,11 +710,11 @@ def GetOpt(argv: list[str]) -> Namespace:
                 The following inputs are \033[1mrequired\033[0m, but have multiple or special specifications. In """
                     f"""the absense of these inputs, the program will ask for input:
 
-                  - `--instance` can be specified using environment variable \033[1m`{Env.INST}`\033[0m.
-                  - `--database` can be specified using environment variable \033[1m`{Env.DATA}`\033[0m.
-                  - `--username` can be specified using environment variable \033[1m`{Env.USER}`\033[0m.
-                  - The `password` (or `API-key`) \033[1mMUST BE\033[0m specified using environment variable \
-                    \033[1m`{Env.PASS}`\033[0m.
+                - `--instance` can be specified using environment variable \033[1m`{Env.INSTANCE}`\033[0m.
+                - `--database` can be specified using environment variable \033[1m`{Env.DATABASE}`\033[0m.
+                - `--username` can be specified using environment variable \033[1m`{Env.USERNAME}`\033[0m.
+                - The `password` (or `API-key`) \033[1mMUST BE\033[0m specified using environment variable \
+                \033[1m`{Env.PASSWORD}`\033[0m.
                 """
                 )
             ),
@@ -854,6 +852,19 @@ def GetOpt(argv: list[str]) -> Namespace:
             help=Help,
         )
 
+        def Inst():
+            return Argument(
+                ["--inst", "--instance"],
+                {
+                    "metavar": "URL",
+                    "action": "store",
+                    "default": Env.INSTANCE.get(),
+                    "type": URL,
+                    "dest": "instance",
+                    "help": "The address of the Odoo instance. See \033[4mREQUISITES\033[0m below for details.",
+                },
+            )
+
         @classmethod
         def Globals(cls) -> list[Argument]:
             return [
@@ -869,16 +880,13 @@ def GetOpt(argv: list[str]) -> Namespace:
                     },
                 ),
                 cls.Environ,
-                cls.Inst,
+                cls.Inst(),
                 Argument(
                     ["--db", "--database"],
                     {
                         "metavar": "NAME",
                         "action": "store",
-                        "default": Env.DATA.get(),
-                        "type": Ask(
-                            "Enter the Database Name", "database", env=f"{Env.DATA}"
-                        ),
+                        "default": Env.DATABASE.get(),
                         "dest": "database",
                         "help": "The application database to perform operations on. See \033[4mREQUISITES\033[0m below \
                             for details.",
@@ -889,29 +897,9 @@ def GetOpt(argv: list[str]) -> Namespace:
                     {
                         "metavar": "NAME",
                         "action": "store",
-                        "default": Env.USER.get(),
-                        "type": Ask(
-                            "Enter your Username", "username", env=f"{Env.USER}"
-                        ),
+                        "default": Env.USERNAME.get(),
                         "dest": "username",
                         "help": "The user to perform operations as. See \033[4mREQUISITES\033[0m below for details.",
-                    },
-                ),
-                Argument(
-                    ["--pass"],
-                    {
-                        "metavar": "SECRET",
-                        "action": "store",
-                        "default": Secret(Env.PASS.get()),
-                        "type": Ask(
-                            "Enter your Password (or API-Key)",
-                            "password",
-                            True,
-                            f"{Env.PASS}",
-                            Secret,
-                        ),
-                        "dest": "password",
-                        "help": argparse.SUPPRESS,
                     },
                 ),
                 cls.Demo,
@@ -936,46 +924,41 @@ def GetOpt(argv: list[str]) -> Namespace:
                 cls.ReadMe,
             ]
 
-    # Preprocess Logging arg so that it's available to Common & Model
     try:
-        Starters = Parser(**Input.Prog)
-        [
-            Starters.add_argument(*inp.names, **inp.details)
-            for inp in [Input.Logs, Input.Out]
-        ]
-        _, argv = Starters.parse_known_args(argv, namespace=Settings)
-        [
-            Starters.add_argument(*inp.names, **inp.details)
-            for inp in [
-                Input.Demo,
-                Input.ReadMe,
-                Input.Environ,
-                Input.Inst,
+        # Preprocess Logging arg so that it's available to Common & Model
+        try:
+            Starters = Parser(**Input.Prog)
+            arg_sets = [
+                lambda: [Input.Logs, Input.Out],
+                lambda: [Input.Demo, Input.ReadMe],
+                lambda: [Input.Environ],
+                lambda: [Input.Inst()]
             ]
-        ]
-        _, argv = Starters.parse_known_args(argv, namespace=Settings)
-        ...
-        Log.Level = Levels[Settings.logging]
-    except argparse.ArgumentError:
-        pass
+            for arg_set in arg_sets:
+                [
+                    Starters.add_argument(*inp.names, **inp.details)
+                    for inp in arg_set()
+                ]
+                _, argv = Starters.parse_known_args(argv, namespace=Settings)
+        except argparse.ArgumentError:
+            pass
 
-    parser = Build(Input.Prog, Input.Globals(), Input.Commands)
+        parser = Build(Input.Prog, Input.Globals(), Input.Commands)
 
-    if Settings.readme:
-        raise Log.EXIT(GetReadMe(parser), file=Settings.out)
+        if Settings.readme:
+            raise Log.EXIT(GetReadMe(parser), file=Settings.out)
 
-    # Load the proxy
-    Common.Load(Settings.instance)
-
-    # Process all args
-    try:
-        parser.parse_args(argv, Settings)
-        Log.DEBUG(Settings)
-        return Settings
-    except argparse.ArgumentError as e:
-        Log.Bump(Levels.INFO)
-        Log.INFO(parser.format_usage().strip())
-        Log.ERROR(e, code=1)
+        # Process all args
+        try:
+            parser.parse_args(argv, Settings)
+            Log.DEBUG(Settings)
+            return Settings
+        except argparse.ArgumentError as e:
+            Log.Bump(Levels.INFO)
+            Log.INFO(parser.format_usage().strip())
+            Log.ERROR(e, code=1)
+    except Exception as e:
+        Log.ERROR(e, code=2)
 
 
 def GetReadMe(
@@ -983,7 +966,17 @@ def GetReadMe(
     /,
     lines: list[str] = [],
     base: int = 0,
-) -> str:
+) -> str:  # pragma: no cover
+    """Recursively generate the README documentation.
+
+    Args:
+        parser (argparse.ArgumentParser): A complete ArgumentParser object.
+        lines (list[str], optional): For recursing, acts as the container for generated lines.
+        base (int, optional): For recursing, increments the heading levels by the value provided.
+
+    Returns:
+        str: The completed README string.
+    """
     from argparse import _SubParsersAction
 
     def header(level: int, text: str, toc: bool = True) -> str:
@@ -1154,10 +1147,10 @@ def GetReadMe(
         lines.append(header(2, 'See Also'))
         lines.extend([
             '',
-            '* [Changelog](https://github.com/LeShaunJ/clo/CHANGELOG.md)',
-            '* [Contributing](https://github.com/LeShaunJ/clo/CONTRIBUTING.md)',
-            '* [Code of Conduct](https://github.com/LeShaunJ/clo/CODE_OF_CONDUCT.md)',
-            '* [Security](https://github.com/LeShaunJ/clo/SECURITY.md)',
+            '* [Changelog](https://github.com/LeShaunJ/clo/blob/main/CHANGELOG.md)',
+            '* [Contributing](https://github.com/LeShaunJ/clo/blob/main/CONTRIBUTING.md)',
+            '* [Code of Conduct](https://github.com/LeShaunJ/clo/blob/main/CODE_OF_CONDUCT.md)',
+            '* [Security](https://github.com/LeShaunJ/clo/blob/main/SECURITY.md)',
         ])
         lines.extend([
             '',
@@ -1187,7 +1180,7 @@ __all__ = [
     "Parser",
     "HelpFormat",
     "Settings",
-    "Topic",
+    "Explain",
     "Argument",
     "Command",
     "Program",

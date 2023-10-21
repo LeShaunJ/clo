@@ -14,7 +14,7 @@ clean-pyc:
 
 release: sdist
 	twine check dist/*
-	twine upload dist/*
+	twine upload --verbose dist/*
 
 release-test: sdist
 	twine upload --repository-url https://test.pypi.org/legacy/ dist/*

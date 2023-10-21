@@ -2,79 +2,72 @@
 """XMLRPC API implementation"""
 
 import xmlrpc.client
-from typing import Any, Literal, TypedDict, Union
+from traceback import StackSummary, FrameSummary
+from typing import Any, Literal, TypedDict, Union, TypeVar
 from types import MethodType
 from functools import lru_cache
-from itertools import groupby
 from .meta import __title__
-from .types import Secret, IR, Credentials, Domain, Logic
+from .types import Secret, Credentials, Domain, Logic, Env, URL, AskProperty
 from .output import Levels, Log, Trace
 
 ###########################################################################
 
 ProtocolError = xmlrpc.client.ProtocolError
 Fault = xmlrpc.client.Fault
-
-###########################################################################
-
-
-def IRWalk(*models: IR, depth: int = 0) -> dict[str, IR]:  # pragma: no cover
-
-    def transform(obj: IR):
-        try:
-            path = obj["model"].split(".")[depth:]
-            return IR({**obj, "model": path[-1], "path": path})
-        except IndexError:
-            return obj
-
-    def structure(key: str, *objs: IR) -> IR:
-        children = IRWalk(*objs, depth=(depth + 1))
-        parent = ([c for n, c in children.items() if n == key] or [IR({"model": key})])[
-            0
-        ]
-        ...
-        children = {n: c for n, c in children.items() if c != parent}
-        ...
-        return IR({**parent, "children": children})
-
-    models = [transform(m) for m in models]
-
-    try:
-        groups = groupby(models, lambda m: m["path"][depth])
-        return {k: structure(k, *g) for k, g in groups}
-    except IndexError:
-        return {m["model"]: m for m in models}
-
+T = TypeVar('T')
 
 ###########################################################################
 
 
 class _Common(type):
-
-    @property
-    def URL(cls) -> str:
+    @AskProperty("Enter the Instance URL", Env.INSTANCE)
+    def URL(cls) -> URL:
         return getattr(cls, "__url")
 
-    @property
+    @AskProperty("Enter the Database Name", Env.DATABASE)
     def Database(cls) -> str:
         return getattr(cls, "__database")
 
-    @property
+    @AskProperty("Enter your Username", Env.USERNAME)
     def Username(cls) -> str:  # pragma: no cover
-        return getattr(cls, "__username", "")
+        return getattr(cls, "__username")
+
+    @AskProperty("Enter your Password (or API-Key)", Env.PASSWORD, secret=True)
+    def Password(cls) -> Secret:
+        return getattr(cls, "__password")
 
     @property
     def UID(cls) -> int | Literal[False]:
-        return getattr(cls, "__uid", False)
+        return getattr(cls, "__uid")
+
+    @property
+    def Loaded(cls) -> bool:
+        try:
+            return getattr(cls, "__rpc") is not None
+        except AttributeError:
+            return False
+
+    @property
+    def Authorized(cls) -> bool:
+        try:
+            return bool(cls.UID)
+        except AttributeError:
+            return False
 
     @property
     def Arguments(cls) -> tuple[str, str, str]:
-        return cls.Database, cls.UID, getattr(cls, "__password").data
+        return cls.Database, cls.UID, cls.Password.data
+
+    def __repr__(cls) -> str:
+        name = cls.__name__
+        attr = ", ".join(
+            [f"{p}={repr(getattr(cls, p))}" for p in ["URL", "Database", "Username"]]
+        )
+        return f"{name}[{attr}]"
 
 
 class Common(metaclass=_Common):
-    """A singleton class representing the Odoo server's common XMLRPC connection.
-    """
+    """A singleton class representing the Odoo server's common XMLRPC connection."""
 
     class APIVersion(TypedDict):
         """A collection of version metadata properties:
@@ -90,17 +83,39 @@ class Common(metaclass=_Common):
         server_serie: str
         protocol_version: int
 
-    @classmethod
-    def Load(cls, url: str) -> None:
-        """Load the  Odoo server's common XMLRPC connection.
-
-        Args:
-            url (str): The URL of the  Odoo server.
+    def __init__(
+        self,
+        url: str | None = None,
+        database: str | None = None,
+        username: str | None = None,
+        password: Secret = Secret(''),
+        /
+    ) -> None:
+        """Args:
+                url (str, optional): The URL of the  Odoo server.
+                database (str, optional): The name of Odoo instance database.
+                username (str, optional): The user to authenitcate.
+                password (Secret, optional): The user's password.
         """
+        if not isinstance(password, Secret):
+            raise TypeError("`password` argument must be a Secret type.")
 
+        cls = self.__class__
         setattr(cls, "__url", url)
-        ...
+        setattr(cls, "__database", database)
+        setattr(cls, "__username", username)
+        setattr(cls, "__password", password)
+        getattr(cls, "__uid", False)
+
+    @classmethod
+    def Load(cls) -> None:
+        """Load the  Odoo server's common XMLRPC connection.
+        """
+        url = cls.URL
+
         try:
+            assert not cls.Loaded, FileExistsError()
+
             with Trace():
                 setattr(
                     cls,
@@ -110,52 +125,63 @@ class Common(metaclass=_Common):
                         verbose=(Log.Level == Levels.TRACE),
                     ),
                 )
-        except OSError:
-            Log.FATAL(f"Could not connect to XML-RPC protocol at {url}")
+        except FileExistsError:
+            pass
 
     @classmethod
     def Authenticate(
         cls,
-        database: str,
-        username: str,
-        password: Secret,
         *,
-        exit_on_fail: bool = True,
+        username: str | None = None,
+        password: Secret | None = None,
+        exit_on_fail: bool = True
     ) -> int:
         """Log in to an Odoo instance's XMLRPC API.
 
-        Args:
-            database (str): The name of Odoo instance database.
-            username (str): The user to authenitcate.
-            password (Secret): The user's password.
-            exit_on_fail (bool, optional): If `True`, calls for an exit on failure. Defaults to True.
+            Args:
+                username (str, optional): The user to authenitcate.
+                password (Secret, optional): The user's password.
+                exit_on_fail (bool, optional): If `True`, calls for an exit on failure. Defaults to True.
 
-        Raises:
-            LookupError: Raised when authenitcation fails in any way.
+            Raises:
+                LookupError: Raised when authenitcation fails in any way.
 
-        Returns:
-            int: The ID of the authenitcated user.
+            Returns:
+                int: The ID of the authenitcated user.
         """
+        def set_and_get(name: str, value: T) -> T:
+            if value is not None:
+                setattr(cls, f'__{name.lower()}', value)
+            return getattr(cls, name)
 
-        setattr(cls, "__database", database)
-        setattr(cls, "__username", username)
-        setattr(cls, "__password", password)
-        ...
-        rpc = getattr(cls, "__rpc")
-        with Trace():
-            uid: int | Literal[False] = rpc.authenticate(
-                database, username, password.data, {}
-            )
-        if not uid:
-            err_msg = f'Could not authenticate the user, "{username}," on the database, "{database}." \
-                Please check your user and/or password.'
-            if exit_on_fail:
-                Log.FATAL(err_msg, code=10)
-            else:
-                raise LookupError(err_msg)
-        ...
-        setattr(cls, "__uid", uid)
-        return uid
+        try:
+            assert not cls.Authorized
+            cls.Load()
+
+            rpc = getattr(cls, "__rpc")
+            database = cls.Database
+            username = set_and_get('Username', username)
+            password = set_and_get('Password', password)
+
+            with Trace():
+                uid: int | Literal[False] = rpc.authenticate(
+                    database, username, password.data, {}
+                )
+
+            if not uid:
+                err_msg = (
+                    f'Could not authenticate the user, "{username}," on the database, "{database}." '
+                    'Please check your user and/or password.'
+                )
+                if exit_on_fail:
+                    Log.FATAL(err_msg, code=10)
+                else:
+                    raise LookupError(err_msg)
+
+            setattr(cls, "__uid", uid)
+            return uid
+        except AssertionError:
+            return cls.UID
 
     @classmethod
     def Version(cls) -> APIVersion:
@@ -172,14 +198,11 @@ class Common(metaclass=_Common):
     def Demo(cls) -> Credentials:
         """Retrieve demo credentials from Odoo Cloud.
 
-        Returns:
-            Credentials: Teh credentials, in the for of Environment Variable declarations.
+            Returns:
+                Credentials: Teh credentials, in the for of Environment Variable declarations.
         """
-
         from urllib.parse import urlparse, parse_qs, ParseResult
         import requests
-
-        ...
 
         def location(headers: dict[str, str]) -> str:
             try:
@@ -187,19 +210,32 @@ class Common(metaclass=_Common):
             except KeyError:
                 return headers["Location"]
 
-        ...
         result = Credentials()
         url = "https://demo.odoo.com"
-        ...
-        resp = requests.post(url, allow_redirects=False)
+        headers = {
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Sec-Ch-Ua': '"Chromium";v="118", "Google Chrome";v="118", "Not=A?Brand";v="99"',
+            'Sec-Ch-Ua-Mobile': '?0',
+            'Sec-Ch-Ua-Platform': '"macOS"',
+            'Sec-Fetch-Dest': 'document',
+            'Sec-Fetch-Mode': 'navigate',
+            'Sec-Fetch-Site': 'none',
+            'Sec-Fetch-User': '?1',
+            'Upgrade-Insecure-Requests': '1',
+            'User-Agent': (
+                'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 '
+                '(KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36'
+            ),
+        }
+
+        resp = requests.options(url, headers=headers, allow_redirects=False, timeout=3)
         while resp.status_code in [300, 301, 302]:
             url = location(resp.headers)
-            resp = requests.post(url, allow_redirects=False)
-        ...
+            resp = requests.options(url, headers=headers, allow_redirects=False)
+
         if resp.status_code == 303:
-            resp = requests.get(url, allow_redirects=False)
-            ...
-            parts: ParseResult = urlparse(location(resp.headers))
+            parts: ParseResult = urlparse(url)
             query = {k: "".join(v) for k, v in parse_qs(parts.query).items()}
             result = {
                 "instance": f"{parts.scheme}://{parts.netloc}",
@@ -207,8 +243,28 @@ class Common(metaclass=_Common):
                 "username": query["user"],
                 "password": query["key"],
             }
-        ...
+
         return result
+
+    @staticmethod
+    def ToStacks(message: str) -> list[tuple[StackSummary, str]]:
+        import re
+
+        exc_pattern = r'Traceback +.+:\n((?: .+\n)+)(\S.+)'
+        frm_pattern = r'^ *File +"([^"]+)", +line +(\d+), +in +(\w+)\n +(\S.+)'
+
+        stacks: list[tuple[StackSummary, str]] = []
+        exceptions = re.findall(exc_pattern, message)
+
+        for exception in exceptions:
+            matches = re.findall(frm_pattern, exception[0], flags=re.I | re.M)
+            frames = StackSummary([
+                FrameSummary(m[0], m[1], m[2], line=m[3], lookup_line=False)
+                for m in matches
+            ])
+            stacks.append((frames, exception[1]))
+
+        return stacks
 
     @staticmethod
     def HandleProtocol(exception: xmlrpc.client.ProtocolError) -> Literal[200]:
@@ -240,50 +296,54 @@ class Common(metaclass=_Common):
             Literal[100]: Standard exit code for protocol errors in `clo`.
         """
 
-        Log.ERROR(f"FAULT_ERROR({exception.faultCode}): {exception.faultString}")
+        def print_stack(stack: StackSummary, error: str, first: bool = True) -> None:
+            tick = "  -"
+
+            Log.TRACE(stack[0])
+            [Log.__send__(tick, frame) for frame in stack[1:]]
+
+            if not first:
+                Log.INFO('During handling of the above exception, another exception occurred:')
+
+            Log.ERROR(f"FAULT_ERROR({code}): {error}")
+
+        code = exception.faultCode
+        message = exception.faultString
+        stacks = Common.ToStacks(message)
+
+        print_stack(*stacks[0])
+        [print_stack(*stack, first=False) for stack in stacks[1:]]
+
         return 100
 
 
 class _Model(type):
-    __rpc = None
-    ...
-    IR: "Model" = None
-    Repo: dict[str, IR] = {}
-    ...
 
     @lru_cache(maxsize=None)
-    def __getitem__(cls, __name: str, /):
+    def __load__(cls) -> None:
         try:
-            if not cls.IR:
-                cls.__refresh__()
-            ...
-            assert __name in cls.Repo
-            ...
-            return cls(f"{__name}")
+            assert cls.__rpc
         except AssertionError:
-            Log.FATAL(f'The model "{__name}" is invalid.', code=20)
+            try:
+                Common.Authenticate(exit_on_fail=False)
+            except LookupError:
+                Common.Authenticate(
+                    username='admin',
+                    password=Secret('admin')
+                )
 
-    ...
-
-    def __refresh__(cls) -> None:
-        cls.IR = cls("ir.model")
-        ...
-        models = sorted(cls.IR.Find(fields=["model", "info"]), key=lambda m: m["model"])
-        cls.Repo = {m["model"]: IR(m) for m in models}
+            with Trace():
+                cls.__rpc = xmlrpc.client.ServerProxy(
+                    f"{Common.URL}/xmlrpc/2/object",
+                    verbose=(Log.Level == Levels.TRACE),
+                )
 
 
 class Model(metaclass=_Model):
-    """Perform operation on the records of a specified Odoo model.
-
-    ```python
-    Model[str]
-    ```
-
-    Args:
-        name (str): The name of the model to query.
+    """Performs operations on the records of a specified Odoo model.
     """
 
-    __rpc = None
+    __rpc: xmlrpc.client.ServerProxy = None
     __name = ""
     __methods__: dict[str, tuple[str, list, dict]] = {
         "Search": ("search", [[]], {}),
@@ -296,20 +356,14 @@ class Model(metaclass=_Model):
         "Fields": ("fields_get", [[]], {}),
     }
 
-    IR: "Model" = None
-    Repo: dict[str, IR] = {}
-
-    def __new__(cls, *args):
-        if not cls.__rpc:
-            with Trace():
-                cls.__rpc = xmlrpc.client.ServerProxy(
-                    f"{Common.URL}/xmlrpc/2/object",
-                    verbose=(Log.Level == Levels.TRACE),
-                )
-        ...
+    @lru_cache(maxsize=None)
+    def __new__(cls, name: str, /):
         return super().__new__(cls)
 
     def __init__(self, name: str, /) -> None:
+        """Args:
+            name (str): The name of the model to query.
+        """
         self.__name = name
 
     def __str__(self) -> str:
@@ -321,17 +375,20 @@ class Model(metaclass=_Model):
     @lru_cache(maxsize=None)
     def __getattribute__(self, __name: str) -> Any:
         get_attr = object.__getattribute__
+
         try:
             method: tuple[str, list, dict] = get_attr(self, "__methods__")[__name]
-            ...
 
             def __execute__(self: Model, *args, **kwargs):
                 code = 0
+
                 try:
+                    self.__class__.__load__()
+
                     with Trace():
                         args = args if args else method[1]
                         kwargs = kwargs if kwargs else method[2]
-                        # Log.DEBUG(*(*Common.Arguments, self.__name, method[0], args, kwargs), sep=', ')
+
                         return self.__rpc.execute_kw(
                             *Common.Arguments, self.__name, method[0], args, kwargs
                         )
@@ -346,7 +403,6 @@ class Model(metaclass=_Model):
                     if code > 0:
                         raise Log.EXIT(code=code)
 
-            ...
             return MethodType(__execute__, self)
         except KeyError:
             return get_attr(self, __name)
@@ -477,14 +533,12 @@ class Model(metaclass=_Model):
         """
         ...
 
-    ...
-
 
 ###########################################################################
 
 __all__ = [
-    'Common',
-    'Model',
+    "Common",
+    "Model",
 ]
 
 ###########################################################################

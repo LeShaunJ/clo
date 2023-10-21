@@ -10,6 +10,16 @@ def_args = ["--env", ".clorc", "write"]
 ###########################################################################
 
 
+def test_demo_default(capsys):
+    from clo import CLI
+    with pytest.raises(Log.EXIT) as e:
+        CLI(["--demo"])
+
+    out, _ = capsys.readouterr()
+    assert e.value.code == 0
+    assert "Saving demo credentials to" in out
+
+
 @pytest.mark.parametrize(
     "func,pattern",
     [
@@ -69,16 +79,6 @@ def test_fromcsv_pass():
     ])
 
 
-def test_common_load(capsys):
-    from clo.api import Common
-    with pytest.raises(Log.EXIT) as e:
-        Common.Load('')
-
-    _, err = capsys.readouterr()
-    assert e.value.code > 0
-    assert err
-
-
 def test_dry_run(capsys):
     from clo import CLI
     with pytest.raises(Log.EXIT) as e:
@@ -86,7 +86,7 @@ def test_dry_run(capsys):
 
     _, err = capsys.readouterr()
     assert e.value.code == 0
-    assert err.startswith("DEBUG | Model['res.users'].Search([], offset=0)")
+    assert "DEBUG | Model['res.users'].Search([], offset=0)" in err
 
 
 ###########################################################################
