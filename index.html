@@ -8,17 +8,19 @@
       
       
       
+        <link rel="canonical" href="https://leshaunj.github.com/clo/">
       
       
-        <link rel="next" href="changelog/">
+      
+        <link rel="next" href="reference/cli/">
       
       
-      <link rel="icon" href="assets/images/favicon.png">
+      <link rel="icon" href="assets/images/favicon.ico">
       <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.6">
     
     
       
-        <title>clo</title>
+        <title>Command-Line Odoo</title>
       
     
     
@@ -46,6 +48,8 @@
     
       <link rel="stylesheet" href="assets/_mkdocstrings.css">
     
+      <link rel="stylesheet" href="stylesheets/extra.css">
+    
     <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
@@ -58,12 +62,16 @@
   
     
     
+      
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="714B67" data-md-color-accent="indigo">
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="indigo">
   
     
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
@@ -83,12 +91,13 @@
     
       
 
-<header class="md-header" data-md-component="header">
-  <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="." title="clo" class="md-header__button md-logo" aria-label="clo" data-md-component="logo">
-      
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="." title="Command-Line Odoo" class="md-header__button md-logo" aria-label="Command-Line Odoo" data-md-component="logo">
+      
+  <img src="assets/images/logo-white.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -99,7 +108,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            clo
+            Command-Line Odoo
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
@@ -112,6 +121,30 @@
       </div>
     </div>
     
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
       
     
     
@@ -168,14 +201,8 @@
     
   </nav>
   
-</header>
     
-    <div class="md-container" data-md-component="container">
       
-      
-        
-          
-            
 <nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
   <div class="md-grid">
     <ul class="md-tabs__list">
@@ -196,6 +223,24 @@
 
       </a>
     </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="reference/cli/" class="md-tabs__link">
+          
+  
+  Reference
+
+        </a>
+      </li>
+    
   
 
       
@@ -238,23 +283,6 @@
   
   
     <li class="md-tabs__item">
-      <a href="reference/" class="md-tabs__link">
-        
-  
-    
-  
-  Reference
-
-      </a>
-    </li>
-  
-
-      
-        
-  
-  
-  
-    <li class="md-tabs__item">
       <a href="license/" class="md-tabs__link">
         
   
@@ -270,7 +298,13 @@
     </ul>
   </div>
 </nav>
-          
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
         
       
       <main class="md-main" data-md-component="main">
@@ -289,13 +323,12 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="." title="clo" class="md-nav__button md-logo" aria-label="clo" data-md-component="logo">
+    <a href="." title="Command-Line Odoo" class="md-nav__button md-logo" aria-label="Command-Line Odoo" data-md-component="logo">
       
-  
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+  <img src="assets/images/logo-white.png" alt="logo">
 
     </a>
-    clo
+    Command-Line Odoo
   </label>
   
     <div class="md-nav__source">
@@ -488,6 +521,33 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#concepts" class="md-nav__link">
+    Concepts
+  </a>
+  
+    <nav class="md-nav" aria-label="Concepts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#domains" class="md-nav__link">
+    DOMAINS
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#logic" class="md-nav__link">
+    LOGIC
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -503,6 +563,154 @@
     </ul>
   
 </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Reference
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="reference/cli/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CLI
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="reference/api/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    API
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="reference/input/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Input
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="reference/output/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Output
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="reference/types/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Types
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
       
     </li>
   
@@ -538,25 +746,6 @@
   
   <span class="md-ellipsis">
     Contributing
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="reference/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Reference
   </span>
   
 
@@ -735,6 +924,33 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#concepts" class="md-nav__link">
+    Concepts
+  </a>
+  
+    <nav class="md-nav" aria-label="Concepts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#domains" class="md-nav__link">
+    DOMAINS
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#logic" class="md-nav__link">
+    LOGIC
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -788,6 +1004,7 @@
 <li><a href="#explain">Explain</a></li>
 </ul>
 </li>
+<li><a href="#concepts">Concepts</a></li>
 </ul>
 </li>
 <li><a href="#see-also">See Also</a></li>
@@ -796,7 +1013,7 @@
 <pre><code class="language-sh">pip3 install clo
 </code></pre>
 <h2 id="usage">Usage</h2>
-<pre><code class="language-sh">clo [--model MODEL] [--env FILE] [--inst URL] [--db NAME] [--user NAME] [--demo] [--out FILE] [--log LEVEL] [--dry-run] [--help] [--version] ACTION ...
+<pre><code class="language-sh">clo [OPTIONS] ACTION ...
 </code></pre>
 <h3 id="globals">Globals</h3>
 <p>The following parameters apply to any <a href="#actions">Action</a>.</p>
@@ -824,35 +1041,35 @@
 <td style="text-align: center;"><code>FILE</code></td>
 <td style="text-align: center;">NO</td>
 <td style="text-align: left;">Path to a <code>.clorc</code> file. See <a href="#requisites">Requisites</a> below for details.</td>
-<td style="text-align: left;"><code>"~/.clorc"</code></td>
+<td style="text-align: left;"><code>".clorc"</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>‑‑inst</code><br><code>‑‑instance</code></td>
 <td style="text-align: center;"><code>URL</code></td>
 <td style="text-align: center;">NO</td>
 <td style="text-align: left;">The address of the Odoo instance. See <a href="#requisites">Requisites</a> below for details.</td>
-<td style="text-align: left;"><code>"http://localhost:8069"</code></td>
+<td style="text-align: left;"></td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>‑‑db</code><br><code>‑‑database</code></td>
 <td style="text-align: center;"><code>NAME</code></td>
 <td style="text-align: center;">NO</td>
 <td style="text-align: left;">The application database to perform operations on. See <a href="#requisites">Requisites</a> below                             for details.</td>
-<td style="text-align: left;"><code>""</code></td>
+<td style="text-align: left;"></td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>‑‑user</code></td>
 <td style="text-align: center;"><code>NAME</code></td>
 <td style="text-align: center;">NO</td>
 <td style="text-align: left;">The user to perform operations as. See <a href="#requisites">Requisites</a> below for details.</td>
-<td style="text-align: left;"><code>""</code></td>
+<td style="text-align: left;"></td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>‑‑demo</code></td>
-<td style="text-align: center;"></td>
+<td style="text-align: center;"><code>FILE</code></td>
 <td style="text-align: center;">NO</td>
-<td style="text-align: left;">Generate and use a demo instance from Odoo Cloud.</td>
-<td style="text-align: left;"></td>
+<td style="text-align: left;">Generate a demo instance from Odoo Cloud and save the connection properties to <code>FILE</code>.</td>
+<td style="text-align: left;"><code>".clorc"</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>‑‑out</code></td>
@@ -866,7 +1083,7 @@
 <td style="text-align: center;"><code>LEVEL</code></td>
 <td style="text-align: center;">NO</td>
 <td style="text-align: left;">The level (<em><code>OFF</code>, <code>FATAL</code>, <code>ERROR</code>, <code>WARN</code>, <code>INFO</code>, <code>DEBUG</code>, <code>TRACE</code></em>) of logs to produce.</td>
-<td style="text-align: left;"><code>"ERROR"</code></td>
+<td style="text-align: left;"><code>"WARN"</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>‑‑dry‑run</code></td>
@@ -894,15 +1111,18 @@
 <blockquote>
 <h4 id="requisites">Requisites</h4>
 <p>The following inputs are <strong>required</strong>, but have multiple or special specifications. In the absense of these inputs, the program will ask for input:</p>
-<p>- <code>--instance</code> can be specified using environment variable <strong><code>OD_INST</code></strong>.
-  - <code>--database</code> can be specified using environment variable <strong><code>OD_DATA</code></strong>.
-  - <code>--username</code> can be specified using environment variable <strong><code>OD_USER</code></strong>.
-  - The <code>password</code> (<em>or <code>API-key</code></em>) <strong>MUST BE</strong> specified using environment variable                     <strong><code>OD_PASS</code></strong>.</p>
+<ul>
+<li><code>--instance</code> can be specified using environment variable <strong><code>CLO_INSTANCE</code></strong>.</li>
+<li><code>--database</code> can be specified using environment variable <strong><code>CLO_DATABASE</code></strong>.</li>
+<li><code>--username</code> can be specified using environment variable <strong><code>CLO_USERNAME</code></strong>.</li>
+<li>The <code>password</code> (<em>or <code>API-key</code></em>) <strong>MUST BE</strong> specified using environment variable <strong><code>CLO_PASSWORD</code></strong>.</li>
+</ul>
+<p><code>clo</code> also looks for a <code>.clorc</code> file in the working directory that contain these values, or the file specified by <code>--env FILE</code>, if it exists.</p>
 </blockquote>
 <h3 id="actions">Actions</h3>
 <p>The Odoo instance is queried, or operated on, using <code>ACTIONS</code>. Each <code>ACTION</code> has it's own set of arguements; run <code>clo ACTION --help</code> for specific details.</p>
 <h4 id="search">Search</h4>
-<pre><code class="language-sh">clo search [[-o|-n|-a] -d FIELD OPERATOR VALUE [-d ...]] [--offset POSITION] [--limit AMOUNT] [--order FIELD] [--count] [-h]
+<pre><code class="language-sh">clo [OPTIONS] ACTION ... search [[-o|-n|-a] -d FIELD OPERATOR VALUE [-d ...]] [--offset POSITION] [--limit AMOUNT] [--order FIELD] [--count] [-h]
 </code></pre>
 <p>Searches for record IDs based on the search domain.</p>
 <h5 id="options_1">Options</h5>
@@ -983,7 +1203,7 @@
 </tbody>
 </table>
 <h4 id="count">Count</h4>
-<pre><code class="language-sh">clo count [--domain FIELD OPERATOR VALUE] [--or] [--and] [--not] [--limit AMOUNT] [--help]
+<pre><code class="language-sh">clo [OPTIONS] ACTION ... count [--domain FIELD OPERATOR VALUE] [--or] [--and] [--not] [--limit AMOUNT] [--help]
 </code></pre>
 <p>Returns the number of records in the current model matching the provided domain.</p>
 <h5 id="options_2">Options</h5>
@@ -1043,7 +1263,7 @@
 </tbody>
 </table>
 <h4 id="read">Read</h4>
-<pre><code class="language-sh">clo read --ids ID [ID ...] [--fields FIELD [FIELD ...]] [--csv] [--help]
+<pre><code class="language-sh">clo [OPTIONS] ACTION ... read --ids ID [ID ...] [--fields FIELD [FIELD ...]] [--csv] [--help]
 </code></pre>
 <p>Retrieves the details for the records at the ID(s) specified.</p>
 <h5 id="options_3">Options</h5>
@@ -1089,7 +1309,7 @@
 </tbody>
 </table>
 <h4 id="find">Find</h4>
-<pre><code class="language-sh">clo find [[-o|-n|-a] -d FIELD OPERATOR VALUE [-d ...]] [-f FIELD ...] [--offset POSITION] [--limit AMOUNT] [--order FIELD] [--csv [FILE]] [--help]
+<pre><code class="language-sh">clo [OPTIONS] ACTION ... find [[-o|-n|-a] -d FIELD OPERATOR VALUE [-d ...]] [-f FIELD ...] [--offset POSITION] [--limit AMOUNT] [--order FIELD] [--csv [FILE]] [--help]
 </code></pre>
 <p>A shortcut that combines <code>search</code> and <code>read</code> into one execution.</p>
 <h5 id="options_4">Options</h5>
@@ -1177,7 +1397,7 @@
 </tbody>
 </table>
 <h4 id="create">Create</h4>
-<pre><code class="language-sh">clo create --value FIELD VALUE [--help]
+<pre><code class="language-sh">clo [OPTIONS] ACTION ... create --value FIELD VALUE [--help]
 </code></pre>
 <p>Creates new records in the current model.</p>
 <h5 id="options_5">Options</h5>
@@ -1209,7 +1429,7 @@
 </tbody>
 </table>
 <h4 id="write">Write</h4>
-<pre><code class="language-sh">clo write --ids ID [ID ...] --value FIELD VALUE [--help]
+<pre><code class="language-sh">clo [OPTIONS] ACTION ... write --ids ID [ID ...] --value FIELD VALUE [--help]
 </code></pre>
 <p>Updates existing records in the current model.</p>
 <h5 id="options_6">Options</h5>
@@ -1248,7 +1468,7 @@
 </tbody>
 </table>
 <h4 id="delete">Delete</h4>
-<pre><code class="language-sh">clo delete --ids ID [ID ...] [--help]
+<pre><code class="language-sh">clo [OPTIONS] ACTION ... delete --ids ID [ID ...] [--help]
 </code></pre>
 <p>Deletes the records from the current model.</p>
 <h5 id="options_7">Options</h5>
@@ -1280,10 +1500,10 @@
 </tbody>
 </table>
 <h4 id="fields">Fields</h4>
-<pre><code class="language-sh">clo fields [--attributes NAME [NAME ...]] [--help]
+<pre><code class="language-sh">clo [OPTIONS] ACTION ... fields [--attributes NAME [NAME ...]] [--help]
 </code></pre>
 <p>Retrieves raw details of the fields available in the current model.
-For user-friendly formatting, run <code>clo fields explain fields</code>.</p>
+For user-friendly formatting, run <code>clo [OPTIONS] ACTION ... fields explain fields</code>.</p>
 <h5 id="options_8">Options</h5>
 <table>
 <thead>
@@ -1313,7 +1533,7 @@ For user-friendly formatting, run <code>clo fields explain fields</code>.</p>
 </tbody>
 </table>
 <h4 id="explain">Explain</h4>
-<pre><code class="language-sh">clo explain [--verbose] [--help] {models,domains,logic,fields}
+<pre><code class="language-sh">clo [OPTIONS] ACTION ... explain [--verbose] [--help] {models,domains,logic,fields}
 </code></pre>
 <p>Display documentation on a specified topic.</p>
 <h5 id="positional">Positional</h5>
@@ -1363,12 +1583,58 @@ For user-friendly formatting, run <code>clo fields explain fields</code>.</p>
 </tr>
 </tbody>
 </table>
+<h3 id="concepts">Concepts</h3>
+<p>The following breakdowns apply to search-style <code>ACTIONS</code>.</p>
+<h4 id="domains">DOMAINS</h4>
+<p>A domain is a set of criteria, each criterion being a throuple of <code>(FIELD, OPERATOR, VALUE)</code> where:</p>
+<p><code>FIELD</code>:      A field name of the current model, or a relationship traversal through a <code>Many2one</code>
+              using dot-notation.</p>
+<p><code>OPERATOR</code>:   An operand used to compare the <code>FIELD</code> with the value. Valid operators are:</p>
+<pre><code>          =, !=, &gt;, &gt;=, &lt;, &lt;=   Standard comparison operators.
+
+          =?                    Unset or equals to (_returns true if value is either None or
+                                False, otherwise behaves like `=`_).
+
+          =[i]like              Matches `FIELD` against the value pattern. An underscore (_`_`_)
+                                in the pattern matches any single character; a percent sign
+                                (_`%`_) matches any string of zero or more characters. `=ilike`
+                                makes the search case-insensitive.
+
+          [not ][i]like         Matches (_or inverse-matches_) `FIELD` against the %value%
+                                pattern. Similar to `=[i]like` but wraps value with `%` before
+                                matching.
+
+          [not ]in              Is—or is not—equal to any of the items from value, value should
+                                be a list of items.
+
+          child_of              Is a child (_descendant[2m_) of a value record (_[2mvalue can
+                                be either one item or a list of items_). Takes the semantics
+                                of the model into account (_i.e following the relationship
+                                `FIELD` named by `VALUE`_).
+
+          parent_of             Is a child (_ascendant[2m_) of a value record (_[2mvalue can
+                                be either one item or a list of items_). Takes the semantics
+                                of the model into account (_i.e following the relationship
+                                `FIELD` named by `VALUE`_).
+</code></pre>
+<p><code>VALUE</code>:      Variable type, must be comparable (<em>through <code>OPERATOR</code></em>) to the named <code>FIELD</code>.</p>
+<h4 id="logic">LOGIC</h4>
+<p>Domain criteria can be combined using logical operators in prefix form:</p>
+<pre><code>--or -d login = user -d name = "John Smith" -d email = user@domain.com
+</code></pre>
+<p>is equivalent to <code>login == "user" || name == "John Smith" || email == "user@domain.com"</code></p>
+<pre><code>--not -d login = user` or `-d login '!=' user
+</code></pre>
+<p>are equivalent to <code>login != "user"</code>. <code>--not</code> is generally unneeded, save for negating the OPERATOR, <code>child_of</code>, or <code>parent_of</code>.</p>
+<pre><code>--and -d login = user -d name = "John Smith"
+</code></pre>
+<p>is equivalent to <code>login == "user" &amp;&amp; name == "John Smith"</code>; though, successive domainsimply <code>--and</code>.</p>
 <h2 id="see-also">See Also</h2>
 <ul>
-<li><a href="https://github.com/LeShaunJ/clo/CHANGELOG.md">Changelog</a></li>
-<li><a href="https://github.com/LeShaunJ/clo/CONTRIBUTING.md">Contributing</a></li>
-<li><a href="https://github.com/LeShaunJ/clo/CODE_OF_CONDUCT.md">Code of Conduct</a></li>
-<li><a href="https://github.com/LeShaunJ/clo/SECURITY.md">Security</a></li>
+<li><a href="https://github.com/LeShaunJ/clo/blob/main/CHANGELOG.md">Changelog</a></li>
+<li><a href="https://github.com/LeShaunJ/clo/blob/main/CONTRIBUTING.md">Contributing</a></li>
+<li><a href="https://github.com/LeShaunJ/clo/blob/main/CODE_OF_CONDUCT.md">Code of Conduct</a></li>
+<li><a href="https://github.com/LeShaunJ/clo/blob/main/SECURITY.md">Security</a></li>
 </ul>
 <p><img alt="Banner" src="https://leshaunj.github.io/clo/assets/images/logo-social.png" /></p>
 
@@ -1383,19 +1649,48 @@ For user-friendly formatting, run <code>clo fields explain fields</code>.</p>
           
         </div>
         
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
       </main>
       
         <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+        
+          
+          <a href="reference/cli/" class="md-footer__link md-footer__link--next" aria-label="Next: CLI">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                CLI
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
       <div class="md-copyright">
   
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2023 Arian Johnson
+    </div>
   
-    Made with
-    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
-      Material for MkDocs
-    </a>
   
 </div>
       
@@ -1409,7 +1704,64 @@ For user-friendly formatting, run <code>clo fields explain fields</code>.</p>
     </div>
     
     
-    <script id="__config" type="application/json">{"base": ".", "features": ["toc.follow", "navigation.tabs", "navigation.sections"], "search": "assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+      <div class="md-consent" data-md-component="consent" id="__consent" hidden>
+        <div class="md-consent__overlay"></div>
+        <aside class="md-consent__inner">
+          <form class="md-consent__form md-grid md-typeset" name="consent">
+            
+
+
+  
+    
+  
+
+
+
+  
+
+
+<h4>Cookie consent</h4>
+<p>We use cookies to recognize your repeated visits and preferences, as well as to measure the effectiveness of our documentation and whether users find what they're searching for. With your consent, you're helping us to make our documentation better.</p>
+<input class="md-toggle" type="checkbox" id="__settings" >
+<div class="md-consent__settings">
+  <ul class="task-list">
+    
+      
+      
+        
+        
+      
+      <li class="task-list-item">
+        <label class="task-list-control">
+          <input type="checkbox" name="github" checked>
+          <span class="task-list-indicator"></span>
+          GitHub
+        </label>
+      </li>
+    
+  </ul>
+</div>
+<div class="md-consent__controls">
+  
+    
+      <button class="md-button md-button--primary">Accept</button>
+    
+    
+    
+  
+    
+    
+    
+      <label class="md-button" for="__settings">Manage settings</label>
+    
+  
+</div>
+          </form>
+        </aside>
+      </div>
+      <script>var consent=__md_get("__consent");if(consent)for(var input of document.forms.consent.elements)input.name&&(input.checked=consent[input.name]||!1);else"file:"!==location.protocol&&setTimeout(function(){document.querySelector("[data-md-component=consent]").hidden=!1},250);var action,form=document.forms.consent;for(action of["submit","reset"])form.addEventListener(action,function(e){if(e.preventDefault(),"reset"===e.type)for(var n of document.forms.consent.elements)n.name&&(n.checked=!1);__md_set("__consent",Object.fromEntries(Array.from(new FormData(form).keys()).map(function(e){return[e,!0]}))),location.hash="",location.reload()})</script>
+    
+    <script id="__config" type="application/json">{"base": ".", "features": ["toc.follow", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.instant", "navigation.tracking", "navigation.top", "navigation.footer"], "search": "assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
       <script src="assets/javascripts/bundle.aecac24b.min.js"></script>
