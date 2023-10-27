@@ -6,12 +6,16 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
+        <meta name="description" content="CLO lets you perform API operations on Odoo instances directly from the command-line.">
+      
+      
+        <meta name="author" content="Arian LeShaun Johnson">
       
       
         <link rel="canonical" href="https://leshaunj.github.com/clo/reference/input/">
       
       
-        <link rel="prev" href="../api/">
+        <link rel="prev" href="../cli/">
       
       
         <link rel="next" href="../output/">
@@ -229,14 +233,36 @@
         
   
   
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../usage/" class="md-tabs__link">
+          
+  
+    
+  
+  Usage
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
     
   
   
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="../cli/" class="md-tabs__link">
+        <a href="../api/" class="md-tabs__link">
           
+  
+    
   
   Reference
 
@@ -250,50 +276,19 @@
   
   
   
-    <li class="md-tabs__item">
-      <a href="../../changelog/" class="md-tabs__link">
-        
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../about/1_changelog/" class="md-tabs__link">
+          
   
     
   
-  Changelog
+  About
 
-      </a>
-    </li>
-  
-
-      
-        
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../../contributing/" class="md-tabs__link">
-        
-  
+        </a>
+      </li>
     
-  
-  Contributing
-
-      </a>
-    </li>
-  
-
-      
-        
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../../license/" class="md-tabs__link">
-        
-  
-    
-  
-  License
-
-      </a>
-    </li>
   
 
       
@@ -370,40 +365,119 @@
       
   
   
-    
-  
   
     
     
-    
-    
-    
       
-      
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+        
+      
+        
+      
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../usage/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Usage
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Usage
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="">
             
   
   <span class="md-ellipsis">
-    Reference
+    Actions
   </span>
   
 
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_2">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
             <span class="md-nav__icon md-icon"></span>
-            Reference
+            Actions
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -413,11 +487,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../cli/" class="md-nav__link">
+      <a href="../../usage/actions/0_search/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    CLI
+    Search
   </span>
   
 
@@ -433,11 +507,259 @@
   
   
     <li class="md-nav__item">
+      <a href="../../usage/actions/1_count/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Count
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/actions/2_read/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Read
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/actions/3_find/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Find
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/actions/4_create/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Create
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/actions/5_write/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Write
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/actions/6_delete/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Delete
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/actions/7_fields/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Fields
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/actions/8_explain/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Explain
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Reference
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../api/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    API
+    Api
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Cli
   </span>
   
 
@@ -511,6 +833,55 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#clo.input.Env.CONF" class="md-nav__link">
+    CONF
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#clo.input.Env.INSTANCE" class="md-nav__link">
+    INSTANCE
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#clo.input.Env.DATABASE" class="md-nav__link">
+    DATABASE
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#clo.input.Env.USERNAME" class="md-nav__link">
+    USERNAME
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#clo.input.Env.PASSWORD" class="md-nav__link">
+    PASSWORD
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#clo.input.Env.OUT" class="md-nav__link">
+    OUT
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#clo.input.Env.LOG" class="md-nav__link">
+    LOG
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#clo.input.Env.get" class="md-nav__link">
     get()
   </a>
@@ -571,8 +942,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#clo.input.GetReadMe" class="md-nav__link">
-    GetReadMe()
+  <a href="#clo.input.Document" class="md-nav__link">
+    Document()
   </a>
   
 </li>
@@ -643,8 +1014,61 @@
   
   
   
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    About
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            About
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
     <li class="md-nav__item">
-      <a href="../../changelog/" class="md-nav__link">
+      <a href="../../about/1_changelog/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -656,14 +1080,35 @@
     </li>
   
 
-    
-      
-      
+              
+            
+              
+                
   
   
   
     <li class="md-nav__item">
-      <a href="../../contributing/" class="md-nav__link">
+      <a href="../../about/2_code_of_conduct/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Code of Conduct
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/3_contributing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -675,14 +1120,35 @@
     </li>
   
 
-    
-      
-      
+              
+            
+              
+                
   
   
   
     <li class="md-nav__item">
-      <a href="../../license/" class="md-nav__link">
+      <a href="../../about/4_security/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Security Policy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/license/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -691,6 +1157,14 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -734,6 +1208,55 @@
   
     <nav class="md-nav" aria-label="Env">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#clo.input.Env.CONF" class="md-nav__link">
+    CONF
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#clo.input.Env.INSTANCE" class="md-nav__link">
+    INSTANCE
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#clo.input.Env.DATABASE" class="md-nav__link">
+    DATABASE
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#clo.input.Env.USERNAME" class="md-nav__link">
+    USERNAME
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#clo.input.Env.PASSWORD" class="md-nav__link">
+    PASSWORD
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#clo.input.Env.OUT" class="md-nav__link">
+    OUT
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#clo.input.Env.LOG" class="md-nav__link">
+    LOG
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#clo.input.Env.get" class="md-nav__link">
@@ -796,8 +1319,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#clo.input.GetReadMe" class="md-nav__link">
-    GetReadMe()
+  <a href="#clo.input.Document" class="md-nav__link">
+    Document()
   </a>
   
 </li>
@@ -867,7 +1390,12 @@
             Bases: <code><span title="enum.Enum">Enum</span></code></p>
 
   
-      <p>A collection of possible environment variables.</p>
+      <p>A collection of possible environment variables. All members in this
+<code>Enum</code> assume the following:</p>
+<ul>
+<li>The <code>.name</code> represents the variable (<em>prefix with <code>CLO_</code></em>) one would export in their shell.</li>
+<li>The <code>.value</code> represents the long-flag (<em>prefix with <code>--</code></em>) one would specify in their command.</li>
+</ul>
 
 
   
@@ -879,6 +1407,187 @@
 
 
 
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h4 id="clo.input.Env.CONF" class="doc doc-heading">
+          <span class="doc doc-object-name doc-attribute-name">clo.input.Env.CONF</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">CONF</span> <span class="o">=</span> <span class="s1">&#39;.clorc&#39;</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <blockquote>
+<p><strong>NOTE:</strong> <em>This is a special member and <strong>is not</strong> recognized as an
+environment variable or a flag.</em></p>
+</blockquote>
+<p>The default environment file. <code>clo</code> will fallback to any vairables declared
+in this file, barring they're explicitly set from the command-line. Empty
+declarations are ignored.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h4 id="clo.input.Env.INSTANCE" class="doc doc-heading">
+          <span class="doc doc-object-name doc-attribute-name">clo.input.Env.INSTANCE</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">INSTANCE</span> <span class="o">=</span> <span class="s1">&#39;instance&#39;</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>The application database to perform operations on. Equivalent to <code>--database</code>.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h4 id="clo.input.Env.DATABASE" class="doc doc-heading">
+          <span class="doc doc-object-name doc-attribute-name">clo.input.Env.DATABASE</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">DATABASE</span> <span class="o">=</span> <span class="s1">&#39;database&#39;</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>The application database to perform operations on. Equivalent to <code>--database</code>.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h4 id="clo.input.Env.USERNAME" class="doc doc-heading">
+          <span class="doc doc-object-name doc-attribute-name">clo.input.Env.USERNAME</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">USERNAME</span> <span class="o">=</span> <span class="s1">&#39;username&#39;</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>The user to perform operations as. Equivalent to <code>--user</code>.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h4 id="clo.input.Env.PASSWORD" class="doc doc-heading">
+          <span class="doc doc-object-name doc-attribute-name">clo.input.Env.PASSWORD</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">PASSWORD</span> <span class="o">=</span> <span class="s1">&#39;password&#39;</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>The user's password. There is no command-line equivalent.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h4 id="clo.input.Env.OUT" class="doc doc-heading">
+          <span class="doc doc-object-name doc-attribute-name">clo.input.Env.OUT</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">OUT</span> <span class="o">=</span> <span class="s1">&#39;out&#39;</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>Where to stream the output. Equivalent to <code>--out</code>.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h4 id="clo.input.Env.LOG" class="doc doc-heading">
+          <span class="doc doc-object-name doc-attribute-name">clo.input.Env.LOG</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">LOG</span> <span class="o">=</span> <span class="s1">&#39;log&#39;</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>The level of logs to produce. Equivalent to <code>--log</code>.</p>
+  </div>
+
+</div>
 
 
 
@@ -1258,12 +1967,12 @@ found in the environment.</p>
 
 
 
-<h3 id="clo.input.GetReadMe" class="doc doc-heading">
-          <span class="doc doc-object-name doc-function-name">clo.input.GetReadMe</span>
+<h3 id="clo.input.Document" class="doc doc-heading">
+          <span class="doc doc-object-name doc-function-name">clo.input.Document</span>
 
 
 </h3>
-<div class="doc-signature highlight"><pre><span></span><code><span class="n">GetReadMe</span><span class="p">(</span><span class="n">parser</span><span class="p">,</span> <span class="o">/</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="p">[],</span> <span class="n">base</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">Document</span><span class="p">(</span><span class="n">parser</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">/</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="p">[],</span> <span class="n">base</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s1">&#39;docs/usage/index.md&#39;</span><span class="p">)</span>
 </code></pre></div>
 
   <div class="doc doc-contents ">
@@ -1290,6 +1999,24 @@ found in the environment.</p>
                 <span class="doc-param-annotation">
                   <b>TYPE:</b>
                     <code><span title="argparse.ArgumentParser">ArgumentParser</span></code>
+                </span>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td><code>title</code></td>
+          <td class="doc-param-details">
+            <div class="doc-md-description">
+              <p>The name of the of the document to produce.</p>
+            </div>
+            <p>
+                <span class="doc-param-annotation">
+                  <b>TYPE:</b>
+                    <code>str</code>
+                </span>
+                <span class="doc-param-default">
+                  <b>DEFAULT:</b> 
+                    <code>None</code>
                 </span>
             </p>
           </td>
@@ -1330,6 +2057,24 @@ found in the environment.</p>
             </p>
           </td>
         </tr>
+        <tr>
+          <td><code>location</code></td>
+          <td class="doc-param-details">
+            <div class="doc-md-description">
+              <p>The file path to save the doc to.</p>
+            </div>
+            <p>
+                <span class="doc-param-annotation">
+                  <b>TYPE:</b>
+                    <code>str | <span title="pathlib.Path">Path</span> | None</code>
+                </span>
+                <span class="doc-param-default">
+                  <b>DEFAULT:</b> 
+                    <code>&#39;docs/usage/index.md&#39;</code>
+                </span>
+            </p>
+          </td>
+        </tr>
     </tbody>
   </table>
 
@@ -1349,7 +2094,7 @@ found in the environment.</p>
           </td>
           <td class="doc-returns-details">
             <div class="doc-md-description">
-              <p>The completed README string.</p>
+              <p>Markdown-formatted documentation.</p>
             </div>
               <p>
                 <span class="doc-returns-annotation">
@@ -1400,7 +2145,7 @@ found in the environment.</p>
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../api/" class="md-footer__link md-footer__link--prev" aria-label="Previous: API">
+          <a href="../cli/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Cli">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
@@ -1410,7 +2155,7 @@ found in the environment.</p>
                 Previous
               </span>
               <div class="md-ellipsis">
-                API
+                Cli
               </div>
             </div>
           </a>
@@ -1440,7 +2185,7 @@ found in the environment.</p>
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      Copyright &copy; 2023 Arian Johnson
+      Copyright &copy; 2023 ALJ
     </div>
   
   
@@ -1513,7 +2258,7 @@ found in the environment.</p>
       </div>
       <script>var consent=__md_get("__consent");if(consent)for(var input of document.forms.consent.elements)input.name&&(input.checked=consent[input.name]||!1);else"file:"!==location.protocol&&setTimeout(function(){document.querySelector("[data-md-component=consent]").hidden=!1},250);var action,form=document.forms.consent;for(action of["submit","reset"])form.addEventListener(action,function(e){if(e.preventDefault(),"reset"===e.type)for(var n of document.forms.consent.elements)n.name&&(n.checked=!1);__md_set("__consent",Object.fromEntries(Array.from(new FormData(form).keys()).map(function(e){return[e,!0]}))),location.hash="",location.reload()})</script>
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["toc.follow", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.instant", "navigation.tracking", "navigation.top", "navigation.footer"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.expand", "navigation.footer", "navigation.indexes", "navigation.instant", "navigation.sections", "navigation.tabs", "navigation.tabs.sticky", "navigation.top", "navigation.tracking", "toc.follow"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
       <script src="../../assets/javascripts/bundle.aecac24b.min.js"></script>

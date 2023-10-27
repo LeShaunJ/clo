@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" width="1400" height="900" viewBox="0, 0, 1400, 900">
+  <defs>
+    <linearGradient id="Gradient_1" gradientUnits="userSpaceOnUse" x1="1136.478" y1="847.571" x2="1136.478" y2="690.071">
+      <stop offset="0" stop-color="#6E3364"/>
+      <stop offset="1" stop-color="#211615"/>
+    </linearGradient>
+    <linearGradient id="Gradient_2" gradientUnits="userSpaceOnUse" x1="263.522" y1="847.571" x2="263.522" y2="690.071">
+      <stop offset="0" stop-color="#6E3364"/>
+      <stop offset="1" stop-color="#211615"/>
+    </linearGradient>
+    <linearGradient id="Gradient_3" gradientUnits="userSpaceOnUse" x1="700" y1="847.571" x2="700" y2="690.071">
+      <stop offset="0" stop-color="#6E3364"/>
+      <stop offset="1" stop-color="#211615"/>
+    </linearGradient>
+  </defs>
+  <g id="4-bridge" transform="translate(0, 0)">
+    <g id="Bridge">
+      <path d="M0,669 L1400,669 L1400,700.5 L0,700.5 z" fill="#6E3364"/>
+      <g>
+        <path d="M1145.7,751 C1146.6,722.7 1170.4,700.5 1198.7,700.5 L1074.2,700.5 C1102.5,700.5 1126.3,722.7 1127.2,751 C1127.2,751.7 1127.2,752.5 1127.2,753.2 L1127.2,900 L1136.4,900 L1145.6,900 L1145.6,753.3 C1145.6,752.5 1145.7,751.8 1145.7,751 z" fill="url(#Gradient_1)"/>
+        <path d="M272.7,751 C273.6,722.7 297.4,700.5 325.7,700.5 L201.3,700.5 C229.6,700.5 253.4,722.7 254.3,751 C254.3,751.7 254.3,752.5 254.3,753.2 L254.3,900 L263.5,900 L272.7,900 L272.7,753.3 C272.7,752.5 272.7,751.8 272.7,751 z" fill="url(#Gradient_2)"/>
+        <path d="M709.2,751 C710.1,722.7 733.9,700.5 762.2,700.5 L637.8,700.5 C666.1,700.5 689.9,722.7 690.8,751 C690.8,751.7 690.8,752.5 690.8,753.2 L690.8,900 L700,900 L709.2,900 L709.2,753.3 C709.2,752.5 709.2,751.8 709.2,751 z" fill="url(#Gradient_3)"/>
+      </g>
+    </g>
+  </g>
+</svg>
