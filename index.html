@@ -20,7 +20,7 @@
       
       
       <link rel="icon" href="assets/images/favicon.ico">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.6">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.7">
     
     
       
@@ -61,22 +61,575 @@
     
     
     
+    <style>
+      html {
+        height: -webkit-fill-available;
+      }
+
+      body {
+        min-height: 100vh;
+        min-height: -webkit-fill-available;
+      }
+      .md-typeset {
+        color:var(--md-typeset-color)
+      }
+
+      .md-typeset h2 {
+        font-weight: 700;
+        margin-top:.175em
+      }
+
+      .md-typeset h2 + h3 {
+        font-size: 1em;
+        margin-top:-.8em
+      }
+
+      .md-typeset :target {
+        --md-scroll-margin:5.2rem
+      }
+
+      .md-header > .md-tabs,
+      .md-main__inner > .md-sidebar--primary,
+      .md-container > .md-main > .md-main__inner > .md-content,
+      .md-container > .md-main > .md-main__inner > .md-sidebar--secondary,
+      .md-container > .md-footer,
+      .md-content__inner h1:first-of-type {
+        display: none;
+      }
+
+      .md-sidebar--primary {
+        max-height: 100vh;
+      }
+
+      .md-content__inner {
+        margin-bottom: 0;
+        padding:5.2rem 0
+      }
+
+      .md-content__inner:before {
+        display:none
+      }
+
+      .md-content header {
+        display: block;
+        transition:opacity .75s
+      }
+
+      .js .md-content header[hidden] {
+        opacity:0
+      }
+
+      .md-typeset .md-button {
+        background-color: #dd2e57;
+        border-width: 0;
+        color: var(--md-primary-bg-color);
+        margin-right: .5rem;
+        margin-top:.5rem
+      }
+
+      .md-typeset .md-button--secondary {
+        background-color:initial
+      }
+
+      .md-header {
+        background-color: transparent;
+      }
+
+      .md-header:not(.md-header--shadow) {
+        background-color: initial;
+        transition: background-color 125ms, transform 125ms cubic-bezier(.1, .7, .1, 1), box-shadow 0ms;
+      }
+
+      .md-header--shadow {
+        transition:background-color .25s, transform .25s cubic-bezier(.1, .7, .1, 1), box-shadow .25s;
+        box-shadow: none;
+      }
+
+      :root {
+        --md-parallax-perspective: 2.5rem;
+        --md-header__height: 2.4rem;
+      }
+
+      .mdx-parallax {
+        margin-top: calc(var(--md-header__height) * -1);
+        height: 100vh;
+        overflow-x: hidden;
+        perspective: var(--md-parallax-perspective);
+        scroll-behavior: smooth;
+        width:100vw
+      }
+
+      .mdx-parallax__group {
+        background-color: var(--md-default-bg-color);
+        color: var(--md-typeset-color);
+        display: block;
+        position: relative;
+        transform-style:preserve-3d
+      }
+
+      .mdx-parallax__group[data-md-component="hero"] {
+        background-color: initial;
+        contain: strict;
+        height:140vh
+      }
+
+      .safari .mdx-parallax__group[data-md-component="hero"] {
+        contain:none
+      }
+
+      @media (min-width: 125vh) {
+        .mdx-parallax__group:first-child {
+          height:120vw
+        }
+      }
+
+      @media (min-width: 137.5vh) {
+        .mdx-parallax__group:first-child {
+          height:125vw
+        }
+      }
+
+      @media (min-width: 150vh) {
+        .mdx-parallax__group:first-child {
+          height:130vw
+        }
+      }
+
+      @media (min-width: 162.5vh) {
+        .mdx-parallax__group:first-child {
+          height:135vw
+        }
+      }
+
+      @media (min-width: 175vh) {
+        .mdx-parallax__group:first-child {
+          height:140vw
+        }
+      }
+
+      @media (min-width: 187.5vh) {
+        .mdx-parallax__group:first-child {
+          height:145vw
+        }
+      }
+
+      @media (min-width: 200vh) {
+        .mdx-parallax__group:first-child {
+          height:150vw
+        }
+      }
+
+      .mdx-parallax__group:last-child {
+        background-color:var(--md-default-bg-color)
+      }
+
+      .mdx-parallax__layer {
+        height: max(120vh, 100vw);
+        pointer-events: none;
+        position: absolute;
+        top: 0;
+        transform: translateZ(calc(var(--md-parallax-perspective) * var(--md-parallax-depth) * -1)) scale(calc(var(--md-parallax-depth) + 1));
+        /* transform-origin: 50vw 50vh; */
+        width: 100vw;
+        z-index: calc(10 - var(--md-parallax-depth, 0));
+      }
+
+      .mdx-parallax__image {
+        display: block;
+        height: 100%;
+        object-fit: cover;
+        /* object-position: var(--md-image-position, 50%); */
+        position: absolute;
+        width: 100%;
+        z-index:-1
+      }
+
+      .mdx-parallax__blend {
+        background-image: linear-gradient(to bottom, #0000, var(--md-default-bg-color));
+        bottom: 0;
+        height: min(100vh, 100vw);
+        top:auto
+      }
+
+      .mdx-content__column:last-child {
+        margin-top:2.4rem
+      }
+
+      .mdx-content__column p:last-child {
+        margin-bottom:0
+      }
+
+      @media screen and (min-width: 60em) {
+        .mdx-content__inner {
+          display: flex;
+          flex-wrap: nowrap;
+          gap:6.4rem
+        }
+
+        .mdx-content__column {
+          margin-top:0
+        }
+
+        .mdx-content__column:first-child {
+          flex:2 0
+        }
+
+        .mdx-content__column:last-child {
+          flex: 1 0;
+          margin-top:0
+        }
+      }
+
+      .mdx-connect {
+        display: block;
+        transition:transform .75s cubic-bezier(.075, .85, .175, 1) 125ms, opacity .75s 125ms
+      }
+
+      .js .mdx-connect[hidden] {
+        opacity: 0;
+        transform:translateY(1.6rem)
+      }
+
+      .mdx-connect .mdx-connect__link {
+        color: var(--md-default-fg-color);
+        display:block
+      }
+
+      .mdx-connect .mdx-connect__link span {
+        margin-right:.2rem
+      }
+
+      @media screen and (max-width: 76.234375em) {
+        .md-main__inner > .md-sidebar--primary {
+          display: initial;
+        }
+      }
+
+      .mdx-hero {
+        display: block;
+        height:inherit;
+        margin-top: -2.4rem;
+      }
+
+      .js .mdx-hero[hidden] > * {
+        opacity: 0;
+        transform: translateY(16px);
+        transition:transform 0ms .1s, opacity .1s
+      }
+
+      .mdx-hero__scrollwrap {
+        height: 100vh;
+        margin-bottom: -100vh;
+        position: sticky;
+        top: 0;
+        z-index:9
+      }
+
+      .mdx-hero__inner {
+        bottom: 3.2rem;
+        display: block;
+        position: absolute;
+        transition: transform .4s cubic-bezier(.1, .7, .1, 1), opacity .25s;
+        width:100%
+      }
+
+      @media screen and (max-width: 44.984375em) {
+        .mdx-hero__inner {
+          bottom:6.4rem
+        }
+      }
+
+      .mdx-hero__teaser {
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        color: var(--md-primary-bg-color);
+        margin: 0 .8rem;
+        max-width:24rem
+      }
+
+      .mdx-hero__teaser h1 {
+        color: inherit;
+        font-weight: 700;
+        margin-bottom:0
+      }
+
+      .mdx-hero__teaser :not(.md-button) {
+        text-shadow:0 0 .2rem #211d2dcc
+      }
+
+      .mdx-hero .mdx-hero__attribution {
+        background-color: var(--md-default-bg-color--light);
+        border-radius: .1rem;
+        bottom: -2.4rem;
+        color: var(--md-default-fg-color);
+        font-size: .5rem;
+        padding: .1rem .4rem;
+        position: absolute;
+        right: .8rem;
+        transition:color 125ms, background-color 125ms
+      }
+
+      .mdx-hero .mdx-hero__attribution:focus, .mdx-hero .mdx-hero__attribution:hover {
+        background-color: var(--md-accent-fg-color);
+        color:var(--md-accent-bg-color)
+      }
+
+      .mdx-hero__more {
+        bottom: -2.4rem;
+        display: block;
+        left: 50%;
+        margin-left: -.6rem;
+        pointer-events: none;
+        position: absolute;
+        text-align:center
+      }
+
+      .mdx-hero__more svg {
+        fill: #fff;
+        height: 1.2rem;
+        width:1.2rem
+      }
+
+      .mdx-spotlight {
+        margin:2em 0
+      }
+
+      .mdx-spotlight__feature {
+        display: flex;
+        flex: 1 0 48%;
+        flex-flow: row nowrap;
+        gap: 3.2rem;
+        margin:0 0 3.2rem
+      }
+
+      @media screen and (max-width: 59.984375em) {
+        .mdx-spotlight__feature {
+          flex-direction: column;
+          gap:0
+        }
+      }
+
+      @media screen and (min-width: 60em) {
+        .mdx-spotlight__feature:nth-child(odd) {
+          flex-direction:row-reverse
+        }
+      }
+
+      .mdx-spotlight__feature:last-child {
+        margin-bottom:1em
+      }
+
+      .mdx-spotlight__feature > a {
+        display: block;
+        flex-shrink: 0;
+        transition:transform .5s cubic-bezier(.075, .85, .175, 1)
+      }
+
+      @media screen and (max-width: 59.984375em) {
+        .mdx-spotlight__feature > a {
+          margin-left: auto;
+          margin-right:auto
+        }
+      }
+
+      .mdx-spotlight__feature > a:hover {
+        transform:scale(1.025)
+      }
+
+      .mdx-spotlight__feature a > img {
+        border-radius: .2rem;
+        box-shadow: var(--md-shadow-z2);
+        display: block;
+        height: auto;
+        max-width: 100%;
+        width:25rem
+      }
+
+      .mdx-spotlight__feature a > img, .mdx-spotlight__feature figcaption {
+        transition:transform .75s cubic-bezier(.075, .85, .175, 1) 125ms, opacity .75s 125ms
+      }
+
+      .mdx-spotlight__feature figcaption {
+        margin-top:.8rem
+      }
+
+      .js .mdx-spotlight__feature[hidden] > a > img {
+        opacity: 0;
+        transform:translateY(1.6rem)
+      }
+
+      .js .mdx-spotlight__feature[hidden] > figcaption {
+        opacity: 0;
+        transform:translateX(1.6rem)
+      }
+
+      .js .mdx-spotlight__feature[hidden]:nth-child(2n) > figcaption {
+        transform:translateX(-1.6rem)
+      }
+
+      .mdx-trust {
+        display: block;
+        max-width: 40rem;
+        transition:transform .75s cubic-bezier(.075, .85, .175, 1) 125ms, opacity .75s 125ms
+      }
+
+      .js .mdx-trust[hidden] {
+        opacity: 0;
+        transform:translateY(1.6rem)
+      }
+
+      .mdx-users {
+        display: flex;
+        gap: 3.2rem;
+        margin:2.4rem 0
+      }
+
+      @media screen and (max-width: 59.984375em) {
+        .mdx-users {
+          flex-direction:column
+        }
+      }
+
+      .mdx-users__testimonial {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        gap: 1.2rem;
+        margin: 0;
+        text-align:center
+      }
+
+      .mdx-users__testimonial:first-child {
+        transition-delay:.2s
+      }
+
+      .mdx-users__testimonial:nth-child(2) {
+        transition-delay:275ms
+      }
+
+      .mdx-users__testimonial:nth-child(3) {
+        transition-delay:.35s
+      }
+
+      .mdx-users__testimonial img {
+        border-radius: 5rem;
+        height: auto;
+        margin-left: auto;
+        margin-right: auto;
+        width:10rem
+      }
+
+      .mdx-users__testimonial figcaption, .mdx-users__testimonial img {
+        transition: transform .75s cubic-bezier(.075, .85, .175, 1), opacity .75s;
+        transition-delay:inherit
+      }
+
+      .mdx-users__testimonial figcaption {
+        display:block
+      }
+
+      .mdx-users__testimonial hr {
+        margin-left: auto;
+        margin-right: auto;
+        width:5rem
+      }
+
+      .mdx-users__testimonial cite {
+        display: block;
+        -webkit-hyphens: auto;
+        hyphens: auto;
+        text-align:justify
+      }
+
+      .js .mdx-users__testimonial[hidden] img {
+        opacity: 0;
+        transform:scale(.75)
+      }
+
+      .js .mdx-users__testimonial[hidden] figcaption {
+        opacity: 0;
+        transform:translateY(1.6rem)
+      }
+
+      [data-md-color-primary] .md-tabs {
+        background-color: initial;
+        position: absolute;
+        top: 2.4rem
+      }
+
+      .md-content__inner {
+        padding: 0;
+      }
+
+      .md-header__back,
+      .md-header__back_shadow {
+        --md-header__voffset: 0.2rem;
+        --md-header__blur: 0.4rem;
+        z-index: 2;
+        width: 100%;
+        line-height: var(--md-header__height);
+        background: var(--md-default-bg-color);
+      }
+
+      .md-header__back {
+        position: absolute;
+        top: calc(var(--md-header__blur) * -1);
+        height: calc(var(--md-header__height) + var(--md-header__voffset) + (var(--md-header__blur) * 2));
+      }
+
+      .md-header__back_shadow {
+        position: sticky;
+        top: 0;
+        height: var(--md-header__height);
+        box-shadow: 0 0 var(--md-header__voffset) #0000001a, 0 var(--md-header__voffset) var(--md-header__blur) #0003;
+      }
+
+      [data-md-layer="clouds"] {
+        display: flex;
+        flex-direction: row;
+      }
+
+      @keyframes clouds {
+        100% {
+          transform: translateX(-100%)
+        }
+      }
+
+      [data-md-layer="clouds"] img {
+        position: relative;
+        height: 100%;
+        object-fit: contain;
+        width: auto;
+        object-fit: contain;
+        animation: clouds 120s linear infinite;
+      }
+    </style>
+    <script type="text/javascript">
+      let userAgentString = navigator.userAgent;
+      let isSafari = userAgentString.indexOf("Safari") > -1;
+
+      if ( isSafari ) {
+        const delim = ' '
+        let htmlElement = document.querySelector("html");
+        let htmlClasses = htmlElement.getAttribute('class').split(delim)
+        htmlClasses.push('safari')
+        htmlElement.setAttribute('class', htmlClasses.join(delim))
+      }
+    </script>
   </head>
-  
-  
     
     
       
+      
+        
+      
+      
+      
+      
+  <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="indigo">
     
     
-    
-    
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="indigo">
-  
-    
-    
-      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
-    
+    <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" for="__drawer"></label>
@@ -92,8 +645,794 @@
       
     </div>
     
+    <div class="md-container" data-md-component="contaniner">
+      
+        
+        <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+          <div class="md-sidebar__scrollwrap">
+            <div class="md-sidebar__inner">
+              
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="." title="Command-Line Odoo" class="md-nav__button md-logo" aria-label="Command-Line Odoo" data-md-component="logo">
+      
+  <img src="assets/images/logo-white.png" alt="logo">
+
+    </a>
+    Command-Line Odoo
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/LeShaunJ/clo" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
     
       
+      
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="." class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    Installation
+  </a>
+  
+    <nav class="md-nav" aria-label="Installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#with-pip" class="md-nav__link">
+    with pip
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#with-git" class="md-nav__link">
+    with git
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-start" class="md-nav__link">
+    Quick Start
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#connection-authentication" class="md-nav__link">
+    Connection &amp; Authentication
+  </a>
+  
+    <nav class="md-nav" aria-label="Connection & Authentication">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#inline" class="md-nav__link">
+    Inline
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="usage/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Usage
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Usage
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Actions
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Actions
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="usage/actions/0_search/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Search
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="usage/actions/1_count/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Count
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="usage/actions/2_read/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Read
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="usage/actions/3_find/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Find
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="usage/actions/4_create/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Create
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="usage/actions/5_write/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Write
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="usage/actions/6_delete/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Delete
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="usage/actions/7_fields/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Fields
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="usage/actions/8_explain/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Explain
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Reference
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="reference/api/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Api
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="reference/cli/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Cli
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="reference/input/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Input
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="reference/output/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Output
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="reference/types/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Types
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    About
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            About
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="about/1_changelog/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Changelog
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="about/2_code_of_conduct/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Code of Conduct
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="about/3_contributing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contributing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="about/4_security/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Security Policy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="about/license/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    License
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+            </div>
+          </div>
+        </div>
+      
+    </div>
+    
 
   
 
@@ -296,614 +1635,32 @@
     
   
 </header>
-    
-    <div class="md-container" data-md-component="container">
-      
-      
-  
-        
-      
-  <style>
-    .md-typeset {
-      color:var(--md-typeset-color)
-    }
-
-    .md-typeset h2 {
-      font-weight: 700;
-      margin-top:.175em
-    }
-
-    .md-typeset h2 + h3 {
-      font-size: 1em;
-      margin-top:-.8em
-    }
-
-    .md-typeset :target {
-      --md-scroll-margin:5.2rem
-    }
-
-    .md-header > .md-tabs,
-    .md-main__inner > .md-sidebar--primary,
-    .md-content__inner h1:first-of-type {
-      display: none;
-    }
-
-    .md-content__inner {
-      margin-bottom: 0;
-      padding:5.2rem 0
-    }
-
-    .md-content__inner:before {
-      display:none
-    }
-
-    .md-content header {
-      display: block;
-      transition:opacity .75s
-    }
-
-    .js .md-content header[hidden] {
-      opacity:0
-    }
-
-    .md-typeset .md-button {
-      background-color: #dd2e57;
-      border-width: 0;
-      color: var(--md-primary-bg-color);
-      margin-right: .5rem;
-      margin-top:.5rem
-    }
-
-    .md-typeset .md-button--secondary {
-      background-color:initial
-    }
-
-    .md-header {
-      background-color: transparent;
-    }
-
-    .md-header:not(.md-header--shadow) {
-      background-color: initial;
-      transition: background-color 125ms, transform 125ms cubic-bezier(.1, .7, .1, 1), box-shadow 0ms;
-    }
-
-    .md-header--shadow {
-      transition:background-color .25s, transform .25s cubic-bezier(.1, .7, .1, 1), box-shadow .25s;
-      box-shadow: none;
-    }
-
-    :root {
-      --md-parallax-perspective:2.5rem
-    }
-
-    .mdx-parallax {
-      height: 100vh;
-      margin-top: -2.4rem;
-      overflow-x: hidden;
-      overflow-y: auto;
-      overscroll-behavior-y: none;
-      perspective: var(--md-parallax-perspective);
-      scroll-behavior: smooth;
-      width:100vw
-    }
-
-    .mdx-parallax__group {
-      background-color: var(--md-default-bg-color);
-      color: var(--md-typeset-color);
-      display: block;
-      position: relative;
-      transform-style:preserve-3d
-    }
-
-    .mdx-parallax__group:first-child {
-      background-color: initial;
-      contain: strict;
-      height:140vh
-    }
-
-    .safari .mdx-parallax__group:first-child {
-      contain:none
-    }
-
-    @media (min-width: 125vh) {
-      .mdx-parallax__group:first-child {
-        height:120vw
-      }
-    }
-
-    @media (min-width: 137.5vh) {
-      .mdx-parallax__group:first-child {
-        height:125vw
-      }
-    }
-
-    @media (min-width: 150vh) {
-      .mdx-parallax__group:first-child {
-        height:130vw
-      }
-    }
-
-    @media (min-width: 162.5vh) {
-      .mdx-parallax__group:first-child {
-        height:135vw
-      }
-    }
-
-    @media (min-width: 175vh) {
-      .mdx-parallax__group:first-child {
-        height:140vw
-      }
-    }
-
-    @media (min-width: 187.5vh) {
-      .mdx-parallax__group:first-child {
-        height:145vw
-      }
-    }
-
-    @media (min-width: 200vh) {
-      .mdx-parallax__group:first-child {
-        height:150vw
-      }
-    }
-
-    .mdx-parallax__group:last-child {
-      background-color:var(--md-default-bg-color)
-    }
-
-    .mdx-parallax__layer {
-      height: max(120vh, 100vw);
-      pointer-events: none;
-      position: absolute;
-      top: 0;
-      transform: translateZ(calc(var(--md-parallax-perspective) * var(--md-parallax-depth) * -1)) scale(calc(var(--md-parallax-depth) + 1));
-      transform-origin: 50vw 50vh;
-      width: 100vw;
-      z-index:calc(10 - var(--md-parallax-depth, 0))
-    }
-
-    .mdx-parallax__image {
-      display: block;
-      height: 100%;
-      object-fit: cover;
-      /* object-position: var(--md-image-position, 50%); */
-      position: absolute;
-      width: 100%;
-      z-index:-1
-    }
-
-    .mdx-parallax__blend {
-      background-image: linear-gradient(to bottom, #0000, var(--md-default-bg-color));
-      bottom: 0;
-      height: min(100vh, 100vw);
-      top:auto
-    }
-
-    .mdx-content__column:last-child {
-      margin-top:2.4rem
-    }
-
-    .mdx-content__column p:last-child {
-      margin-bottom:0
-    }
-
-    @media screen and (min-width: 60em) {
-      .mdx-content__inner {
-        display: flex;
-        flex-wrap: nowrap;
-        gap:6.4rem
-      }
-
-      .mdx-content__column {
-        margin-top:0
-      }
-
-      .mdx-content__column:first-child {
-        flex:2 0
-      }
-
-      .mdx-content__column:last-child {
-        flex: 1 0;
-        margin-top:0
-      }
-    }
-
-    .mdx-connect {
-      display: block;
-      transition:transform .75s cubic-bezier(.075, .85, .175, 1) 125ms, opacity .75s 125ms
-    }
-
-    .js .mdx-connect[hidden] {
-      opacity: 0;
-      transform:translateY(1.6rem)
-    }
-
-    .mdx-connect .mdx-connect__link {
-      color: var(--md-default-fg-color);
-      display:block
-    }
-
-    .mdx-connect .mdx-connect__link span {
-      margin-right:.2rem
-    }
-
-    .mdx-expect {
-      margin:2.4rem 0
-    }
-
-    .mdx-expect__list {
-      display: flex;
-      flex-flow: row wrap;
-      gap: 1.6rem;
-      padding:0
-    }
-
-    .mdx-expect__item {
-      display: flex;
-      flex: 1 0 48%;
-      gap: .6rem;
-      margin: 0;
-      transition:transform .75s cubic-bezier(.075, .85, .175, 1), opacity .75s
-    }
-
-    .mdx-expect__item:first-child {
-      transition-delay:.2s
-    }
-
-    .mdx-expect__item:nth-child(2) {
-      transition-delay:275ms
-    }
-
-    .mdx-expect__item:nth-child(3) {
-      transition-delay:.35s
-    }
-
-    .mdx-expect__item:nth-child(4) {
-      transition-delay:425ms
-    }
-
-    .mdx-expect__item:nth-child(5) {
-      transition-delay:.5s
-    }
-
-    .mdx-expect__item:nth-child(6) {
-      transition-delay:575ms
-    }
-
-    .js .mdx-expect__item[hidden] {
-      opacity: 0;
-      transform:translate(-.8rem, .4rem)
-    }
-
-    .js .mdx-expect__item[hidden]:nth-child(2n) {
-      transform:translate(.8rem, .4rem)
-    }
-
-    .mdx-expect__icon {
-      fill: currentcolor;
-      background-color: var(--md-default-fg-color--lightest);
-      border-radius: 100%;
-      flex-shrink: 0;
-      height: 2.2rem;
-      padding: .4rem;
-      width:2.2rem
-    }
-
-    .mdx-expect__description > :last-child {
-      margin-bottom:0
-    }
-
-    @media screen and (max-width: 76.234375em) {
-      .mdx-expect__description > :last-child {
-        margin-left:-2.8rem
-      }
-
-      .md-main__inner > .md-sidebar--primary {
-        display: initial;
-      }
-    }
-
-    .mdx-hero {
-      display: block;
-      height:inherit
-    }
-
-    .js .mdx-hero[hidden] > * {
-      opacity: 0;
-      transform: translateY(16px);
-      transition:transform 0ms .1s, opacity .1s
-    }
-
-    .mdx-hero__scrollwrap {
-      height: 100vh;
-      margin-bottom: -100vh;
-      position: sticky;
-      top: 0;
-      z-index:9
-    }
-
-    .mdx-hero__inner {
-      bottom: 3.2rem;
-      display: block;
-      position: absolute;
-      transition: transform .4s cubic-bezier(.1, .7, .1, 1), opacity .25s;
-      width:100%
-    }
-
-    @media screen and (max-width: 44.984375em) {
-      .mdx-hero__inner {
-        bottom:6.4rem
-      }
-    }
-
-    .mdx-hero__teaser {
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
-      color: var(--md-primary-bg-color);
-      margin: 0 .8rem;
-      max-width:24rem
-    }
-
-    .mdx-hero__teaser h1 {
-      color: inherit;
-      font-weight: 700;
-      margin-bottom:0
-    }
-
-    .mdx-hero__teaser :not(.md-button) {
-      text-shadow:0 0 .2rem #211d2dcc
-    }
-
-    .mdx-hero .mdx-hero__attribution {
-      background-color: var(--md-default-bg-color--light);
-      border-radius: .1rem;
-      bottom: -2.4rem;
-      color: var(--md-default-fg-color);
-      font-size: .5rem;
-      padding: .1rem .4rem;
-      position: absolute;
-      right: .8rem;
-      transition:color 125ms, background-color 125ms
-    }
-
-    .mdx-hero .mdx-hero__attribution:focus, .mdx-hero .mdx-hero__attribution:hover {
-      background-color: var(--md-accent-fg-color);
-      color:var(--md-accent-bg-color)
-    }
-
-    .mdx-hero__more {
-      bottom: -2.4rem;
-      display: block;
-      left: 50%;
-      margin-left: -.6rem;
-      pointer-events: none;
-      position: absolute;
-      text-align:center
-    }
-
-    .mdx-hero__more svg {
-      fill: #fff;
-      height: 1.2rem;
-      width:1.2rem
-    }
-
-    .mdx-spotlight {
-      margin:2em 0
-    }
-
-    .mdx-spotlight__feature {
-      display: flex;
-      flex: 1 0 48%;
-      flex-flow: row nowrap;
-      gap: 3.2rem;
-      margin:0 0 3.2rem
-    }
-
-    @media screen and (max-width: 59.984375em) {
-      .mdx-spotlight__feature {
-        flex-direction: column;
-        gap:0
-      }
-    }
-
-    @media screen and (min-width: 60em) {
-      .mdx-spotlight__feature:nth-child(odd) {
-        flex-direction:row-reverse
-      }
-    }
-
-    .mdx-spotlight__feature:last-child {
-      margin-bottom:1em
-    }
-
-    .mdx-spotlight__feature > a {
-      display: block;
-      flex-shrink: 0;
-      transition:transform .5s cubic-bezier(.075, .85, .175, 1)
-    }
-
-    @media screen and (max-width: 59.984375em) {
-      .mdx-spotlight__feature > a {
-        margin-left: auto;
-        margin-right:auto
-      }
-    }
-
-    .mdx-spotlight__feature > a:hover {
-      transform:scale(1.025)
-    }
-
-    .mdx-spotlight__feature a > img {
-      border-radius: .2rem;
-      box-shadow: var(--md-shadow-z2);
-      display: block;
-      height: auto;
-      max-width: 100%;
-      width:25rem
-    }
-
-    .mdx-spotlight__feature a > img, .mdx-spotlight__feature figcaption {
-      transition:transform .75s cubic-bezier(.075, .85, .175, 1) 125ms, opacity .75s 125ms
-    }
-
-    .mdx-spotlight__feature figcaption {
-      margin-top:.8rem
-    }
-
-    .js .mdx-spotlight__feature[hidden] > a > img {
-      opacity: 0;
-      transform:translateY(1.6rem)
-    }
-
-    .js .mdx-spotlight__feature[hidden] > figcaption {
-      opacity: 0;
-      transform:translateX(1.6rem)
-    }
-
-    .js .mdx-spotlight__feature[hidden]:nth-child(2n) > figcaption {
-      transform:translateX(-1.6rem)
-    }
-
-    .mdx-trust {
-      display: block;
-      max-width: 40rem;
-      transition:transform .75s cubic-bezier(.075, .85, .175, 1) 125ms, opacity .75s 125ms
-    }
-
-    .js .mdx-trust[hidden] {
-      opacity: 0;
-      transform:translateY(1.6rem)
-    }
-
-    .mdx-users {
-      display: flex;
-      gap: 3.2rem;
-      margin:2.4rem 0
-    }
-
-    @media screen and (max-width: 59.984375em) {
-      .mdx-users {
-        flex-direction:column
-      }
-    }
-
-    .mdx-users__testimonial {
-      display: flex;
-      flex: 1;
-      flex-direction: column;
-      gap: 1.2rem;
-      margin: 0;
-      text-align:center
-    }
-
-    .mdx-users__testimonial:first-child {
-      transition-delay:.2s
-    }
-
-    .mdx-users__testimonial:nth-child(2) {
-      transition-delay:275ms
-    }
-
-    .mdx-users__testimonial:nth-child(3) {
-      transition-delay:.35s
-    }
-
-    .mdx-users__testimonial img {
-      border-radius: 5rem;
-      height: auto;
-      margin-left: auto;
-      margin-right: auto;
-      width:10rem
-    }
-
-    .mdx-users__testimonial figcaption, .mdx-users__testimonial img {
-      transition: transform .75s cubic-bezier(.075, .85, .175, 1), opacity .75s;
-      transition-delay:inherit
-    }
-
-    .mdx-users__testimonial figcaption {
-      display:block
-    }
-
-    .mdx-users__testimonial hr {
-      margin-left: auto;
-      margin-right: auto;
-      width:5rem
-    }
-
-    .mdx-users__testimonial cite {
-      display: block;
-      -webkit-hyphens: auto;
-      hyphens: auto;
-      text-align:justify
-    }
-
-    .js .mdx-users__testimonial[hidden] img {
-      opacity: 0;
-      transform:scale(.75)
-    }
-
-    .js .mdx-users__testimonial[hidden] figcaption {
-      opacity: 0;
-      transform:translateY(1.6rem)
-    }
-
-    [data-md-color-primary] .md-tabs {
-      background-color: initial;
-      position: absolute;
-      top: 2.4rem
-    }
-
-    .md-content__inner {
-      padding: 0;
-    }
-
-    .md-header__back,
-    .md-header__back_shadow {
-      --md-header__back_height: 2.4rem;
-      --md-header__voffset: 0.2rem;
-      --md-header__blur: 0.4rem;
-      z-index: 2;
-      width: 100%;
-      line-height: var(--md-header__back_height);
-      background: var(--md-default-bg-color);
-    }
-
-    .md-header__back {
-      position: absolute;
-      top: calc(var(--md-header__blur) * -1);
-      height: calc(var(--md-header__back_height) + var(--md-header__voffset) + (var(--md-header__blur) * 2));
-    }
-
-    .md-header__back_shadow {
-      position: sticky;
-      top: 0;
-      height: var(--md-header__back_height);
-      box-shadow: 0 0 var(--md-header__voffset) #0000001a, 0 var(--md-header__voffset) var(--md-header__blur) #0003;
-    }
-  </style>
-  <section class="mdx-container">
-    <div class="mdx-parallax" data-mdx-component="parallax">
-      <section class="mdx-parallax__group">
-        <picture class="mdx-parallax__layer" style="--md-parallax-depth: 10;--md-image-position: 0%">
+    <div class="mdx-parallax" data-md-component="parallax">
+      <section class="mdx-parallax__group" data-md-component="hero">
+        <picture class="mdx-parallax__layer" data-md-layer="background" style="--md-parallax-depth: 10;--md-image-position: 0%">
           <img src="assets/images/layers/7-background.svg" alt class="mdx-parallax__image">
         </picture>
-        <picture class="mdx-parallax__layer" style="--md-parallax-depth: 9;--md-image-position: 10%">
-          <img src="assets/images/layers/6-clouds.svg" alt class="mdx-parallax__image">
-        </picture>
-        <picture class="mdx-parallax__layer" style="--md-parallax-depth: 8;--md-image-position: 20%">
+        <div class="mdx-parallax__layer" data-md-layer="clouds" style="--md-parallax-depth: 9;--md-image-position: 10%">
+          <picture>
+            <img src="assets/images/layers/6-clouds.svg" alt class="mdx-parallax__image">
+          </picture>
+          <picture>
+            <img src="assets/images/layers/6-clouds.svg" alt class="mdx-parallax__image">
+          </picture>
+        </div>
+        <picture class="mdx-parallax__layer" data-md-layer="buildings_4" style="--md-parallax-depth: 8;--md-image-position: 20%">
           <img src="assets/images/layers/5-buildings.svg" alt class="mdx-parallax__image">
         </picture>
-        <picture class="mdx-parallax__layer" style="--md-parallax-depth: 6;--md-image-position: 30%">
+        <picture class="mdx-parallax__layer" data-md-layer="bridge" style="--md-parallax-depth: 6;--md-image-position: 30%">
           <img src="assets/images/layers/4-bridge.svg" alt class="mdx-parallax__image">
         </picture>
-        <picture class="mdx-parallax__layer" style="--md-parallax-depth: 6;--md-image-position: 40%">
+        <picture class="mdx-parallax__layer" data-md-layer="buildings_3" style="--md-parallax-depth: 6;--md-image-position: 40%">
           <img src="assets/images/layers/3-buildings.svg" alt class="mdx-parallax__image">
         </picture>
-        <picture class="mdx-parallax__layer" style="--md-parallax-depth: 5;--md-image-position: 50%">
+        <picture class="mdx-parallax__layer" data-md-layer="buildings_2" style="--md-parallax-depth: 5;--md-image-position: 50%">
           <img src="assets/images/layers/2-buildings.svg" alt class="mdx-parallax__image">
         </picture>
-        <picture class="mdx-parallax__layer" style="--md-parallax-depth: 1;--md-image-position: 60%">
+        <picture class="mdx-parallax__layer" data-md-layer="buildings_1" style="--md-parallax-depth: 1;--md-image-position: 60%">
           <img src="assets/images/layers/1-buildings.svg" alt class="mdx-parallax__image">
         </picture>
         <div class="mdx-parallax__layer mdx-parallax__blend"></div>
@@ -1032,83 +1789,106 @@
           </div>
         </div>
       </section>
-      <section class="mdx-parallax__group">
-        <div class="md-main" data-md-component="main">
+      <div class="mdx-parallax__group" data-md-component="content">
+        
+        
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="." class="md-tabs__link">
+        
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="usage/" class="md-tabs__link">
+          
+  
+    
+  
+  Usage
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="reference/api/" class="md-tabs__link">
+          
+  
+    
+  
+  Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="about/1_changelog/" class="md-tabs__link">
+          
+  
+    
+  
+  About
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+        <main class="md-main" data-md-component="main">
           <div class="md-header__back_shadow"></div>
           <div class="md-header__back"></div>
           <div class="md-main__inner md-grid">
             
               
-            
-              
-              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
-                <div class="md-sidebar__scrollwrap">
-                  <div class="md-sidebar__inner">
-                    
-
-
-  
-
-
-<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
-  <label class="md-nav__title" for="__drawer">
-    <a href="." title="Command-Line Odoo" class="md-nav__button md-logo" aria-label="Command-Line Odoo" data-md-component="logo">
-      
-  <img src="assets/images/logo-white.png" alt="logo">
-
-    </a>
-    Command-Line Odoo
-  </label>
-  
-    <div class="md-nav__source">
-      <a href="https://github.com/LeShaunJ/clo" title="Go to repository" class="md-source" data-md-component="source">
-  <div class="md-source__icon md-icon">
-    
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
-  </div>
-  <div class="md-source__repository">
-    GitHub
-  </div>
-</a>
-    </div>
-  
-  <ul class="md-nav__list" data-md-scrollfix>
-    
-      
-      
-  
-  
-    
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Home
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="." class="md-nav__link md-nav__link--active">
-        
-  
-  <span class="md-ellipsis">
-    Home
-  </span>
-  
-
-      </a>
-      
-        
+                
+                <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                  <div class="md-sidebar__scrollwrap">
+                    <div class="md-sidebar__inner">
+                      
 
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
@@ -1178,739 +1958,16 @@
     </ul>
   
 </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-    
-    
-      
-        
-          
-        
-      
-        
-      
-    
-    
-    
-    
-      
-      
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
-        
-          
-          
-          <div class="md-nav__link md-nav__container">
-            <a href="usage/" class="md-nav__link ">
-              
-  
-  <span class="md-ellipsis">
-    Usage
-  </span>
-  
-
-            </a>
-            
-              
-              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
-                <span class="md-nav__icon md-icon"></span>
-              </label>
-            
-          </div>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2">
-            <span class="md-nav__icon md-icon"></span>
-            Usage
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-            
-              
-                
-  
-  
-  
-    
-    
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-    
-    
-    
-    
-      
-      
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_2" >
-        
-          
-          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="">
-            
-  
-  <span class="md-ellipsis">
-    Actions
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2_2">
-            <span class="md-nav__icon md-icon"></span>
-            Actions
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="usage/actions/0_search/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Search
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="usage/actions/1_count/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Count
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="usage/actions/2_read/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Read
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="usage/actions/3_find/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Find
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="usage/actions/4_create/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Create
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="usage/actions/5_write/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Write
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="usage/actions/6_delete/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Delete
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="usage/actions/7_fields/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Fields
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="usage/actions/8_explain/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Explain
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-    
-    
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-    
-    
-    
-    
-      
-      
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
-        
-          
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
-            
-  
-  <span class="md-ellipsis">
-    Reference
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3">
-            <span class="md-nav__icon md-icon"></span>
-            Reference
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="reference/api/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Api
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="reference/cli/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Cli
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="reference/input/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Input
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="reference/output/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Output
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="reference/types/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Types
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-    
-    
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-    
-    
-    
-    
-      
-      
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
-        
-          
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
-            
-  
-  <span class="md-ellipsis">
-    About
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4">
-            <span class="md-nav__icon md-icon"></span>
-            About
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="about/1_changelog/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Changelog
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="about/2_code_of_conduct/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Code of Conduct
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="about/3_contributing/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Contributing
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="about/4_security/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Security Policy
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="about/license/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    License
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-  </ul>
-</nav>
+                    </div>
                   </div>
                 </div>
-              </div>
-            
-            
               
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
-                <div class="md-sidebar__scrollwrap">
-                  <div class="md-sidebar__inner">
-                    
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#installation" class="md-nav__link">
-    Installation
-  </a>
-  
-    <nav class="md-nav" aria-label="Installation">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#with-pip" class="md-nav__link">
-    with pip
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#with-git" class="md-nav__link">
-    with git
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#quick-start" class="md-nav__link">
-    Quick Start
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#connection-authentication" class="md-nav__link">
-    Connection &amp; Authentication
-  </a>
-  
-    <nav class="md-nav" aria-label="Connection & Authentication">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#inline" class="md-nav__link">
-    Inline
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-                  </div>
-                </div>
-              </div>
-            
-          
             
             
-              
-            <div class="md-content" data-md-component="content">
-              <article class="md-content__inner md-typeset">
-                
+              <div class="md-content" data-md-component="content">
+                <article class="md-content__inner md-typeset">
                   
+                    
 
 
   <h1>Home</h1>
@@ -1982,1026 +2039,22 @@ Enter<span class="w"> </span>your<span class="w"> </span>Password<span class="w"
 
 
 
-                
-              </article>
-            </div>
-          
-            
-            
-          </div>
-        </div>
-      </section>
-      
-        
-        <footer class="md-footer">
-  
-    
-      
-      <nav class="md-footer__inner md-grid" aria-label="Footer" >
-        
-        
-          
-          <a href="usage/" class="md-footer__link md-footer__link--next" aria-label="Next: Usage">
-            <div class="md-footer__title">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              <div class="md-ellipsis">
-                Usage
-              </div>
-            </div>
-            <div class="md-footer__button md-icon">
-              
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
-            </div>
-          </a>
-        
-      </nav>
-    
-  
-  <div class="md-footer-meta md-typeset">
-    <div class="md-footer-meta__inner md-grid">
-      <div class="md-copyright">
-  
-    <div class="md-copyright__highlight">
-      Copyright &copy; 2023 ALJ
-    </div>
-  
-  
-</div>
-      
-    </div>
-  </div>
-</footer>
-      
-      
-    </div>
-  </section>
-
-      <main class="md-main" data-md-component="main">
-        <div class="md-main__inner md-grid">
-          
-              
-            
-              
-              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
-                <div class="md-sidebar__scrollwrap">
-                  <div class="md-sidebar__inner">
-                    
-
-
-  
-
-
-<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
-  <label class="md-nav__title" for="__drawer">
-    <a href="." title="Command-Line Odoo" class="md-nav__button md-logo" aria-label="Command-Line Odoo" data-md-component="logo">
-      
-  <img src="assets/images/logo-white.png" alt="logo">
-
-    </a>
-    Command-Line Odoo
-  </label>
-  
-    <div class="md-nav__source">
-      <a href="https://github.com/LeShaunJ/clo" title="Go to repository" class="md-source" data-md-component="source">
-  <div class="md-source__icon md-icon">
-    
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
-  </div>
-  <div class="md-source__repository">
-    GitHub
-  </div>
-</a>
-    </div>
-  
-  <ul class="md-nav__list" data-md-scrollfix>
-    
-      
-      
-  
-  
-    
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Home
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="." class="md-nav__link md-nav__link--active">
-        
-  
-  <span class="md-ellipsis">
-    Home
-  </span>
-  
-
-      </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#installation" class="md-nav__link">
-    Installation
-  </a>
-  
-    <nav class="md-nav" aria-label="Installation">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#with-pip" class="md-nav__link">
-    with pip
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#with-git" class="md-nav__link">
-    with git
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#quick-start" class="md-nav__link">
-    Quick Start
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#connection-authentication" class="md-nav__link">
-    Connection &amp; Authentication
-  </a>
-  
-    <nav class="md-nav" aria-label="Connection & Authentication">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#inline" class="md-nav__link">
-    Inline
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-    
-    
-      
-        
-          
-        
-      
-        
-      
-    
-    
-    
-    
-      
-      
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
-        
-          
-          
-          <div class="md-nav__link md-nav__container">
-            <a href="usage/" class="md-nav__link ">
-              
-  
-  <span class="md-ellipsis">
-    Usage
-  </span>
-  
-
-            </a>
-            
-              
-              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
-                <span class="md-nav__icon md-icon"></span>
-              </label>
-            
-          </div>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2">
-            <span class="md-nav__icon md-icon"></span>
-            Usage
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-            
-              
-                
-  
-  
-  
-    
-    
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-    
-    
-    
-    
-      
-      
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_2" >
-        
-          
-          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="">
-            
-  
-  <span class="md-ellipsis">
-    Actions
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2_2">
-            <span class="md-nav__icon md-icon"></span>
-            Actions
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="usage/actions/0_search/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Search
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="usage/actions/1_count/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Count
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="usage/actions/2_read/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Read
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="usage/actions/3_find/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Find
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="usage/actions/4_create/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Create
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="usage/actions/5_write/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Write
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="usage/actions/6_delete/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Delete
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="usage/actions/7_fields/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Fields
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="usage/actions/8_explain/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Explain
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-    
-    
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-    
-    
-    
-    
-      
-      
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
-        
-          
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
-            
-  
-  <span class="md-ellipsis">
-    Reference
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3">
-            <span class="md-nav__icon md-icon"></span>
-            Reference
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="reference/api/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Api
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="reference/cli/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Cli
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="reference/input/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Input
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="reference/output/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Output
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="reference/types/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Types
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-    
-    
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-    
-    
-    
-    
-      
-      
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
-        
-          
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
-            
-  
-  <span class="md-ellipsis">
-    About
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4">
-            <span class="md-nav__icon md-icon"></span>
-            About
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="about/1_changelog/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Changelog
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="about/2_code_of_conduct/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Code of Conduct
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="about/3_contributing/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Contributing
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="about/4_security/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Security Policy
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="about/license/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    License
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-  </ul>
-</nav>
-                  </div>
-                </div>
-              </div>
-            
-            
-              
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
-                <div class="md-sidebar__scrollwrap">
-                  <div class="md-sidebar__inner">
-                    
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#installation" class="md-nav__link">
-    Installation
-  </a>
-  
-    <nav class="md-nav" aria-label="Installation">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#with-pip" class="md-nav__link">
-    with pip
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#with-git" class="md-nav__link">
-    with git
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#quick-start" class="md-nav__link">
-    Quick Start
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#connection-authentication" class="md-nav__link">
-    Connection &amp; Authentication
-  </a>
-  
-    <nav class="md-nav" aria-label="Connection & Authentication">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#inline" class="md-nav__link">
-    Inline
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-                  </div>
-                </div>
-              </div>
-            
-          
-            
-          
-              
-            <div class="md-content" data-md-component="content">
-              <article class="md-content__inner md-typeset">
-                
                   
-
-
-  <h1>Home</h1>
-
-<h2 id="installation">Installation</h2>
-<h3 id="with-pip">with <code>pip</code> <small>recommended</small></h3>
-<p><code>clo</code> is published as a <a href="https://pypi.org/project/clo">Python package</a> and can be installed with
-<code>pip</code>. Open up a terminal and install:</p>
-<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>clo
-</code></pre></div>
-<h3 id="with-git">with <code>git</code></h3>
-<p><code>clo</code> can be pulled directly from <a href="https://github.com/leshaunj/clo">GitHub</a> by cloning the repository:</p>
-<div class="highlight"><pre><span></span><code>git clone https://github.com/leshaunj/clo
-</code></pre></div>
-<p>From there, install the theme and its dependencies with:</p>
-<div class="highlight"><pre><span></span><code>pip install -e .
-</code></pre></div>
-<p>This can be useful for managing multiple versions.</p>
-<h2 id="quick-start">Quick Start</h2>
-<p>Jump right into it with a <a href="https://demo.odoo.com">demo</a> instance:</p>
-<div class="highlight"><pre><span></span><code>clo<span class="w"> </span>--demo
-</code></pre></div>
-<blockquote>
-<div class="highlight"><pre><span></span><code>Saving demo credentials to .clorc
-</code></pre></div>
-</blockquote>
-<p><code>clo</code> creates a demo instance and saves the connection/authentication values as *<em>environment variables</em> to a file in your working directory titled <code>.clorc</code>:</p>
-<div class="highlight"><pre><span></span><code>cat<span class="w"> </span>.clorc
-</code></pre></div>
-<blockquote>
-<div class="highlight"><pre><span></span><code>CLO_INSTANCE=&quot;https://demo8.odoo.com&quot;
-CLO_DATABASE=&quot;demo_saas-163_ea9cad58c1db_1698358792&quot;
-CLO_USERNAME=&quot;admin&quot;
-CLO_PASSWORD=&quot;admin&quot;
-</code></pre></div>
-</blockquote>
-<p>Now you can you begin performing <code>clo</code> operations.</p>
-<h2 id="connection-authentication">Connection &amp; Authentication</h2>
-<p>You can set the environment variables of <code>.clorc</code> to that of your own Odoo instance as well. While <code>clo</code> looks for <code>.clorc</code> by default, you can instruct it to use any file you want:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># path/to/env/file</span>
-<span class="nv">CLO_INSTANCE</span><span class="o">=</span><span class="s2">&quot;https://odoo.mine.com&quot;</span>
-<span class="nv">CLO_DATABASE</span><span class="o">=</span><span class="s2">&quot;mydb&quot;</span>
-<span class="nv">CLO_USERNAME</span><span class="o">=</span><span class="s2">&quot;admin&quot;</span>
-<span class="nv">CLO_PASSWORD</span><span class="o">=</span><span class="s2">&quot;admin&quot;</span>
-</code></pre></div>
-<p>or:</p>
-<div class="highlight"><pre><span></span><code>clo<span class="w"> </span>--demo<span class="w"> </span>path/to/env/file
-</code></pre></div>
-<p>then:</p>
-<div class="highlight"><pre><span></span><code>clo<span class="w"> </span>--env<span class="w"> </span>path/to/env/file<span class="w"> </span>...
-</code></pre></div>
-<h3 id="inline">Inline</h3>
-<p>You can set most of the connection/authentication requisites from the command line:</p>
-<div class="highlight"><pre><span></span><code>clo<span class="w"> </span>--inst<span class="w"> </span>https://odoo.mine.com<span class="w"> </span>--db<span class="w"> </span>mydb<span class="w"> </span>--user<span class="w"> </span>admin<span class="w"> </span>...
-</code></pre></div>
-<p>Though, for security, your <code>password</code> <strong>must be</strong> provided either by the <code>CLO_PASSWORD</code> environment vairable:</p>
-<div class="highlight"><pre><span></span><code><span class="nv">CLO_PASSWORD</span><span class="o">=</span><span class="s2">&quot;admin&quot;</span><span class="w"> </span>clo<span class="w"> </span>--inst<span class="w"> </span>https://odoo.mine.com<span class="w"> </span>--db<span class="w"> </span>mydb<span class="w"> </span>--user<span class="w"> </span>admin<span class="w"> </span>...
-</code></pre></div>
-<p>otherwise, <code>clo</code> will ask for it directly:</p>
-<div class="highlight"><pre><span></span><code>clo<span class="w"> </span>--inst<span class="w"> </span>https://odoo.mine.com<span class="w"> </span>--db<span class="w"> </span>mydb<span class="w"> </span>--user<span class="w"> </span>admin<span class="w"> </span>...
-</code></pre></div>
-<blockquote>
-<div class="highlight"><pre><span></span><code>WARN<span class="w">  </span><span class="p">|</span><span class="w"> </span>Environment<span class="w"> </span>file<span class="w"> </span><span class="sb">`</span>.clorc<span class="sb">`</span><span class="w"> </span>was<span class="w"> </span>not<span class="w"> </span>found.
-Enter<span class="w"> </span>your<span class="w"> </span>Password<span class="w"> </span><span class="o">(</span>or<span class="w"> </span>API-Key<span class="o">)</span>:
-</code></pre></div>
-</blockquote>
-
-
-
-
-
-                
-              </article>
-            </div>
-          
+                </article>
+              </div>
             
+            
+          </div>
           
-        </div>
-        
-          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+            <button type="button" class="md-top md-icon" data-md-component="top" hidden>
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
   Back to top
 </button>
-        
-      </main>
-      
-        
+          
+        </main>
+      </div>
+      <section class="mdx-parallax__group" data-md-component="footer">
         <footer class="md-footer">
   
     
@@ -3042,8 +2095,7 @@ Enter<span class="w"> </span>your<span class="w"> </span>Password<span class="w"
     </div>
   </div>
 </footer>
-      
-      
+      </section>
     </div>
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
