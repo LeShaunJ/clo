@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" width="1400" height="900" viewBox="0, 0, 1400, 900">
+<svg class="mdx-parallax__image" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0, 0, 1400, 900">
   <defs>
     <linearGradient id="Gradient_1" gradientUnits="userSpaceOnUse" x1="700" y1="179" x2="700" y2="819.012">
-      <stop offset="0" stop-color="#211615"/>
-      <stop offset="0.492" stop-color="#791B6B"/>
+      <stop offset="0" stop-color="#873e71"/>
+      <stop offset="0.492" stop-color="#873e71"/>
       <stop offset="1" stop-color="#E4B8DD"/>
     </linearGradient>
   </defs>
   <g id="7-background" transform="translate(0, 0)">
     <g id="Background">
-      <path d="M0,0 L1400,0 L1400,900 L0,900 z" fill="#211615" id="Night"/>
+      <path d="M0,0 L1400,0 L1400,900 L0,900 z" fill="#873e71" id="Night"/>
       <path d="M0,146.8 L1400,146.8 L1400,900 L0,900 z" fill="url(#Gradient_1)" id="Dusk"/>
     </g>
   </g>

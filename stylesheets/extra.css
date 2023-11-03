@@ -4,14 +4,16 @@
   --md-primary-fg-color--dark:  #714b67;
 }
 
-.md-header__topic {
-  height: 2.4rem;
-  flex-direction: row;
-  align-items: flex-end;
-}
+@media screen and (min-width: 76.25em) {
+  .md-header__topic {
+    height: 2.4rem;
+    flex-direction: row;
+    align-items: flex-end;
+  }
 
-.md-header__topic .md-ellipsis {
-  margin-bottom: .2rem;
-  padding-bottom: .2rem;
-  line-height: initial;
+  .md-header__topic .md-ellipsis {
+    margin-bottom: .2rem;
+    padding-bottom: .2rem;
+    line-height: initial;
+  }
 }

@@ -1,21 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" width="1400" height="900" viewBox="0, 0, 1400, 900">
+<svg class="mdx-parallax__image" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0, 0, 1400, 900">
   <defs>
-    <linearGradient id="Gradient_1" gradientUnits="userSpaceOnUse" x1="555.337" y1="780.071" x2="555.337" y2="410.619">
+    <linearGradient id="1_Buildings_Gradient_1" gradientUnits="userSpaceOnUse" x1="555.337" y1="780.071" x2="555.337" y2="410.619">
       <stop offset="0" stop-color="#6E3364"/>
       <stop offset="1" stop-color="#211615"/>
     </linearGradient>
-    <linearGradient id="Gradient_2" gradientUnits="userSpaceOnUse" x1="585.992" y1="780.11" x2="585.992" y2="410.811">
+    <linearGradient id="1_Buildings_Gradient_2" gradientUnits="userSpaceOnUse" x1="585.992" y1="780.11" x2="585.992" y2="410.811">
       <stop offset="0" stop-color="#E5B9DD"/>
       <stop offset="0.481" stop-color="#6A2060" stop-opacity="0.5"/>
       <stop offset="1" stop-color="#211615" stop-opacity="0"/>
     </linearGradient>
-    <linearGradient id="Gradient_3" gradientUnits="userSpaceOnUse" x1="557.206" y1="855.562" x2="557.206" y2="680.772">
+    <linearGradient id="1_Buildings_Gradient_3" gradientUnits="userSpaceOnUse" x1="557.206" y1="855.562" x2="557.206" y2="680.772">
       <stop offset="0" stop-color="#6E3364"/>
       <stop offset="1" stop-color="#211615"/>
     </linearGradient>
-    <linearGradient id="Gradient_4" gradientUnits="userSpaceOnUse" x1="657.335" y1="897" x2="657.335" y2="761.276">
+    <linearGradient id="1_Buildings_Gradient_4" gradientUnits="userSpaceOnUse" x1="657.335" y1="897" x2="657.335" y2="761.276">
       <stop offset="0" stop-color="#E5B9DD"/>
       <stop offset="0.481" stop-color="#6A2060" stop-opacity="0.5"/>
       <stop offset="1" stop-color="#211615" stop-opacity="0"/>
@@ -23,10 +21,10 @@
   </defs>
   <g id="1-buildings" transform="translate(0, 0)">
     <g id="Buildings">
-      <path d="M555.3,611 L555.3,611 C497.4,611 450.4,658 450.4,715.9 L450.4,874 L660.2,874 L660.2,715.9 C660.2,658 613.3,611 555.3,611 z" fill="url(#Gradient_1)"/>
-      <path d="M550.7,611.1 C543.5,611.4 536.5,612.5 529.7,614.2 C557.3,625.7 577.7,666.8 577.7,715.9 L577.7,874 L642.4,874 L642.4,715.9 C642.3,659.5 601.7,613.6 550.7,611.1 z" fill="url(#Gradient_2)"/>
-      <path d="M655,775.6 L459.4,775.6 C390.7,775.6 335,831.3 335,900 L335,900 L779.4,900 L779.4,900 C779.4,831.3 723.7,775.6 655,775.6 z" fill="url(#Gradient_3)"/>
-      <path d="M648.7,775.6 L555.3,775.6 C616.4,775.6 665.9,831.3 665.9,900 L665.9,900 L759.3,900 L759.3,900 C759.3,831.3 709.8,775.6 648.7,775.6 z" fill="url(#Gradient_4)"/>
+      <path d="M555.3,611 L555.3,611 C497.4,611 450.4,658 450.4,715.9 L450.4,874 L660.2,874 L660.2,715.9 C660.2,658 613.3,611 555.3,611 z" fill="url(#1_Buildings_Gradient_1)"/>
+      <path d="M550.7,611.1 C543.5,611.4 536.5,612.5 529.7,614.2 C557.3,625.7 577.7,666.8 577.7,715.9 L577.7,874 L642.4,874 L642.4,715.9 C642.3,659.5 601.7,613.6 550.7,611.1 z" fill="url(#1_Buildings_Gradient_2)"/>
+      <path d="M655,775.6 L459.4,775.6 C390.7,775.6 335,831.3 335,900 L335,900 L779.4,900 L779.4,900 C779.4,831.3 723.7,775.6 655,775.6 z" fill="url(#1_Buildings_Gradient_3)"/>
+      <path d="M648.7,775.6 L555.3,775.6 C616.4,775.6 665.9,831.3 665.9,900 L665.9,900 L759.3,900 L759.3,900 C759.3,831.3 709.8,775.6 648.7,775.6 z" fill="url(#1_Buildings_Gradient_4)"/>
       <g>
         <path d="M434.8,803 L469.7,803 C471.2,803 472.5,801.8 472.5,800.2 C472.5,798.7 471.3,797.4 469.7,797.4 L434.8,797.4 C433.3,797.4 432,798.6 432,800.2 C432,801.8 433.2,803 434.8,803 z" fill="#E5B9DD"/>
         <path d="M531.9,803 L539.9,803 C541.4,803 542.7,801.8 542.7,800.2 C542.7,798.7 541.5,797.4 539.9,797.4 L531.9,797.4 C530.4,797.4 529.1,798.6 529.1,800.2 C529.1,801.8 530.4,803 531.9,803 z" fill="#E5B9DD"/>

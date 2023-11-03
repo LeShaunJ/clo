@@ -1,0 +1,13 @@
+<svg class="mdx-parallax__image" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0, 0, 1400, 900">
+  <defs>
+    <linearGradient id="Background_Gradient_1" gradientUnits="userSpaceOnUse" x1="700" y1="179" x2="700" y2="819.012">
+      <stop offset="0" stop-color="#211615"/>
+      <stop offset="0.492" stop-color="#791B6B"/>
+      <stop offset="1" stop-color="#E4B8DD"/>
+    </linearGradient>
+  </defs>
+  <g id="Background" transform="translate(0, 0)">
+    <path d="M0,0 L1400,0 L1400,900 L0,900 z" fill="#211615" id="Night"/>
+    <path d="M0,146.8 L1400,146.8 L1400,900 L0,900 z" fill="url(#Background_Gradient_1)" id="Dusk"/>
+  </g>
+</svg>
