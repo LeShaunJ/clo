@@ -1,5 +1,5 @@
 mdx_truly_sane_lists
 mkdocs-include-markdown-plugin
-mkdocs-material>=9.4.6
+mkdocs-material>=9.7.6
 mkdocstrings[python]>=0.5.0
 mkdocs>=0.23.0
